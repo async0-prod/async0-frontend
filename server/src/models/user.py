@@ -1,14 +1,17 @@
+from typing import TYPE_CHECKING
 from sqlalchemy.orm import Mapped, mapped_column, relationship, WriteOnlyMapped
-from sqlalchemy import String, Enum
-from datetime import datetime, timezone
+from sqlalchemy import String, Enum, func, TIMESTAMP
+from datetime import datetime
 from .enum import UserRoles
-from . import Base
-from .bookmark import Bookmark
-from .user_solution import UserSolution
-from .upvote_solution import UpvoteSolution
-from .downvote_solution import DownvoteSolution
-from .submission import Submission
+from core.db import Base
 from uuid import uuid4, UUID
+
+if TYPE_CHECKING:
+    from .bookmark import Bookmark
+    from .user_solution import UserSolution
+    from .vote_problem import VoteProblem
+    from .vote_solution import VoteSolution
+    from .submission import Submission
 
 
 class User(Base):
@@ -18,17 +21,28 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
     role: Mapped[UserRoles] = mapped_column(Enum(UserRoles), default=UserRoles.USER)
     created_at: Mapped[datetime] = mapped_column(
-        default=datetime.now(timezone.utc), index=True
+        TIMESTAMP(timezone=True),
+        index=True,
+        nullable=False,
+        default=func.now(),
     )
     updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.now(timezone.utc), index=True
+        TIMESTAMP(timezone=True),
+        index=True,
+        nullable=False,
+        default=func.now(),
+        onupdate=func.now(),
     )
 
-    bookmarks: WriteOnlyMapped[Bookmark] = relationship(back_populates="user")
-    user_solutions: WriteOnlyMapped[UserSolution] = relationship(back_populates="user")
-    upvotes: WriteOnlyMapped[UpvoteSolution] = relationship(back_populates="user")
-    downvotes: WriteOnlyMapped[DownvoteSolution] = relationship(back_populates="user")
-    submissions: WriteOnlyMapped[Submission] = relationship(back_populates="user")
+    bookmarks: WriteOnlyMapped["Bookmark"] = relationship(back_populates="user")
+    user_solutions: WriteOnlyMapped["UserSolution"] = relationship(
+        back_populates="user"
+    )
+    solution_votes: WriteOnlyMapped["VoteSolution"] = relationship(
+        back_populates="user"
+    )
+    problem_votes: WriteOnlyMapped["VoteProblem"] = relationship(back_populates="user")
+    submissions: WriteOnlyMapped["Submission"] = relationship(back_populates="user")
 
     def __repr__(self):
         return f"<User(id={self.id}, email={self.email}, role={self.role})>"

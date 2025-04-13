@@ -1,19 +1,21 @@
 from typing import TYPE_CHECKING
-from sqlalchemy import ForeignKey, UniqueConstraint, func, TIMESTAMP
+from sqlalchemy import ForeignKey, UniqueConstraint, Enum, func, TIMESTAMP
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
+from uuid import UUID, uuid4
+from .enum import VoteType
 from core.db import Base
-from uuid import uuid4, UUID
 
 if TYPE_CHECKING:
     from .user import User
     from .problem import Problem
 
 
-class Bookmark(Base):
-    __tablename__ = "bookmark"
+class VoteProblem(Base):
+    __tablename__ = "vote_problem"
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
+    vote_type: Mapped[VoteType] = mapped_column(Enum(VoteType))
     user_id: Mapped[UUID] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
     problem_id: Mapped[UUID] = mapped_column(
         ForeignKey("problem.id", ondelete="CASCADE")
@@ -33,13 +35,13 @@ class Bookmark(Base):
     )
 
     user: Mapped["User"] = relationship(
-        lazy="joined", innerjoin=True, back_populates="bookmarks"
+        lazy="joined", innerjoin=True, back_populates="problem_votes"
     )
     problem: Mapped["Problem"] = relationship(
-        lazy="joined", innerjoin=True, back_populates="bookmarks"
+        lazy="joined", innerjoin=True, back_populates="votes"
     )
 
     __table_args__ = (UniqueConstraint("user_id", "problem_id"),)
 
     def __repr__(self):
-        return f"<Bookmark(id={self.id}, user_id={self.user_id}, problem_id={self.problem_id})>"
+        return f"<VoteProblem(id={self.id}, vote_type={self.vote_type}, user_id={self.user_id}, problem_id={self.problem_id})>"

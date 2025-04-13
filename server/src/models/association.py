@@ -1,7 +1,6 @@
 from sqlalchemy import Column
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import ForeignKey, Table
-from . import Base
+from core.db import Base
 
 TopicProblem = Table(
     "topic_problem",

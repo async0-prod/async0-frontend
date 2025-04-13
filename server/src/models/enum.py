@@ -6,6 +6,11 @@ class UserRoles(enum.Enum):
     ADMIN = "ADMIN"
 
 
+class VoteType(enum.Enum):
+    UPVOTE = "UPVOTE"
+    DOWNVOTE = "DOWNVOTE"
+
+
 class Difficulty(enum.Enum):
     Easy = "Easy"
     Medium = "Medium"

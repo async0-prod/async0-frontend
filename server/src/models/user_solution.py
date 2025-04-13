@@ -1,11 +1,14 @@
-from sqlalchemy import String, ForeignKey, Boolean
+from typing import TYPE_CHECKING
+from sqlalchemy import String, ForeignKey, Boolean, TIMESTAMP, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship, WriteOnlyMapped
 from datetime import datetime, timezone
-from . import Base
-from .user import User
-from .problem import Problem
-from .submission import Submission
+from core.db import Base
 from uuid import UUID, uuid4
+
+if TYPE_CHECKING:
+    from .user import User
+    from .problem import Problem
+    from .submission import Submission
 
 
 class UserSolution(Base):
@@ -14,24 +17,31 @@ class UserSolution(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     code: Mapped[str] = mapped_column(String)
     has_solved: Mapped[bool] = mapped_column(Boolean, default=False)
-    user_id: Mapped[str] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
-    problem_id: Mapped[str] = mapped_column(
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
+    problem_id: Mapped[UUID] = mapped_column(
         ForeignKey("problem.id", ondelete="CASCADE")
     )
     created_at: Mapped[datetime] = mapped_column(
-        default=datetime.now(timezone.utc), index=True
+        TIMESTAMP(timezone=True),
+        index=True,
+        nullable=False,
+        default=func.now(),
     )
     updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.now(timezone.utc), index=True
+        TIMESTAMP(timezone=True),
+        index=True,
+        nullable=False,
+        default=func.now(),
+        onupdate=func.now(),
     )
 
-    user: Mapped[User] = relationship(
+    user: Mapped["User"] = relationship(
         lazy="joined", innerjoin=True, back_populates="user_solutions"
     )
-    problem: Mapped[Problem] = relationship(
+    problem: Mapped["Problem"] = relationship(
         lazy="joined", innerjoin=True, back_populates="user_solutions"
     )
-    submissions: WriteOnlyMapped[Submission] = relationship(
+    submissions: WriteOnlyMapped["Submission"] = relationship(
         back_populates="user_solution"
     )
 

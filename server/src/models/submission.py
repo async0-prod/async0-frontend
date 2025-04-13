@@ -1,13 +1,16 @@
-from sqlalchemy import Integer, ForeignKey, Enum
+from typing import TYPE_CHECKING
+from sqlalchemy import Integer, ForeignKey, Enum, func, TIMESTAMP
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
-from datetime import datetime, timezone
-from src.models.enum import Status
-from . import Base
-from .user import User
-from .problem import Problem
-from .user_solution import UserSolution
+from datetime import datetime
+from .enum import Status
+from core.db import Base
 from uuid import UUID, uuid4
+
+if TYPE_CHECKING:
+    from .user import User
+    from .problem import Problem
+    from .user_solution import UserSolution
 
 
 class Submission(Base):
@@ -15,25 +18,32 @@ class Submission(Base):
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     status: Mapped[Status] = mapped_column(Enum(Status), default=Status.Pending)
-    user_id: Mapped[str] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
-    problem_id: Mapped[str] = mapped_column(ForeignKey("problem.id"))
-    user_solution_id: Mapped[str] = mapped_column(ForeignKey("user_solution.id"))
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"))
+    problem_id: Mapped[UUID] = mapped_column(ForeignKey("problem.id"))
+    user_solution_id: Mapped[UUID] = mapped_column(ForeignKey("user_solution.id"))
     passed_testcases: Mapped[int] = mapped_column(Integer)
     total_testcases: Mapped[int] = mapped_column(Integer)
     created_at: Mapped[datetime] = mapped_column(
-        default=datetime.now(timezone.utc), index=True
+        TIMESTAMP(timezone=True),
+        index=True,
+        nullable=False,
+        default=func.now(),
     )
     updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.now(timezone.utc), index=True
+        TIMESTAMP(timezone=True),
+        index=True,
+        nullable=False,
+        default=func.now(),
+        onupdate=func.now(),
     )
 
-    user: Mapped[User] = relationship(
+    user: Mapped["User"] = relationship(
         lazy="joined", innerjoin=True, back_populates="submissions"
     )
-    problem: Mapped[Problem] = relationship(
+    problem: Mapped["Problem"] = relationship(
         lazy="joined", innerjoin=True, back_populates="submissions"
     )
-    user_solution: Mapped[UserSolution] = relationship(
+    user_solution: Mapped["UserSolution"] = relationship(
         lazy="joined", innerjoin=True, back_populates="submissions"
     )
 

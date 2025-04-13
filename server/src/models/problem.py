@@ -1,19 +1,22 @@
+from typing import TYPE_CHECKING
 from sqlalchemy.orm import Mapped, mapped_column, relationship, WriteOnlyMapped
-from sqlalchemy import String, Integer, Enum
-from datetime import datetime, timezone
+from sqlalchemy import String, Integer, Enum, func, TIMESTAMP
+from datetime import datetime
 from .enum import Difficulty
-from . import Base
-from .testcase import TestCase
-from .topic import Topic
-from .list import List
-from .bookmark import Bookmark
-from .solution import Solution
-from .user_solution import UserSolution
-from .submission import Submission
-from .upvote_solution import UpvoteSolution
-from .downvote_solution import DownvoteSolution
+from core.db import Base
 from .association import TopicProblem, ListProblem
 from uuid import uuid4, UUID
+
+if TYPE_CHECKING:
+    from .testcase import TestCase
+    from .topic import Topic
+    from .list import List
+    from .bookmark import Bookmark
+    from .solution import Solution
+    from .user_solution import UserSolution
+    from .submission import Submission
+    from .vote_problem import VoteProblem
+    from .vote_solution import VoteSolution
 
 
 class Problem(Base):
@@ -22,7 +25,7 @@ class Problem(Base):
 
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     name: Mapped[str] = mapped_column(
-        String(64), index=True, unique=True, nullable=False
+        String(128), index=True, unique=True, nullable=False
     )
     description: Mapped[str] = mapped_column(String)
     difficulty: Mapped[Difficulty] = mapped_column(
@@ -33,31 +36,36 @@ class Problem(Base):
     time_limit: Mapped[int | None] = mapped_column(Integer, nullable=True)
     memory_limit: Mapped[int | None] = mapped_column(Integer, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
-        default=datetime.now(timezone.utc), index=True
+        TIMESTAMP(timezone=True),
+        index=True,
+        nullable=False,
+        default=func.now(),
     )
     updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.now(timezone.utc), index=True
+        TIMESTAMP(timezone=True),
+        index=True,
+        nullable=False,
+        default=func.now(),
+        onupdate=func.now(),
     )
 
-    test_cases: WriteOnlyMapped[TestCase] = relationship(back_populates="problem")
-    topics: Mapped[list[Topic]] = relationship(
-        lazy="selectin", secondary=TopicProblem, back_populates="problem"
+    test_cases: WriteOnlyMapped["TestCase"] = relationship(back_populates="problem")
+    topics: Mapped[list["Topic"]] = relationship(
+        lazy="selectin", secondary=TopicProblem, back_populates="problems"
     )
-    lists: Mapped[list[List]] = relationship(
-        lazy="selectin", secondary=ListProblem, back_populates="problem"
+    lists: Mapped[list["List"]] = relationship(
+        lazy="selectin", secondary=ListProblem, back_populates="problems"
     )
-    bookmarks: WriteOnlyMapped[Bookmark] = relationship(back_populates="problem")
-    solutions: WriteOnlyMapped[Solution] = relationship(back_populates="problem")
-    user_solutions: WriteOnlyMapped[UserSolution] = relationship(
+    bookmarks: WriteOnlyMapped["Bookmark"] = relationship(back_populates="problem")
+    solutions: WriteOnlyMapped["Solution"] = relationship(back_populates="problem")
+    user_solutions: WriteOnlyMapped["UserSolution"] = relationship(
         back_populates="problem"
     )
-    upvote_solutions: WriteOnlyMapped[UpvoteSolution] = relationship(
+    solution_votes: WriteOnlyMapped["VoteSolution"] = relationship(
         back_populates="problem"
     )
-    downvote_solutions: WriteOnlyMapped[DownvoteSolution] = relationship(
-        back_populates="problem"
-    )
-    submissions: WriteOnlyMapped[Submission] = relationship(back_populates="problem")
+    votes: WriteOnlyMapped["VoteProblem"] = relationship(back_populates="problem")
+    submissions: WriteOnlyMapped["Submission"] = relationship(back_populates="problem")
 
     def __repr__(self):
         return f"<Problem(id={self.id}, name={self.name})>"

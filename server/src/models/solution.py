@@ -1,11 +1,13 @@
-from sqlalchemy import String, ForeignKey, Integer
+from typing import TYPE_CHECKING
+from sqlalchemy import String, ForeignKey, Integer, func, TIMESTAMP
 from sqlalchemy.orm import Mapped, mapped_column, relationship, WriteOnlyMapped
-from datetime import datetime, timezone
-from . import Base
-from .problem import Problem
-from .upvote_solution import UpvoteSolution
-from .downvote_solution import DownvoteSolution
+from datetime import datetime
+from core.db import Base
 from uuid import UUID, uuid4
+
+if TYPE_CHECKING:
+    from .problem import Problem
+    from .vote_solution import VoteSolution
 
 
 class Solution(Base):
@@ -14,25 +16,27 @@ class Solution(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     code: Mapped[str] = mapped_column(String)
     rank: Mapped[int] = mapped_column(Integer, default=1)
-    problem_id: Mapped[str] = mapped_column(
+    problem_id: Mapped[UUID] = mapped_column(
         ForeignKey("problem.id", ondelete="CASCADE")
     )
     created_at: Mapped[datetime] = mapped_column(
-        default=datetime.now(timezone.utc), index=True
+        TIMESTAMP(timezone=True),
+        index=True,
+        nullable=False,
+        default=func.now(),
     )
     updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.now(timezone.utc), index=True
+        TIMESTAMP(timezone=True),
+        index=True,
+        nullable=False,
+        default=func.now(),
+        onupdate=func.now(),
     )
 
-    problem: Mapped[Problem] = relationship(
+    problem: Mapped["Problem"] = relationship(
         lazy="joined", innerjoin=True, back_populates="solutions"
     )
-    upvote_solutions: WriteOnlyMapped[UpvoteSolution] = relationship(
-        back_populates="solution"
-    )
-    downvote_solutions: WriteOnlyMapped[DownvoteSolution] = relationship(
-        back_populates="solution"
-    )
+    votes: WriteOnlyMapped["VoteSolution"] = relationship(back_populates="solution")
 
     def __repr__(self):
         return f"<Solution(id={self.id}, code={self.code}, rank={self.rank})>"
