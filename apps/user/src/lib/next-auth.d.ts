@@ -5,10 +5,14 @@ declare module "next-auth" {
   // Extend session to hold the access_token
   interface Session {
     accessToken: string & DefaultSession;
+    userId: string & DefaultSession;
+    role: string & DefaultSession;
   }
 
   // Extend token to hold the access_token before it gets put into session
   interface JWT {
     accessToken: string & DefaultJWT;
+    userId: string & DefaultJWT;
+    role: string & DefaultJWT;
   }
 }
