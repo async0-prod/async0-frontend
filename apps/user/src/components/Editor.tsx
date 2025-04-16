@@ -3,6 +3,7 @@
 import {
   Dispatch,
   SetStateAction,
+  useEffect,
   useRef,
   useState,
   useTransition,
@@ -79,9 +80,7 @@ export default function CodeEditor({
     }, 100);
   });
 
-  const [value, setValue] = useState<string>(
-    window.localStorage.getItem(`${problemName}-code`) || placeholderCode
-  );
+  const [value, setValue] = useState<string>(placeholderCode);
   const [codeSaved, setCodeSaved] = useState<boolean>(false);
   const [isCodeSavePending, startCodeSaveTransition] = useTransition();
   const [fontSize, setFontSize] = useState<number>(16);
@@ -89,6 +88,13 @@ export default function CodeEditor({
   const [lineHeight, setLineHeight] = useState<number>(23);
   const [intellisenseActive, setIntellisenseActive] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
+
+  useEffect(() => {
+    const val = window.localStorage.getItem(`${problemName}-code`);
+    if (val) {
+      setValue(val);
+    }
+  }, [problemName]);
 
   function handleMount(editor: editor.IStandaloneCodeEditor, monaco: Monaco) {
     editorRef.current = editor;
@@ -102,6 +108,19 @@ export default function CodeEditor({
         }
         setCodeSaved(true);
       });
+    });
+  }
+
+  function handleBeforeMount(monaco: Monaco) {
+    monaco.editor.defineTheme("custom", {
+      base: "vs-dark",
+      inherit: true,
+      rules: [],
+      colors: {
+        "editor.background": "#080c16",
+        "editor.lineHighlightBackground": "#252526",
+        "editorLineNumber.activeForeground": "#FFD700",
+      },
     });
   }
 
@@ -212,6 +231,9 @@ export default function CodeEditor({
               size={"icon"}
               onClick={() => {
                 setValue(placeholderCode);
+                if (window) {
+                  window.localStorage.removeItem(`${problemName}-code`);
+                }
               }}
               className="hover:bg-transparent"
             >
@@ -226,9 +248,13 @@ export default function CodeEditor({
         height="75vh"
         theme="custom"
         defaultLanguage="javascript"
-        onChange={(value) => setValue(value!)}
+        onChange={(value) => setValue(value || "")}
         onMount={handleMount}
+        beforeMount={handleBeforeMount}
         options={{
+          suggest: {
+            showFunctions: false,
+          },
           fontSize: fontSize,
           tabSize: tabSpace,
           lineNumbers: "on",

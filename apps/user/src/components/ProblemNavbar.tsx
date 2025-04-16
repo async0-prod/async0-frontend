@@ -8,7 +8,6 @@ import { useTheme } from "next-themes";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SidebarTrigger } from "./ui/sidebar";
 
 export function ProblemNavbar() {
   const { theme, setTheme } = useTheme();
@@ -17,8 +16,7 @@ export function ProblemNavbar() {
   const toggleLogin = () => setIsLoggedIn(!isLoggedIn);
 
   return (
-    <div className="p-4 flex items-center ">
-      <SidebarTrigger className="md:hidden cursor-pointer" />
+    <div className="p-4 flex items-center justify-center">
       <Link
         href="/"
         className="ml-3 md:ml-16 text-lg font-semibold transition-colors hover:text-primary"
@@ -26,7 +24,7 @@ export function ProblemNavbar() {
         async0
       </Link>
 
-      <div className="flex items-center gap-4 ml-auto mr-4">
+      <div className="flex items-center gap-4 mr-4">
         <div className="relative hidden md:block">
           <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input

@@ -3,20 +3,29 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { Menu, X, Sun, Moon, User } from "lucide-react";
+import { Menu, X, Sun, Moon, Loader2, LogIn } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
 import { Toggle } from "./ui/toggle";
 import { Skeleton } from "./ui/skeleton";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { signIn, signOut, useSession } from "next-auth/react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import Searchbar from "./Searchbar";
 
 export function Navbar() {
+  const { data: session, status } = useSession();
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const pathname = usePathname();
-
   const { theme, setTheme } = useTheme();
 
   useEffect(() => {
@@ -25,7 +34,7 @@ export function Navbar() {
 
   if (!mounted) {
     return (
-      <div className="sticky top-0 w-full h-16 flex items-center justify-between gap-4 border-b px-4 md:px-6 z-10 ">
+      <div className="sticky top-0 w-full h-16 flex items-center justify-between gap-4 px-4 md:px-6 z-10 ">
         <div className="flex items-center gap-4">
           <Skeleton className="h-8 w-24" />
           <Skeleton className="h-4 w-16 hidden md:block" />
@@ -42,7 +51,7 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b ">
+    <header className="sticky top-0 z-40 w-full">
       <div className="flex h-16 items-center justify-around px-6">
         <Link href="/" className={`flex items-center font-semibold `}>
           async0
@@ -55,7 +64,17 @@ export function Navbar() {
           <Link href="/problems" className={cn("text-sm ")}>
             Problems
           </Link>
+          <Link href="/quirks" className={cn("text-sm ")}>
+            Quirks
+          </Link>
+          <Link href="/blog" className={cn("text-sm ")}>
+            Blog
+          </Link>
         </nav>
+
+        <div className="w-full lg:w-[450px] lg:ml-auto">
+          <Searchbar />
+        </div>
 
         <div className="flex items-center gap-2 ml-auto">
           <Toggle
@@ -76,32 +95,44 @@ export function Navbar() {
             )}
           </Toggle>
 
-          {isLoggedIn ? (
-            <Avatar>
-              <AvatarImage
-                src="/placeholder.svg?height=32&width=32"
-                alt="User"
-              />
-              <AvatarFallback>
-                <User className="h-4 w-4" />
-              </AvatarFallback>
-            </Avatar>
+          {status === "loading" ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : status === "authenticated" ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Avatar className="h-9 w-9 cursor-pointer">
+                  <AvatarImage src={session.user!.image!} alt="pfp" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>{session.user?.name}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => signOut()}>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
-            <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="cursor-pointer">
-                Sign In
-              </Button>
-              <Button size="sm" className="cursor-pointer">
-                Sign Up
-              </Button>
-            </div>
+            <Button
+              size="sm"
+              className="cursor-pointer"
+              onClick={() => signIn()}
+            >
+              <LogIn size="16" className="hidden md:block mr-2" />
+              Sign in
+            </Button>
           )}
 
           <Button
             className="items-center justify-center rounded-md md:hidden"
             onClick={() => setIsOpen(!isOpen)}
           >
-            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isOpen ? (
+              <X size={16} className="hidden md:block mr-2" />
+            ) : (
+              <Menu size={16} className="hidden md:block mr-2" />
+            )}
             <span className="sr-only">Toggle menu</span>
           </Button>
         </div>

@@ -1,12 +1,9 @@
 import {
   BarChart2,
-  Bookmark,
   BookOpen,
   ChevronDown,
   ChevronUp,
   Clock,
-  Code,
-  ExternalLink,
   Lightbulb,
   NotebookText,
   Tag,
