@@ -18,158 +18,64 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarTrigger,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuSkeleton,
+  useSidebar,
 } from "@/components/ui/sidebar";
-import { ComponentProps } from "react";
-
+import { ComponentProps, RefObject, useRef, useState } from "react";
+import { useOnClickOutside } from "usehooks-ts";
 import { TeamSwitcher } from "./TeamSwitcher";
-import { NavMain } from "./NavMain";
+import { NavTopics } from "./NavTopics";
 import { NavUser } from "./NavUser";
-import { NavProjects } from "./NavProjects";
+import { NavLists } from "./NavLists";
+import { SidebarDataType } from "@/app/problems/layout";
 
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
-};
+interface AppSidebarProps extends ComponentProps<typeof Sidebar> {
+  data: SidebarDataType | undefined;
+}
 
-export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ data, ...props }: AppSidebarProps) {
+  const { open, setOpen } = useSidebar();
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const [selectedList, setSelectedList] = useState(data?.[0]?.name ?? "");
+
+  useOnClickOutside(sidebarRef as RefObject<HTMLElement>, () => {
+    if (open) setOpen(false);
+  });
+
+  if (!data) {
+    return (
+      <SidebarMenu>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <SidebarMenuItem key={index}>
+            <SidebarMenuSkeleton showIcon />
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    );
+  }
+
   return (
-    <Sidebar variant="floating" collapsible="icon" {...props}>
-      <SidebarHeader className="bg-almond dark:bg-charcoal">
-        <TeamSwitcher teams={data.teams} />
-      </SidebarHeader>
-      <SidebarContent className="bg-almond dark:bg-charcoal">
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+    <Sidebar
+      variant="floating"
+      collapsible="icon"
+      {...props}
+      onClick={() => {
+        if (!open) setOpen(true);
+      }}
+      ref={sidebarRef}
+    >
+      <SidebarHeader>{/* <TeamSwitcher /> */}</SidebarHeader>
+      <SidebarContent className="">
+        <NavTopics data={data} selectedList={selectedList} />
+        <NavLists
+          data={data}
+          selectedList={selectedList}
+          setSelectedList={setSelectedList}
+        />
       </SidebarContent>
-      <SidebarFooter className="bg-almond dark:bg-charcoal">
-        <SidebarTrigger />
-        <NavUser user={data.user} />
-      </SidebarFooter>
+      <SidebarFooter>{/* <NavUser /> */}</SidebarFooter>
     </Sidebar>
   );
 }
