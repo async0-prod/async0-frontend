@@ -21,11 +21,66 @@ import { CompletionStats } from "./_components/CompletionStats";
 import { TopicProgress } from "./_components/TopicProgress";
 import { PopularProblems } from "./_components/PopularProblems";
 import { PopularSolutions } from "./_components/PopularSolutions";
+import { Badge } from "@/components/ui/badge";
+
+import NavigationPane from "./_components/NavigationPane";
 
 export default function DashboardPage() {
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+    <div className="flex min-h-screen w-full flex-col rounded-xl my-4 border-1 overflow-hidden">
+      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 bg-red-50">
+        <div className="flex items-center">
+          <div>
+            <div className="text-2xl font-bold">Morning Gourav!</div>
+            <p className="text-xs text-muted-foreground">
+              {`Been a while since you're back huh?`}
+            </p>
+          </div>
+
+          <div className="ml-auto pr-8">
+            <NavigationPane />
+          </div>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card>
+            <CardHeader className="flex flex-row items-center">
+              <div className="grid gap-1">
+                <CardTitle className="font-manrope flex items-center gap-1">
+                  Trending Problems
+                  <Badge variant="outline" className="px-2 py-0 text-xs">
+                    782 new attempts this week <TrendingUp />
+                  </Badge>
+                </CardTitle>
+                <CardDescription>
+                  Problems with the most bookmarks
+                </CardDescription>
+              </div>
+              <BookMarked className="ml-auto h-5 w-5 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <PopularProblems />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center">
+              <div className="grid gap-1">
+                <CardTitle className="font-manrope">
+                  Trending Solutions
+                </CardTitle>
+                <CardDescription>
+                  Solutions with the most upvotes
+                </CardDescription>
+              </div>
+              <ThumbsUp className="ml-auto h-5 w-5 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <PopularSolutions />
+            </CardContent>
+          </Card>
+        </div>
+
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -81,10 +136,15 @@ export default function DashboardPage() {
 
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="lists">Problem Lists</TabsTrigger>
-            <TabsTrigger value="popular">Popular</TabsTrigger>
-            <TabsTrigger value="topics">Topics</TabsTrigger>
+            <TabsTrigger value="overview" className="p-4">
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="lists" className="p-4">
+              Problem Lists
+            </TabsTrigger>
+            <TabsTrigger value="topics" className="p-4">
+              Topics
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-4">
@@ -159,43 +219,6 @@ export default function DashboardPage() {
                 <CompletionStats />
               </CardContent>
             </Card>
-          </TabsContent>
-
-          <TabsContent value="popular" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2">
-              <Card>
-                <CardHeader className="flex flex-row items-center">
-                  <div className="grid gap-1">
-                    <CardTitle className="font-manrope">
-                      Most Liked Problems
-                    </CardTitle>
-                    <CardDescription>
-                      Problems with the most upvotes and bookmarks
-                    </CardDescription>
-                  </div>
-                  <BookMarked className="ml-auto h-5 w-5 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <PopularProblems />
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="flex flex-row items-center">
-                  <div className="grid gap-1">
-                    <CardTitle className="font-manrope">
-                      Most Liked Solutions
-                    </CardTitle>
-                    <CardDescription>
-                      Solutions with the most upvotes
-                    </CardDescription>
-                  </div>
-                  <ThumbsUp className="ml-auto h-5 w-5 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <PopularSolutions />
-                </CardContent>
-              </Card>
-            </div>
           </TabsContent>
 
           <TabsContent value="topics" className="space-y-4">
