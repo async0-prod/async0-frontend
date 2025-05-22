@@ -60,7 +60,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./apps/user
-          file: ./apps/user/Dockerfile
+          file: ./apps/user/Dockerfile.user
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/async0:user-latest
@@ -89,7 +89,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./apps/admin
-          file: ./apps/admin/Dockerfile
+          file: ./apps/admin/Dockerfile.admin
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/async0:admin-latest
