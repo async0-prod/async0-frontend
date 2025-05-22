@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/auth";
 import { ProblemType } from "@/lib/types";
 
 export async function getAllProblems() {
@@ -21,6 +21,29 @@ export async function getAllProblems() {
     return problems;
   } catch (error) {
     console.error("Error fetching all problems", error);
+  }
+}
+
+export async function getProblemById(problemId: string) {
+  const session = await auth();
+  const token = session?.accessToken;
+
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/admin/problem/${problemId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        cache: "no-store",
+      }
+    );
+    const problem = await res.json();
+    return problem;
+  } catch (error) {
+    console.error("Error fetching problem details", error);
   }
 }
 

@@ -1,14 +1,22 @@
-"use server";
+import { auth } from "@/lib/auth";
+import { ListType } from "@/lib/types";
 
-import { prisma } from "@async0/db";
-import { cache } from "react";
+export async function getAllLists() {
+  const session = await auth();
+  const token = session?.accessToken;
 
-export const getAllLists = cache(async () => {
   try {
-    return await prisma.list.findMany();
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/list`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      cache: "no-store",
+    });
+    const lists = (await res.json()) as ListType;
+    return lists;
   } catch (error) {
-    console.log("ERROR FETCHING ALL LISTS", error);
-  } finally {
-    await prisma.$disconnect();
+    console.error("Error fetching all lists", error);
   }
-});
+}

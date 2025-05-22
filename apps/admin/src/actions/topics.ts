@@ -1,12 +1,22 @@
-import { prisma } from "@async0/db";
-import { cache } from "react";
+import { auth } from "@/lib/auth";
+import { TopicType } from "@/lib/types";
 
-export const getAllTopics = cache(async () => {
+export async function getAllTopics() {
+  const session = await auth();
+  const token = session?.accessToken;
+
   try {
-    return await prisma.topic.findMany();
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/topic`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      cache: "no-store",
+    });
+    const topics = (await res.json()) as TopicType;
+    return topics;
   } catch (error) {
-    console.log("ERROR FETCHING ALL TOPICS", error);
-  } finally {
-    await prisma.$disconnect();
+    console.error("Error fetching all topics", error);
   }
-});
+}
