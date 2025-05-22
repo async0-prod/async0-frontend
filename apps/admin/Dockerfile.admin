@@ -11,7 +11,9 @@ FROM base AS builder
 WORKDIR /app
 
 RUN pnpm install --global turbo
-COPY . .
+COPY package.json pnpm-lock.yaml turbo.json ./
+COPY apps apps
+COPY packages packages
 RUN turbo prune --scope=admin --docker
 
 FROM base AS installer
