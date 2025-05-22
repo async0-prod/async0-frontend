@@ -27,3 +27,14 @@ export type ProblemType = {
     };
   }[];
 }[];
+
+export type TopicType = {
+  id: string;
+  name: string;
+  list_id: string;
+}[];
+
+export type ListType = {
+  id: string;
+  name: string;
+}[];

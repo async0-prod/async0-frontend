@@ -1,8 +1,8 @@
 import { getAllLists } from "@/actions/lists";
+import { getProblemById } from "@/actions/problems";
 import { getAllTopics } from "@/actions/topics";
 import ProblemForm from "@/components/ProblemForm";
 import { Separator } from "@/components/ui/separator";
-import { prisma } from "@async0/db";
 
 export default async function EditProductPage({
   params,
@@ -12,24 +12,15 @@ export default async function EditProductPage({
   const { problemId } = await params;
   const listsPromise = getAllLists();
   const topicsPromise = getAllTopics();
-
-  const problemPromise = prisma.problem.findUnique({
-    where: { id: problemId },
-    include: {
-      testcase: { select: { input: true, output: true } },
-      list_problem: { select: { list: { select: { name: true, id: true } } } },
-      topic_problem: {
-        select: { topic: { select: { name: true, id: true } } },
-      },
-      solution: { select: { code: true, rank: true } },
-    },
-  });
+  const problemPromise = getProblemById(problemId);
 
   const [lists, topics, problem] = await Promise.all([
     listsPromise,
     topicsPromise,
     problemPromise,
   ]);
+
+  console.log(problem);
   return (
     <>
       <div className="mb-4">

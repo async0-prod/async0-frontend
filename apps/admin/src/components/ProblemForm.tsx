@@ -16,10 +16,11 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import { list, problem, solution, testcase, topic } from "@async0/db";
+import { problem, solution, testcase } from "@async0/db";
 import { unescapeCode } from "@/lib/codeFormat";
 import { updateOneProblem, addOneProblem } from "@/actions/handleFormData";
 import { deleteProblem } from "@/actions/problems";
+import { ListType, TopicType } from "@/lib/types";
 
 type ProblemFormType = {
   problem?: {
@@ -28,8 +29,8 @@ type ProblemFormType = {
     testcase: { input: string; output: string }[];
     solution: { code: string; rank: number }[];
   } & problem;
-  lists?: list[];
-  topics?: topic[];
+  lists?: ListType;
+  topics?: TopicType;
 };
 
 export default function ProblemForm({
