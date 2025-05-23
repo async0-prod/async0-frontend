@@ -2,8 +2,8 @@ SELECT
   p.id,
   p.name,
   p.difficulty,
-  COALESCE(bm.bookmark_count, 0) AS totalBookmarks,
-  COALESCE(s.solved_count, 0) AS totalUsersSolved,
+  COALESCE(bm.bookmark_count, 0)::int AS totalBookmarks,
+  COALESCE(s.solved_count, 0)::int AS totalUsersSolved,
   EXISTS (
     SELECT 1
     FROM submission s2
@@ -16,7 +16,7 @@ FROM
 LEFT JOIN (
   SELECT
     problem_id,
-    COUNT(*) AS bookmark_count
+    COUNT(*)::int AS bookmark_count
   FROM
     bookmark
   GROUP BY
@@ -25,7 +25,7 @@ LEFT JOIN (
 LEFT JOIN (
   SELECT
     problem_id,
-    COUNT(DISTINCT user_id) AS solved_count
+    COUNT(DISTINCT user_id)::int AS solved_count
   FROM
     submission
   WHERE
