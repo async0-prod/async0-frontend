@@ -60,6 +60,8 @@ export default function CodeEditor({
   clearConsole,
   isPending,
 }: CodeEditorProps) {
+  const { starter_code, name } = problem;
+
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
   const consoleRef = useRef<HTMLDivElement>(null);
   const [isConsoleOpen, setIsConsoleOpen] = useState(false);
@@ -71,15 +73,15 @@ export default function CodeEditor({
   const [intellisenseActive, setIntellisenseActive] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [value, setValue] = useState<string>(
-    String(unescapeCode(problem.starter_code))
+    String(unescapeCode(starter_code))
   );
 
   useEffect(() => {
-    const val = window.localStorage.getItem(`${problem.name}-code`);
+    const val = window.localStorage.getItem(`${name}-code`);
     if (val) {
       setValue(val);
     }
-  }, [problem.name]);
+  }, [name]);
 
   function handleMount(editor: editor.IStandaloneCodeEditor, monaco: Monaco) {
     editorRef.current = editor;
@@ -89,10 +91,7 @@ export default function CodeEditor({
       startCodeSaveTransition(() => {
         editor.getAction("editor.action.formatDocument")?.run();
         if (window) {
-          window.localStorage.setItem(
-            `${problem.name}-code`,
-            editor.getValue()
-          );
+          window.localStorage.setItem(`${name}-code`, editor.getValue());
         }
         setCodeSaved(true);
       });
@@ -215,9 +214,9 @@ export default function CodeEditor({
               variant={"ghost"}
               size={"icon"}
               onClick={() => {
-                setValue(String(unescapeCode(problem.starter_code)));
+                setValue(String(unescapeCode(starter_code)));
                 if (window) {
-                  window.localStorage.removeItem(`${problem.name}-code`);
+                  window.localStorage.removeItem(`${name}-code`);
                 }
               }}
               className="hover:bg-transparent"

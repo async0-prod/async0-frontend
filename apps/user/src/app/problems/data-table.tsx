@@ -61,17 +61,17 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="flex w-full flex-col gap-2.5 overflow-auto text-charcoal dark:text-white">
-      <div className="flex items-center py-4">
+      <div className="flex items-center pb-2">
         <Input
           placeholder="Filter problems..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="max-w-sm border-charcoal/20"
         />
       </div>
-      <div className="overflow-hidden rounded-md border">
+      <div className="overflow-hidden rounded-md bg-white p-2">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -104,7 +104,7 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   onClick={() => handleRowClick(row.getValue("name"))}
-                  className="cursor-pointer hover:bg-charcoal/10"
+                  className="cursor-pointer  dark:bg-charcoal hover:bg-charcoal/10"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -134,12 +134,10 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex flex-col gap-2.5">
-        <DataTablePagination table={table} />
-        {/* {actionBar &&
+      <DataTablePagination table={table} />
+      {/* {actionBar &&
           table.getFilteredSelectedRowModel().rows.length > 0 &&
           actionBar} */}
-      </div>
     </div>
   );
 }

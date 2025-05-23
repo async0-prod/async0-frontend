@@ -22,8 +22,8 @@ export default function DispayProblem({
   problem,
   userSubmissions,
 }: {
-  problem: problemType | null;
-  userSubmissions: userSubmissionType[] | undefined;
+  problem: problemType | undefined;
+  userSubmissions: userSubmissionType | undefined;
 }) {
   const isMobile = useMobile();
   const { data: session } = useSession();
@@ -64,7 +64,7 @@ export default function DispayProblem({
     }
 
     startTransition(async () => {
-      const res = await submissionSubmit(value, problem.testcase, problem.id);
+      const res = await submissionSubmit(value, problem.testcases, problem.id);
       setProblemSubmitStatus(res);
     });
   }

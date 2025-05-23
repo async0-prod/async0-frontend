@@ -1,14 +1,14 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ProblemTableData } from "@/lib/types";
+import { userProblemTableDataType } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { sql } from "@async0/db";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   BookmarkIcon,
@@ -19,7 +19,7 @@ import {
   UserRoundCheck,
 } from "lucide-react";
 
-export const columns: ColumnDef<ProblemTableData>[] = [
+export const columns: ColumnDef<userProblemTableDataType>[] = [
   {
     accessorKey: "hasSolved",
     header: () => {
@@ -51,7 +51,7 @@ export const columns: ColumnDef<ProblemTableData>[] = [
   },
 
   {
-    accessorKey: "totalBookmarks",
+    accessorKey: "totalbookmarks",
     header: () => {
       return (
         <TooltipProvider>
@@ -70,7 +70,7 @@ export const columns: ColumnDef<ProblemTableData>[] = [
       );
     },
     cell: ({ row }) => {
-      const totalBookmarks = row.getValue("totalBookmarks") as number;
+      const totalBookmarks = row.getValue("totalbookmarks") as number;
       return (
         <div className="flex justify-center items-center gap-1.5 text-sm">
           <span className="tabular-nums">{totalBookmarks}</span>
@@ -143,10 +143,8 @@ export const columns: ColumnDef<ProblemTableData>[] = [
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="flex justify-center items-center max-w-full">
-                <Badge variant="outline" className="text-xs">
-                  {topicList[0]}
-                </Badge>
+              <div className="flex justify-center items-center text-xs">
+                <p>{topicList[0]}</p>
               </div>
             </TooltipTrigger>
             {/* <TooltipContent>
@@ -164,7 +162,6 @@ export const columns: ColumnDef<ProblemTableData>[] = [
       const topics = row.getValue(columnId) as string[];
       return topics.some((topic) => topic === filterValue);
     },
-    size: 150,
   },
 
   {
@@ -195,19 +192,19 @@ export const columns: ColumnDef<ProblemTableData>[] = [
       const difficulty = row.getValue("difficulty") as string;
 
       return (
-        <div className="flex justify-center items-center text-muted-foreground">
-          <Badge
+        <div className="flex justify-center items-center text-muted-foreground text-xs">
+          <div
             className={cn(
-              "text-xs w-3/4"
-              // difficulty === "Easy"
-              //   ? "bg-emerald-500/90 hover:bg-emerald-500"
-              //   : difficulty === "Medium"
-              //     ? "bg-amber-500/90 hover:bg-amber-500"
-              //     : "bg-rose-500/90 hover:bg-rose-500"
+              "font-bold",
+              difficulty === "Easy" &&
+                "text-highlight-green hover:text-highlight-green/90",
+              difficulty === "Medium" &&
+                "text-highlight-yellow hover:text-highlight-yellow/90",
+              difficulty === "Hard" && "text-red-400 hover:text-red-400/90"
             )}
           >
             {difficulty}
-          </Badge>
+          </div>
         </div>
       );
     },
@@ -218,11 +215,11 @@ export const columns: ColumnDef<ProblemTableData>[] = [
         difficultyOrder.indexOf(b.getValue("difficulty"))
       );
     },
-    size: 120,
+    size: 50,
   },
 
   {
-    accessorKey: "totalUsersSolved",
+    accessorKey: "totaluserssolved",
     header: () => {
       return (
         <TooltipProvider>
@@ -241,7 +238,7 @@ export const columns: ColumnDef<ProblemTableData>[] = [
       );
     },
     cell: ({ row }) => {
-      const totalUsersSolved = row.getValue("totalUsersSolved") as number;
+      const totalUsersSolved = row.getValue("totaluserssolved") as number;
       return (
         <div className="flex justify-center items-center gap-1.5 text-sm">
           <span className="tabular-nums">{totalUsersSolved}</span>
