@@ -11,7 +11,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 export default function Searchbar() {
   const [text, setText] = useState<string>("");
   const [showCard, setShowCard] = useState<boolean>(false);
-  const [searchResults, setSearchResults] = useState([]);
+  // const [searchResults, setSearchResults] = useState([]);
   const debouncedText = useDebounce(text, 0.5);
   const [ref, { width }] = useMeasure();
 

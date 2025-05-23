@@ -2,8 +2,14 @@
 
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
-
-import { List, BookOpen, Settings, Plus, Minus, Menu } from "lucide-react";
+import {
+  List,
+  BookOpen,
+  Settings,
+  Menu,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { useState, useEffect, useRef, RefObject } from "react";
 import { Button } from "./ui/button";
 import { SheetTrigger, SheetContent, Sheet } from "./ui/sheet";
@@ -23,7 +29,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
-import { Badge } from "./ui/badge";
 
 import { useOnClickOutside, useToggle } from "usehooks-ts";
 
@@ -66,22 +71,9 @@ export function SidebarData({ data, isLoading = false }: SidebarProps) {
 
   const currentList = data.find((list) => list.name === selectedList);
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty.toLowerCase()) {
-      case "easy":
-        return "text-green-500";
-      case "medium":
-        return "text-yellow-500";
-      case "hard":
-        return "text-red-500";
-      default:
-        return "text-gray-500";
-    }
-  };
-
   const collapsedSidebarContent = (
     <TooltipProvider delayDuration={300}>
-      <div className="flex h-full flex-col items-center py-4 bg-background">
+      <div className="flex h-full flex-col items-center py-8">
         {/* Section 1: User Profile Icon */}
         <div className="mb-8 flex flex-col items-center">
           <Tooltip>
@@ -135,30 +127,14 @@ export function SidebarData({ data, isLoading = false }: SidebarProps) {
           </TooltipTrigger>
           <TooltipContent side="right">Settings</TooltipContent>
         </Tooltip>
-
-        {/* Expand Sidebar Button */}
-        {/* <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={toggleDesktopSidebarOpen}
-              className="mt-2"
-            >
-              <ChevronRight className="h-4 w-4" />
-              <span className="sr-only">Expand Sidebar</span>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="right">Expand Sidebar</TooltipContent>
-        </Tooltip> */}
       </div>
     </TooltipProvider>
   );
 
   const expandedSidebarContent = (
-    <div className="flex h-full flex-col bg-background">
+    <div className="flex h-full flex-col py-4">
       {/* Section 1: User Profile */}
-      <div className="border-b p-4">
+      <div className="p-4">
         <div className="flex items-center gap-3">
           <Avatar>
             <AvatarImage src={`${session?.user?.image}`} />
@@ -183,14 +159,17 @@ export function SidebarData({ data, isLoading = false }: SidebarProps) {
       </div>
 
       {/* Section 2: Lists */}
-      <div className="border-b p-4">
-        <h3 className="mb-2 text-sm font-medium">Problem Lists</h3>
+      <div className="p-4">
+        <h3 className="mb-2 text-sm font-medium text-muted-foreground">
+          Lists
+        </h3>
         <div className="flex flex-col gap-1">
           {data.map((list) => (
             <Button
               key={list.name}
               variant={selectedList === list.name ? "default" : "ghost"}
               className="justify-start"
+              size={"sm"}
               onClick={() => setSelectedList(list.name)}
             >
               {list.name}
@@ -201,11 +180,13 @@ export function SidebarData({ data, isLoading = false }: SidebarProps) {
 
       {/* Section 3: Topics and Problems */}
       <div className="flex-1 overflow-auto p-4">
-        <h3 className="mb-2 text-sm font-medium">Topics</h3>
+        <h3 className="mb-2 text-sm font-medium text-muted-foreground">
+          Topics
+        </h3>
         {currentList && (
-          <Accordion type="multiple" className="w-full">
+          <Accordion type="multiple" className="w-full overflow-auto">
             {currentList.topic
-              .slice(
+              ?.slice(
                 0,
                 showAllTopics ? currentList.topic.length : INITIAL_TOPICS_COUNT
               )
@@ -215,7 +196,7 @@ export function SidebarData({ data, isLoading = false }: SidebarProps) {
                     {topic.name}
                   </AccordionTrigger>
                   <AccordionContent>
-                    <div className="flex flex-col gap-2 pl-2">
+                    <div className="flex flex-col gap-1 w-full">
                       {topic.topic_problem.map((tp) => {
                         const problem = tp.problem;
                         // const isSolved = user.solvedProblems.includes(
@@ -225,7 +206,7 @@ export function SidebarData({ data, isLoading = false }: SidebarProps) {
                         return (
                           <div
                             key={problem.name}
-                            className="flex items-center justify-between rounded-md p-2 hover:bg-accent group"
+                            className="flex items-center justify-between rounded-md px-4 py-2 hover:bg-accent group"
                           >
                             <div className="flex items-center gap-2">
                               <div
@@ -240,17 +221,10 @@ export function SidebarData({ data, isLoading = false }: SidebarProps) {
                                   <Check className="h-3 w-3 text-primary-foreground" />
                                 )} */}
                               </div>
-                              <span className="text-sm">{problem.name}</span>
+                              <span className="text-sm max-w-[150px] text-wrap">
+                                {problem.name}
+                              </span>
                             </div>
-                            <Badge
-                              variant="outline"
-                              className={cn(
-                                "text-xs",
-                                getDifficultyColor(problem.difficulty)
-                              )}
-                            >
-                              {problem.difficulty}
-                            </Badge>
                           </div>
                         );
                       })}
@@ -259,29 +233,28 @@ export function SidebarData({ data, isLoading = false }: SidebarProps) {
                 </AccordionItem>
               ))}
 
-            {currentList.topic.length > INITIAL_TOPICS_COUNT && (
+            {currentList.topic?.length > INITIAL_TOPICS_COUNT && (
               <div className="mt-2 flex justify-center">
                 {!showAllTopics ? (
                   <Button
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
                     onClick={() => setShowAllTopics(true)}
-                    className="flex items-center gap-1"
+                    className="flex items-center gap-1 text-xs hover:bg-transparent cursor-pointer"
                   >
-                    <Plus className="h-4 w-4" />
-                    Show More ({currentList.topic.length -
-                      INITIAL_TOPICS_COUNT}{" "}
-                    more)
+                    Show More ({currentList.topic.length - INITIAL_TOPICS_COUNT}
+                    )
+                    <ChevronDown />
                   </Button>
                 ) : (
                   <Button
-                    variant="outline"
+                    variant="ghost"
                     size="sm"
                     onClick={() => setShowAllTopics(false)}
-                    className="flex items-center gap-1"
+                    className="flex items-center gap-1 text-xs hover:bg-transparent cursor-pointer"
                   >
-                    <Minus className="h-4 w-4" />
                     Show Less
+                    <ChevronUp />
                   </Button>
                 )}
               </div>
@@ -291,20 +264,11 @@ export function SidebarData({ data, isLoading = false }: SidebarProps) {
       </div>
 
       {/* Section 4: Settings */}
-      <div className="border-t p-4 flex flex-col gap-2">
+      <div className=" p-4 flex flex-col gap-2">
         <Button variant="ghost" className="w-full justify-start" size="sm">
           <Settings className="mr-2 h-4 w-4" />
           Settings
         </Button>
-        {/* <Button
-          variant="outline"
-          className="w-full justify-start"
-          size="sm"
-          onClick={toggleDesktopSidebarOpen}
-        >
-          <ChevronLeft className="mr-2 h-4 w-4" />
-          Collapse Sidebar
-        </Button> */}
       </div>
     </div>
   );
@@ -312,7 +276,7 @@ export function SidebarData({ data, isLoading = false }: SidebarProps) {
   const expandedLoadingState = (
     <div className="flex h-full flex-col bg-background">
       {/* Section 1: User Profile Loading */}
-      <div className="border-b p-4">
+      <div className="p-4">
         <div className="flex items-center gap-3">
           <Skeleton className="h-10 w-10 rounded-full" />
           <div className="flex flex-col gap-2">
@@ -330,7 +294,7 @@ export function SidebarData({ data, isLoading = false }: SidebarProps) {
       </div>
 
       {/* Section 2: Lists Loading */}
-      <div className="border-b p-4">
+      <div className="p-4">
         <Skeleton className="h-5 w-32 mb-3" />
         <div className="flex flex-col gap-2">
           <Skeleton className="h-9 w-full" />
@@ -402,9 +366,7 @@ export function SidebarData({ data, isLoading = false }: SidebarProps) {
           toggleDesktopSidebarOpen();
         }}
         className={cn(
-          "fixed inset-y-0 z-30 w-[78px] transition-all duration-300 ease-in-out border-r",
-          !isDesktopSidebarOpen ? "translate-x-0" : "-translate-x-full",
-          "lg:translate-x-0",
+          "sticky h-screen top-0 min-w-[78px] bg-charcoal text-white",
           isDesktopSidebarOpen && "lg:hidden"
         )}
       >
@@ -415,9 +377,7 @@ export function SidebarData({ data, isLoading = false }: SidebarProps) {
       <aside
         ref={ref}
         className={cn(
-          "fixed inset-y-0  z-30 w-[280px] transform transition-all duration-300 ease-in-out bg-background border-r",
-          isDesktopSidebarOpen ? "translate-x-0" : "-translate-x-full",
-          "lg:translate-x-0",
+          "sticky h-screen top-0 min-w-[280px] bg-charcoal text-white",
           !isDesktopSidebarOpen && "lg:hidden"
         )}
       >

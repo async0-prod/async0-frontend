@@ -22,7 +22,7 @@ export default function BreadCrumbs() {
     pathsArray.push(currentPath);
   }
   return (
-    <Breadcrumb className="ml-6">
+    <Breadcrumb className="pb-4 px-48">
       <BreadcrumbList>
         {pathsArray.length > 0 &&
           pathsArray.map((path, index) => {

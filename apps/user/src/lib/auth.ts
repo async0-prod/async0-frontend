@@ -1,17 +1,7 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
-import type { NextAuthConfig, Session } from "next-auth";
+import type { NextAuthConfig } from "next-auth";
 import type { Provider } from "next-auth/providers";
-
-export interface session extends Session {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    accesstoken: string;
-    role: string;
-  };
-}
 
 const providers: Provider[] = [
   Google({
@@ -41,11 +31,8 @@ export const authOptions: NextAuthConfig = {
   callbacks: {
     async jwt({ token, user, account }) {
       if (account && user) {
-        token.foo = "bar";
-        token.accessToken = account.access_token;
         try {
           const url = `${process.env.NEXT_PUBLIC_API_URL}/user/signin`;
-          console.log(account.access_token);
           const response = await fetch(url, {
             method: "POST",
             headers: {
@@ -56,9 +43,17 @@ export const authOptions: NextAuthConfig = {
 
           if (response.ok) {
             console.log("User registered successfully");
-            const userData = await response.json();
+            const userData = (await response.json()) as {
+              id: string;
+              email: string;
+              role: string;
+              server_access_token: string;
+            };
+
+            token.foo = "bar";
             token.userId = userData.id;
             token.role = userData.role;
+            token.accessToken = userData.server_access_token;
           }
         } catch (error) {
           console.error("Failed to register user with backend:", error);
@@ -67,7 +62,13 @@ export const authOptions: NextAuthConfig = {
       return token;
     },
     async session({ session, token }) {
-      return { ...session, foo: token.foo, accessToken: token.accessToken };
+      return {
+        ...session,
+        foo: token.foo,
+        accessToken: token.accessToken,
+        userId: token.userId,
+        role: token.role,
+      };
     },
   },
   pages: {
@@ -76,7 +77,7 @@ export const authOptions: NextAuthConfig = {
   session: {
     strategy: "jwt",
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.AUTH_SECRET,
 };
 
 export const { handlers, signIn, signOut, auth } = NextAuth(authOptions);
