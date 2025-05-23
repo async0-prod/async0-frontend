@@ -11,9 +11,7 @@ FROM base AS builder
 WORKDIR /app
 
 RUN pnpm install --global turbo
-COPY package.json pnpm-lock.yaml turbo.json ./
-COPY apps apps
-COPY packages packages
+COPY . .
 RUN turbo prune --scope=user --docker
 
 FROM base AS installer
@@ -22,10 +20,7 @@ WORKDIR /app
 COPY --from=builder /app/out/json/ .
 RUN pnpm install --frozen-lockfile
 COPY --from=builder /app/out/full/ .
-# COPY ./packages/db/.env /app/packages/db/.env
-RUN pnpm --filter=@async0/db exec prisma generate --sql
-
-RUN pnpm turbo run build --filter=user
+RUN pnpm turbo run build
 
 FROM base AS runner
 WORKDIR /app
