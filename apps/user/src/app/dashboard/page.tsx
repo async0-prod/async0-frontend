@@ -22,22 +22,23 @@ import { TopicProgress } from "./_components/TopicProgress";
 import { PopularProblems } from "./_components/PopularProblems";
 import { PopularSolutions } from "./_components/PopularSolutions";
 import { Badge } from "@/components/ui/badge";
+import NavigationPane from "@/components/NavigationPane";
 
-import NavigationPane from "./_components/NavigationPane";
+export const dynamic = "force-dynamic";
 
 export default function DashboardPage() {
   return (
-    <div className="flex min-h-screen w-full flex-col rounded-xl my-4 border-1 overflow-hidden">
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 bg-red-50">
+    <div className="flex w-full flex-col rounded-xl my-4 mr-4 border-1 overflow-hidden">
+      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 bg-background">
         <div className="flex items-center">
           <div>
-            <div className="text-2xl font-bold">Morning Gourav!</div>
+            <div className="text-4xl font-bold">Morning Gourav!</div>
             <p className="text-xs text-muted-foreground">
               {`Been a while since you're back huh?`}
             </p>
           </div>
 
-          <div className="ml-auto pr-8">
+          <div className="flex-1">
             <NavigationPane />
           </div>
         </div>

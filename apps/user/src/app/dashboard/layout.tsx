@@ -1,3 +1,5 @@
+import Sidebar from "@/components/Sidebar";
+
 export default function DashboardLayout({
   children,
 }: {
@@ -5,7 +7,10 @@ export default function DashboardLayout({
 }) {
   return (
     <>
-      <div>{children}</div>
+      <div className="flex bg-charcoal">
+        <Sidebar />
+        {children}
+      </div>
     </>
   );
 }

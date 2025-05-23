@@ -14,7 +14,6 @@ import {
 import { ChartContainer } from "@/components/ui/chart";
 import { Button } from "@/components/ui/button";
 
-// Data for different time periods
 const timePeriodsData = {
   "1d": [
     { date: "12 AM", problems: 0 },
