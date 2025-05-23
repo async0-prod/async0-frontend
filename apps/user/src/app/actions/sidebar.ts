@@ -1,33 +1,20 @@
-import { prisma } from "@async0/db";
+"use server";
+
+import { SidebarDataType } from "@/lib/types";
 
 export async function getSidebarData() {
   try {
-    const lists = await prisma.list.findMany({
-      select: {
-        name: true,
-        topic: {
-          select: {
-            name: true,
-            topic_problem: {
-              select: {
-                problem: {
-                  select: {
-                    name: true,
-                    difficulty: true,
-                    time_limit: true,
-                    memory_limit: true,
-                  },
-                },
-              },
-            },
-          },
-        },
+    const res = await fetch("http://127.0.0.1:8000/api/v1/user/sidebar", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
       },
+      cache: "no-store",
     });
-    return lists;
+
+    const sidebarData = (await res.json()) as SidebarDataType;
+    return sidebarData;
   } catch (error) {
-    console.log("ERROR FETCHING SIDEBAR DATA", error);
-  } finally {
-    await prisma.$disconnect();
+    console.error("Error fetching all problems", error);
   }
 }
