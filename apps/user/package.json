@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@async0/db": "workspace:*",
     "@async0/ui": "workspace:*",
     "@monaco-editor/react": "^4.7.0",
     "@radix-ui/react-accordion": "^1.2.10",
