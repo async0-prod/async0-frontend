@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/tooltip";
 import { userProblemTableDataType } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { sql } from "@async0/db";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   BookmarkIcon,
