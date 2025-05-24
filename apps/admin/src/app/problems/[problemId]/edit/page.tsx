@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 export default async function EditProductPage({
   params,
 }: {
-  params: { problemId: string };
+  params: Promise<{ problemId: string }>;
 }) {
   const { problemId } = await params;
   const listsPromise = getAllLists();
