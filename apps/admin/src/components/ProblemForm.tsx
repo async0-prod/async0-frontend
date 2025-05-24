@@ -16,19 +16,13 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import { problem, solution, testcase } from "@async0/db";
 import { unescapeCode } from "@/lib/codeFormat";
 import { updateOneProblem, addOneProblem } from "@/actions/handleFormData";
 import { deleteProblem } from "@/actions/problems";
-import { ListType, TopicType } from "@/lib/types";
+import { ListType, ProblemType, TopicType } from "@/lib/types";
 
 type ProblemFormType = {
-  problem?: {
-    list_problem: { list: { name: string; id: string } }[];
-    topic_problem: { topic: { name: string; id: string } }[];
-    testcase: { input: string; output: string }[];
-    solution: { code: string; rank: number }[];
-  } & problem;
+  problem?: ProblemType;
   lists?: ListType;
   topics?: TopicType;
 };
@@ -44,10 +38,12 @@ export default function ProblemForm({
     null
   );
 
-  const [solutions, setSolutions] = useState<Partial<solution>[]>(
-    problem?.solution || []
-  );
-  const [testCases, setTestCases] = useState<Partial<testcase>[]>(
+  // const [solutions, setSolutions] = useState<
+  //   Partial<{ code: string; rank: number }>[]
+  // >(problem?.solution || []);
+  const [testCases, setTestCases] = useState<
+    Partial<{ input: string; output: string }>[]
+  >(
     problem?.testcase.map((tc) => ({
       input: tc.input,
       output: tc.output,
@@ -74,7 +70,10 @@ export default function ProblemForm({
 
   function handleTestCaseChange(
     idx: number,
-    field: keyof testcase,
+    field: keyof {
+      input: string;
+      output: string;
+    },
     value: string
   ) {
     setTestCases((prevState) => {
@@ -92,13 +91,13 @@ export default function ProblemForm({
     setTestCases(testCases.filter((_, i) => i !== idx));
   }
 
-  function handleSolutionChange(idx: number, value: string) {
-    setSolutions((prevState) => {
-      return prevState.map((solution, index) => {
-        return index === idx ? { ...solution, code: value } : solution;
-      });
-    });
-  }
+  // function handleSolutionChange(idx: number, value: string) {
+  //   setSolutions((prevState) => {
+  //     return prevState.map((solution, index) => {
+  //       return index === idx ? { ...solution, code: value } : solution;
+  //     });
+  //   });
+  // }
 
   return (
     <form action={action}>
@@ -206,7 +205,7 @@ export default function ProblemForm({
         />
       </div>
 
-      <div className="space-y-2 mt-5 ">
+      {/* <div className="space-y-2 mt-5 ">
         <Label htmlFor="Solutions">Solutions</Label>
         {solutions.length > 0 ? (
           solutions.map((solution, idx) => {
@@ -249,7 +248,7 @@ export default function ProblemForm({
           <CirclePlus className="mr-2" />
           Add Solution
         </Button>
-      </div>
+      </div> */}
 
       <div className="space-y-2 mt-5">
         <Label htmlFor="Testcases">Testcases</Label>

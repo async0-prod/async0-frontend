@@ -20,7 +20,6 @@ export default async function EditProductPage({
     problemPromise,
   ]);
 
-  console.log(problem);
   return (
     <>
       <div className="mb-4">

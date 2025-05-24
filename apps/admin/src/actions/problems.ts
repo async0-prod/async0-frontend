@@ -17,7 +17,7 @@ export async function getAllProblems() {
         cache: "no-store",
       }
     );
-    const problems = (await res.json()) as ProblemType;
+    const problems = (await res.json()) as ProblemType[];
     return problems;
   } catch (error) {
     console.error("Error fetching all problems", error);
@@ -40,7 +40,7 @@ export async function getProblemById(problemId: string) {
         cache: "no-store",
       }
     );
-    const problem = await res.json();
+    const problem = (await res.json()) as ProblemType;
     return problem;
   } catch (error) {
     console.error("Error fetching problem details", error);
