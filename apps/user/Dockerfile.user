@@ -11,7 +11,7 @@ RUN corepack enable && corepack prepare pnpm
 
 FROM base AS builder
 WORKDIR /app
-RUN pnpm install --global turbo
+RUN pnpm add --global turbo
 COPY . .
 RUN turbo prune user --docker
 
