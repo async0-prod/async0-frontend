@@ -8,36 +8,57 @@ on:
 
 jobs:
   setup:
-    name: Detect changed apps
+    name: Detect code changes
     runs-on: ubuntu-latest
     outputs:
-      user_changed: ${{ steps.user_diff.outputs.changed }}
-      admin_changed: ${{ steps.admin_diff.outputs.changed }}
+      user_changed: ${{ steps.set_flags.outputs.user_changed }}
+      admin_changed: ${{ steps.set_flags.outputs.admin_changed }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Check if user app changed
-        id: user_diff
+      - name: Get changed files
+        id: changed_files
         run: |
-          git fetch origin main
-          if git diff --name-only origin/main...HEAD | grep -qE '^apps/user/|^packages/'; then
-            echo "changed=true" >> $GITHUB_OUTPUT
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # For PRs, compare against the base branch
+            files=$(git diff --name-only ${{ github.event.pull_request.base.sha }}...${{ github.sha }})
           else
-            echo "changed=false" >> $GITHUB_OUTPUT
+            # For pushes to main, compare against previous commit
+            files=$(git diff --name-only HEAD~1..HEAD)
+          fi
+          echo "Changed files:"
+          echo "$files"
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "$files" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Set build flags
+        id: set_flags
+        run: |
+          files="${{ steps.changed_files.outputs.files }}"
+          user_changed=false
+          admin_changed=false
+
+          if echo "$files" | grep -qE '^apps/user/|^packages/' || true; then
+            user_changed=true
           fi
 
-      - name: Check if admin app changed
-        id: admin_diff
-        run: |
-          git fetch origin main
-          if git diff --name-only origin/main...HEAD | grep -qE '^apps/admin/|^packages/'; then
-            echo "changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "changed=false" >> $GITHUB_OUTPUT
+          if echo "$files" | grep -qE '^apps/admin/|^packages/' || true; then
+            admin_changed=true
           fi
+
+          root_changes=$(echo "$files" | grep -vE '^apps/|^packages/' || true)
+          if [ -n "$root_changes" ]; then
+            echo "Root-level changes detected, building all apps"
+            user_changed=true
+            admin_changed=true
+          fi
+
+          echo "user_changed=$user_changed" >> $GITHUB_OUTPUT
+          echo "admin_changed=$admin_changed" >> $GITHUB_OUTPUT
 
   build-user-and-push-image:
     if: needs.setup.outputs.user_changed == 'true'
@@ -66,7 +87,10 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/async0:user-latest
             ${{ secrets.DOCKER_USERNAME }}/async0:user-${{ github.sha }}
-          provenance: true
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
           sbom: true
 
   build-admin-and-push-image:
@@ -96,5 +120,8 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/async0:admin-latest
             ${{ secrets.DOCKER_USERNAME }}/async0:admin-${{ github.sha }}
-          provenance: true
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
           sbom: true
