@@ -137,7 +137,7 @@ jobs:
 
       - name: Write env files
         run: |
-          cat << EOF >> ./envfile
+          cat << 'EOF' > ./envfile
           GIT_COMMIT_HASH=${{ github.sha }}
           EOF
 
@@ -166,7 +166,7 @@ jobs:
           host: async0.com
           username: deploy
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          source: ".envfile,user.env,admin.env,pyserver.env,judge0.conf,docker-stack.yml"
+          source: "envfile,user.env,admin.env,pyserver.env,judge0.conf,docker-stack.yml"
           target: /home/deploy/async0-stack/
 
       - name: Create dokcer configs
