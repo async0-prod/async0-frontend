@@ -196,4 +196,4 @@ jobs:
           host: async0.com
           user: deploy
           ssh_key: ${{secrets.DEPLOY_SSH_KEY}}
-          env_file: /home/deploy/async0-stack/.envfile
+          env_file: /home/deploy/async0-stack/envfile
