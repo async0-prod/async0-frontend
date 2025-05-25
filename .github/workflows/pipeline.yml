@@ -135,13 +135,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Create env files
+      - name: Write env files
         run: |
-          echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
-          echo "${{ secrets.USER_ENV_VARS }}" > ./user.env
-          echo "${{ secrets.ADMIN_ENV_VARS }}" > ./admin.env
-          echo "${{ secrets.PYSERVER_ENV_VARS }}" > ./pyserver.env
-          echo "${{ secrets.JUDGE0_ENV_VARS }}" > ./judge0.conf
+          cat << 'EOF' > ./user.env
+          ${{ secrets.USER_ENV_VARS }}
+          EOF
+
+          cat << 'EOF' > ./admin.env
+          ${{ secrets.ADMIN_ENV_VARS }}
+          EOF
+
+          cat << 'EOF' > ./pyserver.env
+          ${{ secrets.PYSERVER_ENV_VARS }}
+          EOF
+
+          cat << 'EOF' > ./judge0.conf
+          ${{ secrets.JUDGE0_ENV_VARS }}
+          EOF
+
+      - name: Debug
+        run: ls -alh
 
       - name: Copy env files and docker-stack.yml
         uses: appleboy/scp-action@v0.1.7
