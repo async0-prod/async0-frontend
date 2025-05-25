@@ -78,7 +78,7 @@ services:
   judge0-server:
     image: judge0/judge0:latest
     volumes:
-      - /home/deploy/async0-stack/judge0.conf:/judge0.conf:ro
+      - judge0.conf:/judge0.conf:ro
     ports:
       - "2358:2358"
     privileged: true
@@ -92,7 +92,7 @@ services:
     image: judge0/judge0:latest
     command: ["./scripts/workers"]
     volumes:
-      - /home/deploy/async0-stack/judge0.conf:/judge0.conf:ro
+      - judge0.conf:/judge0.conf:ro
     privileged: true
     deploy:
       restart_policy:
@@ -102,7 +102,7 @@ services:
 
   db:
     image: postgres:16.2
-    env_file: /home/deploy/async0-stack/judge0.conf
+    env_file: judge0.conf
     volumes:
       - data:/var/lib/postgresql/data/
     deploy:
@@ -119,7 +119,7 @@ services:
         "-c",
         'docker-entrypoint.sh --appendonly no --requirepass "$$REDIS_PASSWORD"',
       ]
-    env_file: /home/deploy/async0-stack/judge0.conf
+    env_file: judge0.conf
     deploy:
       restart_policy:
         condition: any
