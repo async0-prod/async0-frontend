@@ -137,9 +137,6 @@ jobs:
 
       - name: Write env files
         run: |
-          cat << 'EOF' > ./envfile
-          GIT_COMMIT_HASH=${{ github.sha }}
-          EOF
 
           cat << 'EOF' > ./user.env
           ${{ secrets.USER_ENV_VARS }}
@@ -157,16 +154,13 @@ jobs:
           ${{ secrets.JUDGE0_ENV_VARS }}
           EOF
 
-      - name: Debug
-        run: ls -alh
-
       - name: Copy env files and docker-stack.yml
         uses: appleboy/scp-action@v1
         with:
           host: async0.com
           username: deploy
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          source: "envfile,user.env,admin.env,pyserver.env,judge0.conf,docker-stack.yml"
+          source: "user.env,admin.env,pyserver.env,judge0.conf,docker-stack.yml"
           target: /home/deploy/async0-stack/
 
       - name: Create dokcer configs
@@ -188,6 +182,10 @@ jobs:
 
             rm -f ./user.env ./admin.env ./pyserver.env
 
+      - name: create env file
+        run: |
+          echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
+
       - name: Stack Deploy
         uses: cssnr/stack-deploy-action@v1
         with:
@@ -196,4 +194,4 @@ jobs:
           host: async0.com
           user: deploy
           ssh_key: ${{secrets.DEPLOY_SSH_KEY}}
-          env_file: /home/deploy/async0-stack/envfile
+          env_file: ./envfile
