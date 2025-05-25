@@ -4,8 +4,6 @@ on:
     workflows: ["async0 CI"]
     types:
       - completed
-    branches:
-      - main
 
 jobs:
   deploy:
