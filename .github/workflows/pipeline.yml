@@ -161,7 +161,7 @@ jobs:
           username: deploy
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           source: "user.env,admin.env,pyserver.env,judge0.conf,docker-stack.yml"
-          target: /home/deploy/async0-stack
+          target: /home/deploy
 
       - name: Create dokcer configs
         uses: appleboy/ssh-action@v1
@@ -170,7 +170,6 @@ jobs:
           username: deploy
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
-            cd /home/deploy/async0-stack
             docker config rm user-config 2>/dev/null || true
             docker config create user-config ./user.env
 
@@ -190,7 +189,7 @@ jobs:
         uses: cssnr/stack-deploy-action@v1
         with:
           name: async0-stack
-          file: ./async0-stack/docker-stack.yml
+          file: docker-stack.yml
           host: async0.com
           user: deploy
           ssh_key: ${{secrets.DEPLOY_SSH_KEY}}
