@@ -162,7 +162,7 @@ jobs:
           host: async0.com
           username: deploy
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          source: "user.env admin.env pyserver.env judge0.conf docker-stack.yml"
+          source: "user.env,admin.env,pyserver.env,judge0.conf,docker-stack.yml"
           target: /home/deploy/async0-stack/
 
       - name: Create dokcer configs
