@@ -41,12 +41,12 @@ services:
     privileged: true
     restart: unless-stopped
     depends_on:
-      - judge0-db
-      - judge0-redis
+      - db
+      - redis
     networks:
       - judge0-network
 
-  judge0-worker:
+  worker:
     image: judge0/judge0:1.13.0
     command: ["./scripts/workers"]
     volumes:
@@ -54,12 +54,12 @@ services:
     privileged: true
     restart: unless-stopped
     depends_on:
-      - judge0-db
-      - judge0-redis
+      - db
+      - redis
     networks:
       - judge0-network
 
-  judge0-db:
+  db:
     image: postgres:13
     env_file:
       - ./judge0.conf
@@ -69,7 +69,7 @@ services:
     networks:
       - judge0-network
 
-  judge0-redis:
+  redis:
     image: redis:6.2
     command:
       [
