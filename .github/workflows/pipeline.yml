@@ -132,9 +132,7 @@ jobs:
       - setup
       - build-user-and-push-image
       - build-admin-and-push-image
-    if: |
-      needs.setup.outputs.user_changed == 'true' ||
-      needs.setup.outputs.admin_changed == 'true'
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
