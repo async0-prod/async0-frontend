@@ -3,6 +3,8 @@ import axios from "axios";
 import { judge0ResponseType, testcaseType } from "./types";
 import { postUserSubmission } from "@/app/actions/submissions";
 
+const judge0Url = process.env.JUDGE0_URL ?? "http://127.0.0.1:2358";
+
 export const submissionRun = cache(async (userCode: string) => {
   const source = axios.CancelToken.source();
   const timeId = setTimeout(() => {
@@ -16,7 +18,7 @@ export const submissionRun = cache(async (userCode: string) => {
 
   try {
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_JUDGE0_URL}/submissions/?base64_encoded=false&wait=false`,
+      `${judge0Url}/submissions/?base64_encoded=false&wait=false`,
       JSON.stringify(code),
       {
         headers: { "Content-Type": "application/json" },
@@ -84,7 +86,7 @@ export const submissionSubmit = cache(
 
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_JUDGE0_URL}/submissions/batch?base64_encoded=false&wait=false`,
+        `${judge0Url}/submissions/batch?base64_encoded=false&wait=false`,
         { submissions },
         {
           headers: { "Content-Type": "application/json" },
@@ -163,7 +165,7 @@ export async function checkPromiseStatus(
   return new Promise((resolve) => {
     async function checkStatus() {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_JUDGE0_URL}/submissions/${token}?base64_encoded=false`
+        `${judge0Url}/submissions/${token}?base64_encoded=false`
       );
 
       if (
@@ -186,7 +188,7 @@ export async function checkSubmitPromiseStatus(
   return new Promise((resolve) => {
     async function checkStatus() {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_JUDGE0_URL}/submissions/${token}?base64_encoded=false`
+        `${judge0Url}/submissions/${token}?base64_encoded=false`
       );
 
       if (

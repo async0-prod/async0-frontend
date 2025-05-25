@@ -3,6 +3,8 @@
 import { auth } from "@/lib/auth";
 import { userSubmissionType } from "@/lib/types";
 
+const pyBaseUrl = process.env.PYSERVER_URL ?? "http://127.0.0.1:8000/api/v1";
+
 export async function getUserSubmissions(problemId?: string) {
   const session = await auth();
   const token = session?.accessToken;
@@ -12,17 +14,14 @@ export async function getUserSubmissions(problemId?: string) {
   }
 
   try {
-    const res = await fetch(
-      `http://127.0.0.1:8000/api/v1/user/submission/${problemId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        cache: "no-store",
-      }
-    );
+    const res = await fetch(`${pyBaseUrl}/user/submission/${problemId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      cache: "no-store",
+    });
 
     const submissions = (await res.json()) as userSubmissionType;
     return submissions;
@@ -48,8 +47,9 @@ export async function postUserSubmission(
     total_testcases: totalTestcases,
     code: code,
   };
+
   try {
-    fetch("http://127.0.0.1:8000/api/v1/user/submission", {
+    fetch(`${pyBaseUrl}/user/submission`, {
       method: "POST",
       body: JSON.stringify(requestBody),
 

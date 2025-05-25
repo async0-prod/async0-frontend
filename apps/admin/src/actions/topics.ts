@@ -5,8 +5,10 @@ export async function getAllTopics() {
   const session = await auth();
   const token = session?.accessToken;
 
+  const pyBaseUrl = process.env.PYSERVER_URL ?? "http://127.0.0.1:8000/api/v1";
+
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/topic`, {
+    const res = await fetch(`${pyBaseUrl}/admin/topic`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

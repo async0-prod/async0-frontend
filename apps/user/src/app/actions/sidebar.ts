@@ -1,10 +1,11 @@
 "use server";
 
 import { SidebarDataType } from "@/lib/types";
+const pyBaseUrl = process.env.PYSERVER_URL ?? "http://127.0.0.1:8000/api/v1";
 
 export async function getSidebarData() {
   try {
-    const res = await fetch("http://127.0.0.1:8000/api/v1/user/sidebar", {
+    const res = await fetch(`${pyBaseUrl}/user/sidebar`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

@@ -1,22 +1,21 @@
 import { auth } from "@/lib/auth";
 import { ProblemType } from "@/lib/types";
 
+const pyBaseUrl = process.env.PYSERVER_URL ?? "http://127.0.0.1:8000/api/v1";
+
 export async function getAllProblems() {
   const session = await auth();
   const token = session?.accessToken;
 
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/admin/problem`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        cache: "no-store",
-      }
-    );
+    const res = await fetch(`${pyBaseUrl}/admin/problem`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      cache: "no-store",
+    });
     const problems = (await res.json()) as ProblemType[];
     return problems;
   } catch (error) {
@@ -29,17 +28,14 @@ export async function getProblemById(problemId: string) {
   const token = session?.accessToken;
 
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/admin/problem/${problemId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        cache: "no-store",
-      }
-    );
+    const res = await fetch(`${pyBaseUrl}/admin/problem/${problemId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      cache: "no-store",
+    });
     const problem = (await res.json()) as ProblemType;
     return problem;
   } catch (error) {
@@ -61,7 +57,7 @@ export async function addProblem(body: {
   const token = session?.accessToken;
 
   try {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/problem`, {
+    await fetch(`${pyBaseUrl}/admin/problem`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -92,18 +88,15 @@ export async function updateProblem(
   const token = session?.accessToken;
 
   try {
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/admin/problem/${problemId}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: "include",
-        body: JSON.stringify(body),
-      }
-    );
+    await fetch(`${pyBaseUrl}/admin/problem/${problemId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+      body: JSON.stringify(body),
+    });
   } catch (error) {
     console.error("Error adding problem", error);
   }
@@ -114,7 +107,7 @@ export async function deleteProblem(id: string) {
   const token = session?.accessToken;
 
   try {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/problem/${id}`, {
+    await fetch(`${pyBaseUrl}/admin/problem/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
