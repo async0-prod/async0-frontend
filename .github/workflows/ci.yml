@@ -1,4 +1,4 @@
-name: async0-user-admin CI pipeline
+name: async0 CI
 
 on:
   push:
