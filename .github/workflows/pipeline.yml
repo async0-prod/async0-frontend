@@ -157,7 +157,7 @@ jobs:
         run: ls -alh
 
       - name: Copy env files and docker-stack.yml
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/scp-action@v1
         with:
           host: async0.com
           username: deploy
@@ -166,7 +166,7 @@ jobs:
           target: /home/deploy/async0-stack/
 
       - name: Create dokcer configs
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v1
         with:
           host: async0.com
           username: deploy
