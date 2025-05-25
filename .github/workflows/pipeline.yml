@@ -130,8 +130,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - setup
-      - build-user-and-push-image
-      - build-admin-and-push-image
 
     steps:
       - name: Checkout repository
