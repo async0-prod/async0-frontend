@@ -27,7 +27,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   user:
-    image: grvbrk/async0:user-${GIT_COMMIT_HASH:latest}
+    image: grvbrk/async0:user-${GIT_COMMIT_HASH:-latest}
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.user-service.loadbalancer.server.port=3000"
@@ -45,7 +45,7 @@ services:
       - judge0
 
   admin:
-    image: grvbrk/async0:admin-${GIT_COMMIT_HASH:latest}
+    image: grvbrk/async0:admin-${GIT_COMMIT_HASH:-latest}
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.admin-service.loadbalancer.server.port=3001"
@@ -63,7 +63,7 @@ services:
       - judge0
 
   pyserver:
-    image: grvbrk/async0:python-${GIT_COMMIT_HASH:latest}
+    image: grvbrk/async0:python-${GIT_COMMIT_HASH:-latest}
     configs:
       - source: pyserver-config
         target: /app/.env
