@@ -193,15 +193,20 @@ jobs:
 
             rm -f ./user.env ./admin.env ./pyserver.env
 
-      - name: Stack Deploy
-        uses: cssnr/stack-deploy-action@v1
+      - name: Stack update
+        if: |
+          needs.setup.outputs.user_changed == 'true' || needs.setup.outputs.admin_changed == 'true'
+        uses: appleboy/ssh-action@v1
         with:
-          name: async0
-          file: docker-stack.yml
           host: async0.com
-          user: deploy
-          ssh_key: ${{secrets.DEPLOY_SSH_KEY}}
-          env_file: ./envfile
-          registry_user: ${{ secrets.DOCKER_USERNAME }}
-          registry_pass: ${{ secrets.DOCKER_PASSWORD }}
-          resolve_image: "always"
+          username: deploy
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -e
+            if [ "${{ needs.setup.outputs.user_changed }}" = "true" ]; then
+              docker service update --image grvbrk/async0:user-${{ github.sha }} async0_user
+            fi
+
+            if [ "${{ needs.setup.outputs.admin_changed }}" = "true" ]; then
+              docker service update --image grvbrk/async0:admin-${{ github.sha }} async0_admin
+            fi

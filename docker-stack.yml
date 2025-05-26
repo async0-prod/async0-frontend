@@ -1,8 +1,6 @@
-version: "3.8"
-
 services:
   traefik:
-    image: traefik:v3.1
+    image: traefik:v3.4.0
     command:
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false"
@@ -30,48 +28,34 @@ services:
     image: grvbrk/async0:user-${GIT_COMMIT_HASH:-latest}
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=frontend"
-      - "traefik.http.services.user-service.loadbalancer.server.port=3000"
-      - "traefik.http.routers.user-router.rule=Host(`async0.com`)"
-      - "traefik.http.routers.user-router.entrypoints=websecure"
-      - "traefik.http.routers.user-router.tls.certresolver=myresolver"
-      - "traefik.http.routers.user-router.service=user-service"
+      - "traefik.http.services.user.loadbalancer.server.port=3000"
+      - "traefik.http.routers.user.rule=Host(`async0.com`)"
+      - "traefik.http.routers.user.entrypoints=websecure"
+      - "traefik.http.routers.user.tls.certresolver=myresolver"
     configs:
       - source: user-config
-        target: /app/.env
+        target: ./user.env
         mode: 0444
-    networks:
-      - frontend
-      - backend
-      - judge0
 
   admin:
     image: grvbrk/async0:admin-${GIT_COMMIT_HASH:-latest}
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=frontend"
-      - "traefik.http.services.admin-service.loadbalancer.server.port=3001"
-      - "traefik.http.routers.admin-router.rule=Host(`admin.async0.com`)"
-      - "traefik.http.routers.admin-router.entrypoints=websecure"
-      - "traefik.http.routers.admin-router.tls.certresolver=myresolver"
-      - "traefik.http.routers.admin-router.service=admin-service"
+      - "traefik.http.services.admin.loadbalancer.server.port=3001"
+      - "traefik.http.routers.admin.rule=Host(`admin.async0.com`)"
+      - "traefik.http.routers.admin.entrypoints=websecure"
+      - "traefik.http.routers.admin.tls.certresolver=myresolver"
     configs:
       - source: admin-config
-        target: /app/.env
+        target: ./admin.env
         mode: 0444
-    networks:
-      - frontend
-      - backend
-      - judge0
 
   pyserver:
     image: grvbrk/async0:python-${GIT_COMMIT_HASH:-latest}
     configs:
       - source: pyserver-config
-        target: /app/.env
+        target: ./pyserver.env
         mode: 0444
-    networks:
-      - backend
 
   judge0-server:
     image: judge0/judge0:latest
@@ -84,8 +68,6 @@ services:
     deploy:
       restart_policy:
         condition: any
-    networks:
-      - judge0
 
   worker:
     image: judge0/judge0:latest
@@ -97,8 +79,6 @@ services:
     deploy:
       restart_policy:
         condition: any
-    networks:
-      - judge0
 
   db:
     image: postgres:16.2
@@ -108,8 +88,6 @@ services:
     deploy:
       restart_policy:
         condition: any
-    networks:
-      - judge0
 
   redis:
     image: redis:7.2.4
@@ -139,8 +117,3 @@ configs:
 volumes:
   data:
   letsencrypt:
-
-networks:
-  frontend:
-  backend:
-  judge0:
