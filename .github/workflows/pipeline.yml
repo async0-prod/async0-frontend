@@ -202,4 +202,6 @@ jobs:
           user: deploy
           ssh_key: ${{secrets.DEPLOY_SSH_KEY}}
           env_file: ./envfile
-          registry_auth: true
+          registry_user: ${{ secrets.DOCKER_USERNAME }}
+          registry_pass: ${{ secrets.DOCKER_PASSWORD }}
+          resolve_image: "always"
