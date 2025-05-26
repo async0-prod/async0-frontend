@@ -30,6 +30,7 @@ services:
     image: grvbrk/async0:user-${GIT_COMMIT_HASH:-latest}
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=frontend"
       - "traefik.http.services.user-service.loadbalancer.server.port=3000"
       - "traefik.http.routers.user-router.rule=Host(`async0.com`)"
       - "traefik.http.routers.user-router.entrypoints=websecure"
@@ -48,6 +49,7 @@ services:
     image: grvbrk/async0:admin-${GIT_COMMIT_HASH:-latest}
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=frontend"
       - "traefik.http.services.admin-service.loadbalancer.server.port=3001"
       - "traefik.http.routers.admin-router.rule=Host(`admin.async0.com`)"
       - "traefik.http.routers.admin-router.entrypoints=websecure"
