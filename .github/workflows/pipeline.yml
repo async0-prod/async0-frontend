@@ -167,30 +167,33 @@ jobs:
           source: "user.env,admin.env,pyserver.env,judge0.conf,docker-stack.yml"
           target: /home/deploy
 
-      # - name: Create dokcer configs
-      #   uses: appleboy/ssh-action@v1
-      #   with:
-      #     host: async0.com
-      #     username: deploy
-      #     key: ${{ secrets.DEPLOY_SSH_KEY }}
-      #     script: |
-      #       docker config rm user-config 2>/dev/null || true
-      #       docker config create user-config ./user.env
+      - name: Create dokcer configs
+        uses: appleboy/ssh-action@v1
+        with:
+          host: async0.com
+          username: deploy
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            docker config rm user-config
+            docker config create user-config ./user.env
 
-      #       docker config rm admin-config 2>/dev/null || true
-      #       docker config create admin-config ./admin.env
+            docker config rm admin-config
+            docker config create admin-config ./admin.env
 
-      #       docker config rm pyserver-config 2>/dev/null || true
-      #       docker config create pyserver-config ./pyserver.env
+            docker config rm pyserver-config
+            docker config create pyserver-config ./pyserver.env
 
-      #       rm -f ./user.env ./admin.env ./pyserver.env
+            docker config rm judge0-config
+            docker config create judge0-config ./judge0.conf
 
-      # - name: Stack Deploy
-      #   uses: cssnr/stack-deploy-action@v1
-      #   with:
-      #     name: async0
-      #     file: docker-stack.yml
-      #     host: async0.com
-      #     user: deploy
-      #     ssh_key: ${{secrets.DEPLOY_SSH_KEY}}
-      #     env_file: ./envfile
+            rm -f ./user.env ./admin.env ./pyserver.env
+
+      - name: Stack Deploy
+        uses: cssnr/stack-deploy-action@v1
+        with:
+          name: async0
+          file: docker-stack.yml
+          host: async0.com
+          user: deploy
+          ssh_key: ${{secrets.DEPLOY_SSH_KEY}}
+          env_file: ./envfile

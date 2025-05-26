@@ -77,10 +77,12 @@ services:
 
   judge0-server:
     image: judge0/judge0:latest
-    volumes:
-      - judge0.conf:/judge0.conf:ro
     ports:
       - "2358:2358"
+    configs:
+      - source: judge0-config
+        target: /judge0.conf
+        mode: 0444
     deploy:
       restart_policy:
         condition: any
@@ -90,8 +92,10 @@ services:
   worker:
     image: judge0/judge0:latest
     command: ["./scripts/workers"]
-    volumes:
-      - judge0.conf:/judge0.conf:ro
+    configs:
+      - source: judge0-config
+        target: /judge0.conf
+        mode: 0444
     deploy:
       restart_policy:
         condition: any
@@ -130,6 +134,8 @@ configs:
   admin-config:
     external: true
   pyserver-config:
+    external: true
+  judge0-config:
     external: true
 
 volumes:
