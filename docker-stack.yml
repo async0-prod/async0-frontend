@@ -81,7 +81,6 @@ services:
       - judge0.conf:/judge0.conf:ro
     ports:
       - "2358:2358"
-    privileged: true
     deploy:
       restart_policy:
         condition: any
@@ -93,7 +92,6 @@ services:
     command: ["./scripts/workers"]
     volumes:
       - judge0.conf:/judge0.conf:ro
-    privileged: true
     deploy:
       restart_policy:
         condition: any

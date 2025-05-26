@@ -128,6 +128,9 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      packages: write
     needs:
       - setup
 
@@ -137,6 +140,7 @@ jobs:
 
       - name: Write env files
         run: |
+          echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
 
           cat << 'EOF' > ./user.env
           ${{ secrets.USER_ENV_VARS }}
@@ -163,34 +167,30 @@ jobs:
           source: "user.env,admin.env,pyserver.env,judge0.conf,docker-stack.yml"
           target: /home/deploy
 
-      - name: Create dokcer configs
-        uses: appleboy/ssh-action@v1
-        with:
-          host: async0.com
-          username: deploy
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          script: |
-            docker config rm user-config 2>/dev/null || true
-            docker config create user-config ./user.env
+      # - name: Create dokcer configs
+      #   uses: appleboy/ssh-action@v1
+      #   with:
+      #     host: async0.com
+      #     username: deploy
+      #     key: ${{ secrets.DEPLOY_SSH_KEY }}
+      #     script: |
+      #       docker config rm user-config 2>/dev/null || true
+      #       docker config create user-config ./user.env
 
-            docker config rm admin-config 2>/dev/null || true
-            docker config create admin-config ./admin.env
+      #       docker config rm admin-config 2>/dev/null || true
+      #       docker config create admin-config ./admin.env
 
-            docker config rm pyserver-config 2>/dev/null || true
-            docker config create pyserver-config ./pyserver.env
+      #       docker config rm pyserver-config 2>/dev/null || true
+      #       docker config create pyserver-config ./pyserver.env
 
-            rm -f ./user.env ./admin.env ./pyserver.env
+      #       rm -f ./user.env ./admin.env ./pyserver.env
 
-      - name: create env file
-        run: |
-          echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
-
-      - name: Stack Deploy
-        uses: cssnr/stack-deploy-action@v1
-        with:
-          name: async0-stack
-          file: docker-stack.yml
-          host: async0.com
-          user: deploy
-          ssh_key: ${{secrets.DEPLOY_SSH_KEY}}
-          env_file: ./envfile
+      # - name: Stack Deploy
+      #   uses: cssnr/stack-deploy-action@v1
+      #   with:
+      #     name: async0
+      #     file: docker-stack.yml
+      #     host: async0.com
+      #     user: deploy
+      #     ssh_key: ${{secrets.DEPLOY_SSH_KEY}}
+      #     env_file: ./envfile
