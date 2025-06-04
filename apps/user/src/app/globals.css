@@ -11,6 +11,7 @@
 @theme inline {
   --font-nunito: var(--font-nunito);
   --font-manrope: var(--font-manrope);
+  --font-inter: var(--font-inter);
 }
 
 @custom-variant dark (&:is(.dark *));

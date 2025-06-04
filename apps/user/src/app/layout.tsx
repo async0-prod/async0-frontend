@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Nunito, Manrope } from "next/font/google";
+import { Nunito, Manrope, Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 
@@ -12,6 +12,12 @@ const nunito = Nunito({
 const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -31,14 +37,14 @@ export default function RootLayout({
         <meta name="view-transition" content="same-origin" />
       </head>
       <body
-        className={`${nunito.variable} ${manrope.variable} antialiased bg-almond dark:bg-charcoal relative font-nunito`}
+        className={`${nunito.variable} ${manrope.variable} ${inter.variable} antialiased bg-almond dark:bg-charcoal relative`}
       >
-        <div
-          className=" w-full h-full bg-center opacity-60"
+        {/* <div
+          className="w-full h-full bg-center opacity-60"
           style={{
             backgroundImage: `url("/noise.png")`,
           }}
-        />
+        /> */}
 
         <Providers>{children}</Providers>
       </body>

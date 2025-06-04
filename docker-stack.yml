@@ -101,8 +101,6 @@ services:
     deploy:
       restart_policy:
         condition: any
-    networks:
-      - judge0
 
 configs:
   user-config:
