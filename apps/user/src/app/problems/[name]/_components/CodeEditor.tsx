@@ -61,7 +61,7 @@ export default function CodeEditor({
   isPending,
 }: CodeEditorProps) {
   const { starter_code, name } = problem;
-
+  const monacoRef = useRef<Monaco | null>(null);
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
   const consoleRef = useRef<HTMLDivElement>(null);
   const [isConsoleOpen, setIsConsoleOpen] = useState(false);
@@ -83,6 +83,21 @@ export default function CodeEditor({
     }
   }, [name]);
 
+  useEffect(() => {
+    const monaco = monacoRef.current;
+    if (!monaco) return;
+
+    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: !intellisenseActive,
+      noSyntaxValidation: !intellisenseActive,
+    });
+
+    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: !intellisenseActive,
+      noSyntaxValidation: !intellisenseActive,
+    });
+  }, [intellisenseActive]);
+
   function handleMount(editor: editor.IStandaloneCodeEditor, monaco: Monaco) {
     editorRef.current = editor;
     editor.focus();
@@ -99,14 +114,31 @@ export default function CodeEditor({
   }
 
   function handleBeforeMount(monaco: Monaco) {
+    monacoRef.current = monaco;
+
     monaco.editor.defineTheme("custom", {
       base: "vs-dark",
       inherit: true,
-      rules: [],
+      rules: [
+        { token: "", foreground: "D4D4D4", background: "1E1E1E" },
+        { token: "comment", foreground: "6A9955", fontStyle: "italic" },
+        { token: "keyword", foreground: "569CD6" },
+        { token: "identifier", foreground: "9CDCFE" },
+        { token: "string", foreground: "CE9178" },
+        { token: "number", foreground: "B5CEA8" },
+        { token: "delimiter", foreground: "D4D4D4" },
+      ],
       colors: {
-        "editor.background": "#080c16",
-        "editor.lineHighlightBackground": "#252526",
-        "editorLineNumber.activeForeground": "#FFD700",
+        "editor.background": "#1E1E1E",
+        "editor.foreground": "#D4D4D4",
+        "editor.lineHighlightBackground": "#2A2A2A",
+        "editorLineNumber.foreground": "#858585",
+        "editorLineNumber.activeForeground": "#C6C6C6",
+        "editorCursor.foreground": "#AEAFAD",
+        "editor.selectionBackground": "#264F78",
+        "editor.inactiveSelectionBackground": "#3A3D41",
+        "editorIndentGuide.background": "#404040",
+        "editorIndentGuide.activeBackground": "#707070",
       },
     });
   }
@@ -124,7 +156,7 @@ export default function CodeEditor({
   return (
     <div className="p-1.5">
       <Tabs className="py-2">
-        <TabsList className="w-full flex items-center">
+        <TabsList className="flex items-center">
           <div className="flex items-center">
             <Dot
               className={`${codeSaved && "text-green-600"} ${isCodeSavePending && "text-yellow-600"}`}
@@ -147,17 +179,17 @@ export default function CodeEditor({
             )}
           </div>
 
-          <div className="ml-auto">
+          <div className="ml-auto flex gap-4">
             <Button
               variant={"ghost"}
               size={"icon"}
               onClick={handleCodeDownload}
-              className="hover:bg-transparent"
+              className="hover:bg-transparent cursor-pointer"
             >
               {copied ? (
                 <CheckCheck className="h-5 w-5  " />
               ) : (
-                <Copy className="h-5 w-5 " />
+                <Copy size={16} />
               )}
             </Button>
 
@@ -166,9 +198,9 @@ export default function CodeEditor({
                 <Button
                   variant={"ghost"}
                   size={"icon"}
-                  className="hover:bg-transparent"
+                  className="hover:bg-transparent cursor-pointer"
                 >
-                  <Settings className="h-5 w-5 " />
+                  <Settings size={16} />
                 </Button>
               </PopoverTrigger>
               <PopoverContent align="end">
@@ -219,9 +251,9 @@ export default function CodeEditor({
                   window.localStorage.removeItem(`${name}-code`);
                 }
               }}
-              className="hover:bg-transparent"
+              className="hover:bg-transparent cursor-pointer"
             >
-              <RotateCcw className="h-5 w-5 " />
+              <RotateCcw size={16} />
             </Button>
           </div>
         </TabsList>
@@ -232,47 +264,52 @@ export default function CodeEditor({
           value={value}
           height="60vh"
           defaultLanguage="javascript"
-          // theme="light"
+          theme="custom"
           onChange={(value) => setValue(value || "")}
           onMount={handleMount}
           beforeMount={handleBeforeMount}
           options={{
-            suggest: {
-              showFunctions: false,
-            },
-            fontSize: fontSize,
-            tabSize: tabSpace,
-            lineNumbers: "on",
-            lineHeight: lineHeight,
-            minimap: { enabled: false },
-            padding: { top: 40 },
-            multiCursorModifier: "alt",
-            cursorBlinking: "smooth",
-            mouseWheelScrollSensitivity: 3,
-            find: {
-              cursorMoveOnType: true,
-              addExtraSpaceOnTop: true,
-              loop: true,
-            },
-            smoothScrolling: true,
-            tabCompletion: "on",
-            overviewRulerBorder: false,
-            hideCursorInOverviewRuler: true,
-            copyWithSyntaxHighlighting: true,
-            renderLineHighlightOnlyWhenFocus: true,
-            overviewRulerLanes: 0,
-            guides: { bracketPairs: false, indentation: false },
-            renderLineHighlight: "all",
-            scrollBeyondLastLine: false,
             quickSuggestions: intellisenseActive,
+            suggestOnTriggerCharacters: intellisenseActive,
+            hover: { enabled: intellisenseActive },
+            parameterHints: { enabled: intellisenseActive },
+            // lightbulb: {
+            //   enabled: intellisenseActive ? ShowLightbulbIconMode : "off",
+            // },
+            wordBasedSuggestions: intellisenseActive
+              ? "currentDocument"
+              : "off",
+            inlineSuggest: { enabled: intellisenseActive },
+            tabCompletion: intellisenseActive ? "on" : "off",
+
+            fontSize: 14,
+            fontFamily: "Fira Code, monospace",
+            fontLigatures: true,
+            wordWrap: "on",
+            minimap: { enabled: false },
+            bracketPairColorization: { enabled: true },
+            cursorBlinking: "smooth",
+            formatOnPaste: true,
+            lineNumbers: "on",
+            lineHeight: 22,
+            padding: { top: 20 },
+            scrollBeyondLastLine: false,
+            smoothScrolling: true,
             scrollbar: {
+              verticalScrollbarSize: 10,
+              horizontalScrollbarSize: 10,
               handleMouseWheel: true,
               alwaysConsumeMouseWheel: false,
-              verticalScrollbarSize: 10,
-              verticalHasArrows: true,
-              horizontal: "auto",
-              horizontalScrollbarSize: 10,
-              horizontalHasArrows: true,
+            },
+            guides: { bracketPairs: false, indentation: false },
+            renderLineHighlight: "all",
+            renderLineHighlightOnlyWhenFocus: true,
+            overviewRulerBorder: false,
+            overviewRulerLanes: 0,
+            hideCursorInOverviewRuler: true,
+            copyWithSyntaxHighlighting: true,
+            suggest: {
+              showFunctions: false,
             },
           }}
         />

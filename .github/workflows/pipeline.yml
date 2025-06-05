@@ -155,10 +155,6 @@ jobs:
           ${{ secrets.ADMIN_ENV_VARS }}
           EOF
 
-          cat << 'EOF' > ./pyserver.env
-          ${{ secrets.PYSERVER_ENV_VARS }}
-          EOF
-
           cat << 'EOF' > ./judge0.conf
           ${{ secrets.JUDGE0_ENV_VARS }}
           EOF
@@ -169,7 +165,7 @@ jobs:
           host: async0.com
           username: deploy
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          source: "user.env,admin.env,pyserver.env,judge0.conf,docker-stack.yml"
+          source: "user.env,admin.env,judge0.conf,docker-stack.yml"
           target: /home/deploy
 
       - name: Create dokcer configs
@@ -185,13 +181,10 @@ jobs:
             docker config rm admin-config
             docker config create admin-config ./admin.env
 
-            docker config rm pyserver-config
-            docker config create pyserver-config ./pyserver.env
-
             docker config rm judge0-config
             docker config create judge0-config ./judge0.conf
 
-            rm -f ./user.env ./admin.env ./pyserver.env
+            rm -f ./user.env ./admin.env
 
       - name: Stack update
         if: |

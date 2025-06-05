@@ -1,6 +1,5 @@
 "use client";
 
-import { useMobile } from "@/hooks/isMobile";
 import { problemNameMapping } from "@/lib/mapping";
 import { submissionRun, submissionSubmit } from "@/lib/submission";
 import { useState, useTransition } from "react";
@@ -25,7 +24,6 @@ export default function DispayProblem({
   problem: problemType | undefined;
   userSubmissions: userSubmissionType | undefined;
 }) {
-  const isMobile = useMobile();
   const { data: session } = useSession();
   const [problemRunStatus, setProblemRunStatus] =
     useState<judge0ResponseType | null>(null);
@@ -75,20 +73,17 @@ export default function DispayProblem({
   }
 
   return (
-    <div className="container flex flex-col">
-      {isMobile ? (
+    <>
+      <div className="lg:hidden">
         <ProblemComponentDetails
           problem={problem}
           problemSubmitStatus={problemSubmitStatus}
           userSubmissions={userSubmissions}
         />
-      ) : (
+      </div>
+      <div className="hidden lg:block">
         <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel
-            defaultSize={40}
-            minSize={30}
-            className="border rounded-xl"
-          >
+          <ResizablePanel defaultSize={40} minSize={30} className="rounded-xl">
             <ProblemComponentDetails
               problem={problem}
               problemSubmitStatus={problemSubmitStatus}
@@ -101,7 +96,7 @@ export default function DispayProblem({
           <ResizablePanel
             defaultSize={60}
             minSize={30}
-            className="px-4 border rounded-xl pt-2 pb-4"
+            className="px-4 rounded-xl pt-2 pb-4"
           >
             <CodeEditor
               problem={problem}
@@ -114,7 +109,7 @@ export default function DispayProblem({
             />
           </ResizablePanel>
         </ResizablePanelGroup>
-      )}
-    </div>
+      </div>
+    </>
   );
 }

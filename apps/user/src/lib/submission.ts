@@ -138,7 +138,7 @@ export const submissionSubmit = cache(
 
       const errMsg = axios.isCancel(error)
         ? "Server took too long to respond."
-        : error.code === "ECONNREFUSED"
+        : error.code === "ECONNREFUSED" || error.code === "ERR_NETWORK"
           ? "Server is down at the moment. Please try again in some time."
           : "Something went wrong!";
 
@@ -147,11 +147,11 @@ export const submissionSubmit = cache(
           stdout: null,
           time: null,
           memory: null,
-          stderr: errMsg,
+          stderr: null,
           token: null,
           compile_output: null,
           message: null,
-          status: { id: 69, description: null },
+          status: { id: 69, description: errMsg },
           output: null,
         },
       ]);

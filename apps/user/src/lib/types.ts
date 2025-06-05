@@ -77,3 +77,12 @@ export type userSubmissionType = {
   code: string;
   has_solved: boolean;
 }[];
+
+export type userProblemSolvedStatType = {
+  total_problems_solved: number;
+  percentage_change: number | null;
+};
+
+export type userProblemStreakStatType = {
+  current_streak: number;
+};

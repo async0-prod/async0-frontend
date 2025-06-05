@@ -60,7 +60,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="flex w-full flex-col gap-2.5 overflow-auto text-charcoal dark:text-white">
+    <div className="flex w-full flex-col gap-2.5 overflow-auto text-charcoal dark:text-almond">
       <div className="flex items-center pb-2">
         <Input
           placeholder="Filter problems..."
@@ -68,10 +68,10 @@ export function DataTable<TData, TValue>({
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm border-charcoal/20"
+          className="max-w-sm dark:border-almond border-charcoal"
         />
       </div>
-      <div className="overflow-hidden rounded-md bg-white p-2">
+      <div className="overflow-hidden rounded-md p-2 border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

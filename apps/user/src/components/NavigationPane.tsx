@@ -1,31 +1,29 @@
 "use client";
 
-import { useTheme } from "next-themes";
-
-import { Moon, Sun } from "lucide-react";
 import Link from "next/link";
-import { Toggle } from "@/components/ui/toggle";
-import { useEffect, useState } from "react";
 
 export default function NavigationPane() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // useEffect(() => {
+  //   setMounted(true);
+  // }, []);
   return (
-    <div className="flex items-center justify-center gap-4 w-full">
-      <div className="flex items-center justify-center gap-4 mx-auto">
-        <Link href="/dashboard">Dashboard</Link>
-        <Link href="/problems">Problems</Link>
-        {/* <Link href="/quirks">Quirks</Link>
-        <Link href="/blog">Blog</Link> */}
-      </div>
+    <div className="flex items-center justify-start gap-4 w-full lg:justify-end">
+      <Link
+        href="/dashboard"
+        className="text-sm text-muted-foreground hover:text-charcoal hover:underline"
+      >
+        Dashboard
+      </Link>
+      <Link
+        href="/problems"
+        className="text-sm text-muted-foreground hover:text-charcoal hover:underline"
+      >
+        Problems
+      </Link>
 
-      <Toggle
+      {/* <Toggle
         aria-label="Toggle"
-        className="ml-auto cursor-pointer hover:bg-transparent hover:text-foreground data-[state=on]:bg-transparent"
+        className="cursor-pointer hover:bg-transparent hover:text-foreground data-[state=on]:bg-transparent"
         onPressedChange={() =>
           theme === "light" ? setTheme("dark") : setTheme("light")
         }
@@ -39,7 +37,7 @@ export default function NavigationPane() {
         ) : (
           <div className="h-4 w-4" />
         )}
-      </Toggle>
+      </Toggle> */}
     </div>
   );
 }

@@ -34,10 +34,6 @@ export function DataTablePagination<TData>({
       )}
       {...props}
     >
-      {/* <div className="flex-1 whitespace-nowrap text-muted-foreground text-sm">
-        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
-      </div> */}
       <div className="ml-auto flex items-center gap-4 sm:gap-6 lg:gap-8">
         <div className="flex items-center space-x-2">
           <p className="whitespace-nowrap font-medium text-sm">Rows per page</p>
@@ -47,7 +43,7 @@ export function DataTablePagination<TData>({
               table.setPageSize(Number(value));
             }}
           >
-            <SelectTrigger className="h-8 w-[4.5rem] [&[data-size]]:h-8">
+            <SelectTrigger className="h-8 w-[4.5rem] [&[data-size]]:h-8 border border-charcoal/20">
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
@@ -98,7 +94,7 @@ export function DataTablePagination<TData>({
             aria-label="Go to last page"
             variant="outline"
             size="sm"
-            className="hidden  lg:flex"
+            className="hidden lg:flex"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >

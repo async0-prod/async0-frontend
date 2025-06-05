@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
-import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRef, useState } from "react";
 
 const VARIANT = {
@@ -12,7 +12,6 @@ const VARIANT = {
 };
 
 export default function HeroSection() {
-  const { data: session, status } = useSession();
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -65,15 +64,12 @@ export default function HeroSection() {
         className="flex mt-4 gap-3"
       >
         <Button className="cursor-pointer bg-charcoal dark:bg-almond">
-          Dashboard
+          <Link href={"/dashboard"}> Dashboard</Link>
         </Button>
         <Button
           variant="outline"
           className="bg-transparent hover:bg-charcoal dark:hover:bg-almond hover:text-almond dark:hover:text-charcoal cursor-pointer border-charcoal dark:border-almond flex items-center gap-2"
           onMouseEnter={handleMouseHover}
-          onClick={() => {
-            if (status === "unauthenticated" || !session) return;
-          }}
         >
           <motion.div
             key={isHovered.toString()}
@@ -93,7 +89,7 @@ export default function HeroSection() {
           >
             <ArrowRight />
           </motion.div>
-          Problems
+          <Link href={"/problems"}> Problems</Link>
         </Button>
       </motion.div>
     </div>

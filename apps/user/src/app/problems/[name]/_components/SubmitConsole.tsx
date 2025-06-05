@@ -11,66 +11,66 @@ import {
   Info,
 } from "lucide-react";
 
+function getStatusIcon(statusId: number) {
+  switch (statusId) {
+    case 1: // In Queue
+    case 2: // Processing
+      return <Clock className="h-4 w-4 text-yellow-500" />;
+    case 3: // Accepted
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case 4: // Wrong Answer
+      return <XCircle className="h-4 w-4 text-red-500" />;
+    case 5: // Time Limit Exceeded
+      return <Clock className="h-4 w-4 text-yellow-500" />;
+    case 6: // Compilation Error
+      return <AlertCircle className="h-4 w-4 text-red-500" />;
+    case 7: // Runtime Error (SIGSEGV)
+    case 8: // Runtime Error (SIGXFSZ)
+    case 9: // Runtime Error (SIGFPE)
+    case 10: // Runtime Error (SIGABRT)
+    case 11: // Runtime Error (NZEC)
+    case 12: // Runtime Error (Other)
+      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case 13: // Internal Error
+    case 14: // Exec Format Error
+      return <Info className="h-4 w-4 text-blue-500" />;
+    default:
+      return <Info className="h-4 w-4 text-gray-500" />;
+  }
+}
+
+function getStatusColor(statusId: number) {
+  switch (statusId) {
+    case 1:
+    case 2:
+      return "bg-yellow-100 text-yellow-800 border-yellow-300";
+    case 3:
+      return "bg-green-100 text-green-800 border-green-300";
+    case 4:
+    case 5:
+      return "bg-yellow-100 text-yellow-800 border-yellow-300";
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+      return "bg-red-100 text-red-800 border-red-300";
+    case 13:
+    case 14:
+      return "bg-blue-100 text-blue-800 border-blue-300";
+    default:
+      return "bg-gray-100 text-gray-800 border-gray-300";
+  }
+}
+
 export default function SubmitConsole({
   data,
 }: {
   data: judge0ResponseType[] | null;
 }) {
   if (!data) return;
-
-  function getStatusIcon(statusId: number) {
-    switch (statusId) {
-      case 1: // In Queue
-      case 2: // Processing
-        return <Clock className="h-4 w-4 text-yellow-500" />;
-      case 3: // Accepted
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 4: // Wrong Answer
-        return <XCircle className="h-4 w-4 text-red-500" />;
-      case 5: // Time Limit Exceeded
-        return <Clock className="h-4 w-4 text-yellow-500" />;
-      case 6: // Compilation Error
-        return <AlertCircle className="h-4 w-4 text-red-500" />;
-      case 7: // Runtime Error (SIGSEGV)
-      case 8: // Runtime Error (SIGXFSZ)
-      case 9: // Runtime Error (SIGFPE)
-      case 10: // Runtime Error (SIGABRT)
-      case 11: // Runtime Error (NZEC)
-      case 12: // Runtime Error (Other)
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case 13: // Internal Error
-      case 14: // Exec Format Error
-        return <Info className="h-4 w-4 text-blue-500" />;
-      default:
-        return <Info className="h-4 w-4 text-gray-500" />;
-    }
-  }
-
-  function getStatusColor(statusId: number) {
-    switch (statusId) {
-      case 1:
-      case 2:
-        return "bg-yellow-100 text-yellow-800 border-yellow-300";
-      case 3:
-        return "bg-green-100 text-green-800 border-green-300";
-      case 4:
-      case 5:
-        return "bg-yellow-100 text-yellow-800 border-yellow-300";
-      case 6:
-      case 7:
-      case 8:
-      case 9:
-      case 10:
-      case 11:
-      case 12:
-        return "bg-red-100 text-red-800 border-red-300";
-      case 13:
-      case 14:
-        return "bg-blue-100 text-blue-800 border-blue-300";
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-300";
-    }
-  }
 
   const getOverallStatus = () => {
     if (data.some((result) => result.status.id === 6)) {
