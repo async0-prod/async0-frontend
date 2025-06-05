@@ -89,7 +89,7 @@ export default function ProblemInfoCard({
               <TestCaseBlock
                 testcase={testcase}
                 testcaseStatus={
-                  problemSubmitStatus ? problemSubmitStatus[i] : null
+                  problemSubmitStatus ? problemSubmitStatus[i] : undefined
                 }
               />
             </motion.div>
@@ -105,7 +105,7 @@ function TestCaseBlock({
   testcaseStatus,
 }: {
   testcase: testcaseType;
-  testcaseStatus: judge0ResponseType | null;
+  testcaseStatus: judge0ResponseType | undefined;
 }) {
   function getStatusColor(statusId: number | null) {
     switch (statusId) {

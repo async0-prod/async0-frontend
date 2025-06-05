@@ -64,8 +64,8 @@ export default function ProblemForm({
     id: string;
     name: string;
   }>({
-    id: problem?.topic_problem[0].topic.id || "",
-    name: problem?.topic_problem[0].topic.name || "",
+    id: problem?.topic_problem[0]?.topic.id || "",
+    name: problem?.topic_problem[0]?.topic.name || "",
   });
 
   function handleTestCaseChange(

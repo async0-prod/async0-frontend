@@ -52,7 +52,7 @@ export function PopularSolutions() {
           className="flex items-start justify-between border-b pb-4 last:border-0 last:pb-0"
         >
           <div className="space-y-1">
-            <h4 className="font-medium font-manrope">{solution.problemName}</h4>
+            <h4 className="font-medium ">{solution.problemName}</h4>
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <Badge variant="outline" className="px-2 py-0 text-xs">
                 Easy

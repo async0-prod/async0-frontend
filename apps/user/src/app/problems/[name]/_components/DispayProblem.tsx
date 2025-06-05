@@ -75,20 +75,24 @@ export default function DispayProblem({
   return (
     <>
       <div className="lg:hidden">
-        <ProblemComponentDetails
-          problem={problem}
-          problemSubmitStatus={problemSubmitStatus}
-          userSubmissions={userSubmissions}
-        />
+        {ProblemComponentDetails && (
+          <ProblemComponentDetails
+            problem={problem}
+            problemSubmitStatus={problemSubmitStatus}
+            userSubmissions={userSubmissions}
+          />
+        )}
       </div>
       <div className="hidden lg:block">
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={40} minSize={30} className="rounded-xl">
-            <ProblemComponentDetails
-              problem={problem}
-              problemSubmitStatus={problemSubmitStatus}
-              userSubmissions={userSubmissions}
-            />
+            {ProblemComponentDetails && (
+              <ProblemComponentDetails
+                problem={problem}
+                problemSubmitStatus={problemSubmitStatus}
+                userSubmissions={userSubmissions}
+              />
+            )}
           </ResizablePanel>
 
           <ResizableHandle className="hidden md:block w-1 bg-charcoal/20  hover:bg-muted-foreground rounded-full my-6" />

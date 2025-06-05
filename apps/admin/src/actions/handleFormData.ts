@@ -29,7 +29,7 @@ export async function addOneProblem(prevState: unknown, formData: FormData) {
       const rank = key.split("-")[1];
       solutions.push({
         code: String(data[key]),
-        rank: rank,
+        rank: rank!,
       });
       delete data[key];
     }
@@ -87,7 +87,7 @@ export async function updateOneProblem(
       const rank = key.split("-")[1];
       solutions.push({
         code: String(data[key]),
-        rank: rank,
+        rank: rank!,
       });
       delete data[key];
     }

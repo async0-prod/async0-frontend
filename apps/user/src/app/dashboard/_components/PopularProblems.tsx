@@ -52,7 +52,7 @@ export function PopularProblems() {
         >
           <div className="space-y-1 w-full">
             <div className="flex items-center gap-2">
-              <h4 className="font-medium font-manrope text-wrap max-w-[300px]">
+              <h4 className="font-medium  text-wrap max-w-[300px]">
                 {problem.name}
               </h4>
             </div>

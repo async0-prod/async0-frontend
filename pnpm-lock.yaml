@@ -65,10 +65,10 @@ importers:
       tailwind-merge:
         specifier: ^3.1.0
         version: 3.1.0
-      tw-animate-css:
-        specifier: ^1.2.5
-        version: 1.2.5
     devDependencies:
+      '@async0/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
       '@eslint/eslintrc':
         specifier: ^3
         version: 3.3.1
@@ -99,9 +99,6 @@ importers:
 
   apps/user:
     dependencies:
-      '@async0/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@monaco-editor/react':
         specifier: ^4.7.0
         version: 4.7.0(monaco-editor@0.52.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -198,9 +195,6 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.1.0(react@19.1.0)
-      react-icons:
-        specifier: ^5.5.0
-        version: 5.5.0(react@19.1.0)
       react-resizable-panels:
         specifier: ^2.1.7
         version: 2.1.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -216,13 +210,13 @@ importers:
       tailwind-merge:
         specifier: ^3.1.0
         version: 3.1.0
-      tw-animate-css:
-        specifier: ^1.2.5
-        version: 1.2.5
       usehooks-ts:
         specifier: ^3.1.1
         version: 3.1.1(react@19.1.0)
     devDependencies:
+      '@async0/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
       '@eslint/eslintrc':
         specifier: ^3
         version: 3.3.1
@@ -3551,11 +3545,6 @@ packages:
     peerDependencies:
       react: ^19.1.0
 
-  react-icons@5.5.0:
-    resolution: {integrity: sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==}
-    peerDependencies:
-      react: '*'
-
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -4032,9 +4021,6 @@ packages:
   turbo@2.5.3:
     resolution: {integrity: sha512-iHuaNcq5GZZnr3XDZNuu2LSyCzAOPwDuo5Qt+q64DfsTP1i3T2bKfxJhni2ZQxsvAoxRbuUK5QetJki4qc5aYA==}
     hasBin: true
-
-  tw-animate-css@1.2.5:
-    resolution: {integrity: sha512-ABzjfgVo+fDbhRREGL4KQZUqqdPgvc5zVrLyeW9/6mVqvaDepXc7EvedA+pYmMnIOsUAQMwcWzNvom26J2qYvQ==}
 
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
@@ -7707,10 +7693,6 @@ snapshots:
       react: 19.1.0
       scheduler: 0.26.0
 
-  react-icons@5.5.0(react@19.1.0):
-    dependencies:
-      react: 19.1.0
-
   react-is@16.13.1: {}
 
   react-is@18.3.1: {}
@@ -8255,8 +8237,6 @@ snapshots:
       turbo-linux-arm64: 2.5.3
       turbo-windows-64: 2.5.3
       turbo-windows-arm64: 2.5.3
-
-  tw-animate-css@1.2.5: {}
 
   type-check@0.4.0:
     dependencies:

@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
 @theme {
   --color-almond: #eee5da;
@@ -10,7 +9,6 @@
 
 @theme inline {
   --font-nunito: var(--font-nunito);
-  --font-manrope: var(--font-manrope);
   --font-inter: var(--font-inter);
 }
 

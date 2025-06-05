@@ -61,7 +61,7 @@ export async function ProblemsTable() {
                     )} */}
                   </TableCell>
                   <TableCell>{problem.name}</TableCell>
-                  <TableCell>{problem.topic_problem[0].topic.name}</TableCell>
+                  <TableCell>{problem.topic_problem[0]?.topic.name}</TableCell>
                   <TableCell>{problem.testcase.length}</TableCell>
                   <TableCell>
                     <DropdownMenu>

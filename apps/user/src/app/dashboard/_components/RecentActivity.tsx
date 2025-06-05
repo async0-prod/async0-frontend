@@ -57,9 +57,7 @@ export function RecentActivity() {
         >
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <h4 className="font-medium font-manrope">
-                {activity.problemName}
-              </h4>
+              <h4 className="font-medium ">{activity.problemName}</h4>
               <Badge
               // variant={
               //   activity.difficulty === "Easy"

@@ -36,7 +36,7 @@ export function SidebarData({ data }: SidebarProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isDesktopSidebarOpen, toggleDesktopSidebarOpen] = useToggle(false);
   const [selectedList, setSelectedList] = useState<string>(
-    data.length > 0 ? data[0].name : ""
+    data.length > 0 ? (data[0]?.name ?? "") : ""
   );
   const [showAllTopics, setShowAllTopics] = useState(false);
 

@@ -47,7 +47,7 @@ export default function DashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center">
               <div className="grid gap-1">
-                <CardTitle className="font-manrope flex items-center gap-1">
+                <CardTitle className=" flex items-center gap-1">
                   Trending Problems
                   <Badge variant="outline" className="px-2 py-0 text-xs">
                     782 new attempts this week <TrendingUp />
@@ -67,9 +67,7 @@ export default function DashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center">
               <div className="grid gap-1">
-                <CardTitle className="font-manrope">
-                  Trending Solutions
-                </CardTitle>
+                <CardTitle className="">Trending Solutions</CardTitle>
                 <CardDescription>
                   Solutions with the most upvotes
                 </CardDescription>
@@ -152,9 +150,7 @@ export default function DashboardPage() {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
               <Card className="lg:col-span-4">
                 <CardHeader>
-                  <CardTitle className="font-manrope">
-                    Problem Solving Frequency
-                  </CardTitle>
+                  <CardTitle className="">Problem Solving Frequency</CardTitle>
                   <CardDescription>
                     Number of problems solved over time
                   </CardDescription>
@@ -165,9 +161,7 @@ export default function DashboardPage() {
               </Card>
               <Card className="lg:col-span-3">
                 <CardHeader>
-                  <CardTitle className="font-manrope">
-                    Difficulty Distribution
-                  </CardTitle>
+                  <CardTitle className="">Difficulty Distribution</CardTitle>
                   <CardDescription>
                     Problems solved by difficulty level
                   </CardDescription>
@@ -181,9 +175,7 @@ export default function DashboardPage() {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
               <Card className="lg:col-span-4">
                 <CardHeader>
-                  <CardTitle className="font-manrope">
-                    Recent Activity
-                  </CardTitle>
+                  <CardTitle className="">Recent Activity</CardTitle>
                   <CardDescription>
                     Your recent problem submissions
                   </CardDescription>
@@ -194,7 +186,7 @@ export default function DashboardPage() {
               </Card>
               <Card className="lg:col-span-3">
                 <CardHeader>
-                  <CardTitle className="font-manrope">Topic Progress</CardTitle>
+                  <CardTitle className="">Topic Progress</CardTitle>
                   <CardDescription>
                     Completion percentage by topic
                   </CardDescription>
@@ -209,9 +201,7 @@ export default function DashboardPage() {
           <TabsContent value="lists" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle className="font-manrope">
-                  Problem Lists Completion
-                </CardTitle>
+                <CardTitle className="">Problem Lists Completion</CardTitle>
                 <CardDescription>
                   Your progress across different problem lists
                 </CardDescription>
@@ -225,7 +215,7 @@ export default function DashboardPage() {
           <TabsContent value="topics" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle className="font-manrope">Topic Progress</CardTitle>
+                <CardTitle className="">Topic Progress</CardTitle>
                 <CardDescription>
                   Your progress across different topics
                 </CardDescription>

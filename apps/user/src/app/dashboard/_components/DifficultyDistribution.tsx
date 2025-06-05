@@ -60,11 +60,9 @@ export function DifficultyDistribution() {
               if (active && payload && payload.length) {
                 return (
                   <div className="rounded-lg border border-border bg-background p-2 shadow-md">
-                    <p className="font-manrope text-sm font-bold">
-                      {payload[0].name}
-                    </p>
+                    <p className=" text-sm font-bold">{payload[0]?.name}</p>
                     <p className="font-nunito text-sm text-primary">
-                      <span className="font-bold">{payload[0].value}</span>{" "}
+                      <span className="font-bold">{payload[0]?.value}</span>{" "}
                       problems
                     </p>
                   </div>

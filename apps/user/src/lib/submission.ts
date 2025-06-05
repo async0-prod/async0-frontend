@@ -116,7 +116,7 @@ export const submissionSubmit = cache(
       let status = "";
       if (totalTestcases === passedTestcases) {
         status = "Accepted";
-      } else if (filteredResponse[passedTestcases].status.id === 5) {
+      } else if (filteredResponse[passedTestcases]?.status.id === 5) {
         status = "TimeLimit";
       } else {
         status = "Rejected";

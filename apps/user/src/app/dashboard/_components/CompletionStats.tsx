@@ -129,17 +129,15 @@ export function CompletionStats() {
               <ChartTooltip
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
-                    const item = data[payload[0].payload.index];
+                    const item = data[payload[0]?.payload.index];
                     return (
                       <div className="rounded-lg border border-border bg-background p-2 shadow-md">
-                        <p className="font-manrope text-sm font-bold">
-                          {item.name}
-                        </p>
+                        <p className=" text-sm font-bold">{item?.name}</p>
                         <p className="font-nunito text-sm text-primary">
                           <span className="font-bold">
-                            {item.solved}/{item.total}
+                            {item?.solved}/{item?.total}
                           </span>{" "}
-                          ({item.percentage}%)
+                          ({item?.percentage}%)
                         </p>
                       </div>
                     );
@@ -157,9 +155,7 @@ export function CompletionStats() {
         {data.map((list) => (
           <div key={list.name} className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium font-manrope">
-                {list.name}
-              </span>
+              <span className="text-sm font-medium ">{list.name}</span>
               <span className="text-sm text-muted-foreground">
                 {list.solved}/{list.total} ({list.percentage}%)
               </span>

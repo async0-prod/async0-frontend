@@ -101,9 +101,7 @@ export function TopicProgress({ showAll = false }: { showAll?: boolean }) {
         {displayTopics.map((topic) => (
           <div key={topic.name} className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium font-manrope">
-                {topic.name}
-              </span>
+              <span className="text-sm font-medium ">{topic.name}</span>
               <span className="text-sm text-muted-foreground">
                 {topic.solved}/{topic.total} ({topic.percentage}%)
               </span>
