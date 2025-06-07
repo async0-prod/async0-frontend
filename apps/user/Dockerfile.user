@@ -31,5 +31,8 @@ USER nextjs
 COPY --from=installer --chown=nextjs:nodejs /app/apps/user/.next/standalone ./
 COPY --from=installer --chown=nextjs:nodejs /app/apps/user/.next/static ./apps/user/.next/static
 COPY --from=installer --chown=nextjs:nodejs /app/apps/user/public ./apps/user/public
+COPY --from=installer --chown=nextjs:nodejs /app/apps/user/entrypoint.sh ./entrypoint.sh
 
-CMD ["node", "apps/user/server.js"]
+RUN chmod +x ./entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
+# CMD ["node", "apps/user/server.js"]
