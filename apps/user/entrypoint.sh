@@ -1,6 +1,6 @@
 #!/bin/sh
 set -a
-[ -f ./user.env ] && . ./user.env
+[ -f ./.env ] && . ./.env
 set +a
 
 exec node apps/user/server.js
