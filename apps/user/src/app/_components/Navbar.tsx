@@ -31,7 +31,7 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className="px-4 lg:px-24 h-16 font-nunito flex items-center justify-around">
+    <header className="px-8 lg:px-24 py-8 font-nunito flex items-center justify-around">
       <Link href="/" className={`font-black text-xl`}>
         async0
       </Link>

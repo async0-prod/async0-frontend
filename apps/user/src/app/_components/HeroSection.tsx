@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 const VARIANT = {
   initial: { opacity: 0, y: -25 },
@@ -13,19 +13,8 @@ const VARIANT = {
 
 export default function HeroSection() {
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleMouseHover = () => {
-    setIsHovered(true);
-
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    timeoutRef.current = setTimeout(() => {
-      setIsHovered(false);
-    }, 800);
-  };
+  //
   return (
     <div className="flex flex-1 flex-col justify-center items-center font-nunito">
       <motion.p
@@ -69,27 +58,31 @@ export default function HeroSection() {
         <Button
           variant="outline"
           className="bg-transparent hover:bg-charcoal dark:hover:bg-almond hover:text-almond dark:hover:text-charcoal cursor-pointer border-charcoal dark:border-almond flex items-center gap-2"
-          onMouseEnter={handleMouseHover}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          asChild
         >
-          <motion.div
-            key={isHovered.toString()}
-            initial={{ y: 0, opacity: 1 }}
-            animate={
-              isHovered
-                ? {
-                    y: [0, 25, -25, 0],
-                    opacity: [1, 0, 0, 1],
-                  }
-                : { y: 0, opacity: 1 }
-            }
-            transition={{
-              duration: 0.4,
-              ease: "easeInOut",
-            }}
-          >
-            <ArrowRight />
-          </motion.div>
-          <Link href={"/problems"}> Problems</Link>
+          <Link href={"/problems"}>
+            <motion.div
+              key={isHovered.toString()}
+              initial={{ y: 0, opacity: 1 }}
+              animate={
+                isHovered
+                  ? {
+                      y: [0, 25, -25, 0],
+                      opacity: [1, 0, 0, 1],
+                    }
+                  : { y: 0, opacity: 1 }
+              }
+              transition={{
+                duration: 0.4,
+                ease: "easeInOut",
+              }}
+            >
+              <ArrowRight />
+            </motion.div>{" "}
+            Problems
+          </Link>
         </Button>
       </motion.div>
     </div>

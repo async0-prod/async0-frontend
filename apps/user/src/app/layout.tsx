@@ -6,13 +6,11 @@ import { Providers } from "./providers";
 const nunito = Nunito({
   variable: "--font-nunito",
   subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -32,7 +30,7 @@ export default function RootLayout({
         <meta name="view-transition" content="same-origin" />
       </head>
       <body
-        className={`${nunito.variable}  ${inter.variable} antialiased bg-almond dark:bg-charcoal relative`}
+        className={`${nunito.className} ${inter.className} antialiased bg-almond dark:bg-charcoal`}
       >
         <Providers>{children}</Providers>
       </body>

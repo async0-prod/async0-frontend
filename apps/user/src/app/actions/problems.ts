@@ -7,10 +7,12 @@ import {
   userProblemStreakStatType,
   userProblemTableDataType,
 } from "@/lib/types";
+import { connection } from "next/server";
 
 const pyBaseUrl = process.env.PYSERVER_URL ?? "http://127.0.0.1:8000/api/v1";
 
 export async function getAllProblems() {
+  await connection();
   const session = await auth();
   const token = session?.accessToken;
 

@@ -5,7 +5,7 @@ import HeroSection from "./_components/HeroSection";
 
 export default async function Home() {
   return (
-    <div className="relative flex min-h-screen flex-col">
+    <div className="relative flex p-2 h-screen flex-col">
       <Navbar />
       <main className="flex flex-col lg:flex-row flex-1 items-center justify-center">
         <HeroSection />
