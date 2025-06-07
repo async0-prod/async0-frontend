@@ -83,7 +83,7 @@ export const authOptions: NextAuthConfig = {
 
 export const { handlers, signIn, signOut, auth } = NextAuth(authOptions);
 
-export async function isAuthenticated() {
-  const session = await auth();
-  return !!session?.user;
-}
+// export async function isAuthenticated() {
+//   const session = await auth();
+//   return !!session?.user;
+// }

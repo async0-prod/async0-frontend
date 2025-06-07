@@ -40,3 +40,4 @@ yarn-error.log*
 *.env
 .env*
 judge0.conf
+.vscode

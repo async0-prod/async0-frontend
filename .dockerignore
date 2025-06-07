@@ -4,3 +4,4 @@
 ./apps/user/.env
 ./apps/admin/.env
 ./packages/db/.env
+.vscode

@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/auth";
+import { auth } from "@/auth";
 import {
   problemType,
   userProblemSolvedStatType,
@@ -10,6 +10,7 @@ import {
 import { connection } from "next/server";
 
 const pyBaseUrl = process.env.PYSERVER_URL ?? "http://127.0.0.1:8000/api/v1";
+console.log(process.env.PYSERVER_URL);
 
 export async function getAllProblems() {
   await connection();
