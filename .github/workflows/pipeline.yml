@@ -1,205 +1,205 @@
-name: async0 CI
+# name: async0 CI
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
 
-jobs:
-  setup:
-    name: Detect code changes
-    runs-on: ubuntu-latest
-    outputs:
-      user_changed: ${{ steps.set_flags.outputs.user_changed }}
-      admin_changed: ${{ steps.set_flags.outputs.admin_changed }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+# jobs:
+#   setup:
+#     name: Detect code changes
+#     runs-on: ubuntu-latest
+#     outputs:
+#       user_changed: ${{ steps.set_flags.outputs.user_changed }}
+#       admin_changed: ${{ steps.set_flags.outputs.admin_changed }}
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 0
 
-      - name: Get changed files
-        id: changed_files
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            # For PRs, compare against the base branch
-            files=$(git diff --name-only ${{ github.event.pull_request.base.sha }}...${{ github.sha }})
-          else
-            # For pushes to main, compare against previous commit
-            files=$(git diff --name-only HEAD~1..HEAD)
-          fi
-          echo "Changed files:"
-          echo "$files"
-          echo "files<<EOF" >> $GITHUB_OUTPUT
-          echo "$files" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+#       - name: Get changed files
+#         id: changed_files
+#         run: |
+#           if [ "${{ github.event_name }}" = "pull_request" ]; then
+#             # For PRs, compare against the base branch
+#             files=$(git diff --name-only ${{ github.event.pull_request.base.sha }}...${{ github.sha }})
+#           else
+#             # For pushes to main, compare against previous commit
+#             files=$(git diff --name-only HEAD~1..HEAD)
+#           fi
+#           echo "Changed files:"
+#           echo "$files"
+#           echo "files<<EOF" >> $GITHUB_OUTPUT
+#           echo "$files" >> $GITHUB_OUTPUT
+#           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Set build flags
-        id: set_flags
-        run: |
-          files="${{ steps.changed_files.outputs.files }}"
-          user_changed=false
-          admin_changed=false
+#       - name: Set build flags
+#         id: set_flags
+#         run: |
+#           files="${{ steps.changed_files.outputs.files }}"
+#           user_changed=false
+#           admin_changed=false
 
-          if echo "$files" | grep -qE '^apps/user/|^packages/' || true; then
-            user_changed=true
-          fi
+#           if echo "$files" | grep -qE '^apps/user/|^packages/' || true; then
+#             user_changed=true
+#           fi
 
-          if echo "$files" | grep -qE '^apps/admin/|^packages/' || true; then
-            admin_changed=true
-          fi
+#           if echo "$files" | grep -qE '^apps/admin/|^packages/' || true; then
+#             admin_changed=true
+#           fi
 
-          root_changes=$(echo "$files" | grep -vE '^apps/|^packages/' || true)
-          if [ -n "$root_changes" ]; then
-            echo "Root-level changes detected, building all apps"
-            user_changed=true
-            admin_changed=true
-          fi
+#           root_changes=$(echo "$files" | grep -vE '^apps/|^packages/' || true)
+#           if [ -n "$root_changes" ]; then
+#             echo "Root-level changes detected, building all apps"
+#             user_changed=true
+#             admin_changed=true
+#           fi
 
-          echo "user_changed=$user_changed" >> $GITHUB_OUTPUT
-          echo "admin_changed=$admin_changed" >> $GITHUB_OUTPUT
+#           echo "user_changed=$user_changed" >> $GITHUB_OUTPUT
+#           echo "admin_changed=$admin_changed" >> $GITHUB_OUTPUT
 
-  build-user-and-push-image:
-    if: needs.setup.outputs.user_changed == 'true'
-    runs-on: ubuntu-latest
-    needs: setup
+#   build-user-and-push-image:
+#     if: needs.setup.outputs.user_changed == 'true'
+#     runs-on: ubuntu-latest
+#     needs: setup
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+#       - name: Log in to Docker Hub
+#         uses: docker/login-action@v3
+#         with:
+#           username: ${{ secrets.DOCKER_USERNAME }}
+#           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+#       - name: Set up Docker Buildx
+#         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push Docker image to dockerhub
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./apps/user/Dockerfile.user
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/async0:user-latest
-            ${{ secrets.DOCKER_USERNAME }}/async0:user-${{ github.sha }}
-          platforms: linux/amd64,linux/arm64
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          provenance: false
-          sbom: true
+#       - name: Build and push Docker image to dockerhub
+#         uses: docker/build-push-action@v6
+#         with:
+#           context: .
+#           file: ./apps/user/Dockerfile.user
+#           push: ${{ github.event_name != 'pull_request' }}
+#           tags: |
+#             ${{ secrets.DOCKER_USERNAME }}/async0:user-latest
+#             ${{ secrets.DOCKER_USERNAME }}/async0:user-${{ github.sha }}
+#           platforms: linux/amd64,linux/arm64
+#           cache-from: type=gha
+#           cache-to: type=gha,mode=max
+#           provenance: false
+#           sbom: true
 
-  build-admin-and-push-image:
-    if: needs.setup.outputs.admin_changed == 'true'
-    runs-on: ubuntu-latest
-    needs: setup
+#   build-admin-and-push-image:
+#     if: needs.setup.outputs.admin_changed == 'true'
+#     runs-on: ubuntu-latest
+#     needs: setup
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+#       - name: Log in to Docker Hub
+#         uses: docker/login-action@v3
+#         with:
+#           username: ${{ secrets.DOCKER_USERNAME }}
+#           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+#       - name: Set up Docker Buildx
+#         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push Docker image to dockerhub
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./apps/admin/Dockerfile.admin
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/async0:admin-latest
-            ${{ secrets.DOCKER_USERNAME }}/async0:admin-${{ github.sha }}
-          platforms: linux/amd64,linux/arm64
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          provenance: false
-          sbom: true
+#       - name: Build and push Docker image to dockerhub
+#         uses: docker/build-push-action@v6
+#         with:
+#           context: .
+#           file: ./apps/admin/Dockerfile.admin
+#           push: ${{ github.event_name != 'pull_request' }}
+#           tags: |
+#             ${{ secrets.DOCKER_USERNAME }}/async0:admin-latest
+#             ${{ secrets.DOCKER_USERNAME }}/async0:admin-${{ github.sha }}
+#           platforms: linux/amd64,linux/arm64
+#           cache-from: type=gha
+#           cache-to: type=gha,mode=max
+#           provenance: false
+#           sbom: true
 
-  deploy:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      packages: write
-    needs:
-      - setup
-      - build-user-and-push-image
-      - build-admin-and-push-image
-    if: |
-      needs.setup.outputs.user_changed == 'true' ||
-      needs.setup.outputs.admin_changed == 'true'
+#   deploy:
+#     runs-on: ubuntu-latest
+#     timeout-minutes: 5
+#     permissions:
+#       packages: write
+#     needs:
+#       - setup
+#       - build-user-and-push-image
+#       - build-admin-and-push-image
+#     if: |
+#       needs.setup.outputs.user_changed == 'true' ||
+#       needs.setup.outputs.admin_changed == 'true'
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
 
-      - name: Write env files
-        run: |
-          echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
+#       - name: Write env files
+#         run: |
+#           echo "GIT_COMMIT_HASH=${{ github.sha }}" >> ./envfile
 
-          cat << 'EOF' > ./user.env
-          ${{ secrets.USER_ENV_VARS }}
-          EOF
+#           cat << 'EOF' > ./user.env
+#           ${{ secrets.USER_ENV_VARS }}
+#           EOF
 
-          cat << 'EOF' > ./admin.env
-          ${{ secrets.ADMIN_ENV_VARS }}
-          EOF
+#           cat << 'EOF' > ./admin.env
+#           ${{ secrets.ADMIN_ENV_VARS }}
+#           EOF
 
-          cat << 'EOF' > ./judge0.conf
-          ${{ secrets.JUDGE0_ENV_VARS }}
-          EOF
+#           cat << 'EOF' > ./judge0.conf
+#           ${{ secrets.JUDGE0_ENV_VARS }}
+#           EOF
 
-      - name: Copy env files and docker-stack.yml
-        uses: appleboy/scp-action@v1
-        with:
-          host: async0.com
-          username: deploy
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          source: "user.env,admin.env,judge0.conf,docker-stack.yml"
-          target: /home/deploy
+#       - name: Copy env files and docker-stack.yml
+#         uses: appleboy/scp-action@v1
+#         with:
+#           host: async0.com
+#           username: deploy
+#           key: ${{ secrets.DEPLOY_SSH_KEY }}
+#           source: "user.env,admin.env,judge0.conf,docker-stack.yml"
+#           target: /home/deploy
 
-      - name: Create dokcer configs
-        uses: appleboy/ssh-action@v1
-        with:
-          host: async0.com
-          username: deploy
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          script: |
-            docker config rm user-config
-            docker config create user-config ./user.env
+#       - name: Create dokcer configs
+#         uses: appleboy/ssh-action@v1
+#         with:
+#           host: async0.com
+#           username: deploy
+#           key: ${{ secrets.DEPLOY_SSH_KEY }}
+#           script: |
+#             docker config rm user-config
+#             docker config create user-config ./user.env
 
-            docker config rm admin-config
-            docker config create admin-config ./admin.env
+#             docker config rm admin-config
+#             docker config create admin-config ./admin.env
 
-            docker config rm judge0-config
-            docker config create judge0-config ./judge0.conf
+#             docker config rm judge0-config
+#             docker config create judge0-config ./judge0.conf
 
-            rm -f ./user.env ./admin.env
+#             rm -f ./user.env ./admin.env
 
-      - name: Stack update
-        if: |
-          needs.setup.outputs.user_changed == 'true' || needs.setup.outputs.admin_changed == 'true'
-        uses: appleboy/ssh-action@v1
-        with:
-          host: async0.com
-          username: deploy
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          script: |
-            set -e
-            if [ "${{ needs.setup.outputs.user_changed }}" = "true" ]; then
-              docker service update --image grvbrk/async0:user-${{ github.sha }} async0_user
-            fi
+#       - name: Stack update
+#         if: |
+#           needs.setup.outputs.user_changed == 'true' || needs.setup.outputs.admin_changed == 'true'
+#         uses: appleboy/ssh-action@v1
+#         with:
+#           host: async0.com
+#           username: deploy
+#           key: ${{ secrets.DEPLOY_SSH_KEY }}
+#           script: |
+#             set -e
+#             if [ "${{ needs.setup.outputs.user_changed }}" = "true" ]; then
+#               docker service update --image grvbrk/async0:user-${{ github.sha }} async0_user
+#             fi
 
-            if [ "${{ needs.setup.outputs.admin_changed }}" = "true" ]; then
-              docker service update --image grvbrk/async0:admin-${{ github.sha }} async0_admin
-            fi
+#             if [ "${{ needs.setup.outputs.admin_changed }}" = "true" ]; then
+#               docker service update --image grvbrk/async0:admin-${{ github.sha }} async0_admin
+#             fi
