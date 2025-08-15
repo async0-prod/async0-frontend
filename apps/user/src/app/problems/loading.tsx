@@ -1,7 +1,11 @@
+import { Loader } from "lucide-react";
+
 export default function ProblemPageLoading() {
   return (
-    <div className="w-full h-screen flex items-center justify-center lg:rounded-xl lg:m-4 bg-almond dark:bg-charcoal overflow-hidden">
-      Loading...
+    <div className="flex-1 w-full flex flex-col items-center justify-center h-screen">
+      <div className="animate-spin flex items-center justify-center">
+        <Loader />
+      </div>
     </div>
   );
 }
