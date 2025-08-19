@@ -38,17 +38,6 @@ export type problemType = {
   testcases: testcaseType[];
 };
 
-export type userProblemTableDataType = {
-  id: string;
-  name: string;
-  topics: string[];
-  lists: string[];
-  totalUsersSolved: number;
-  difficulty: "Easy" | "Medium" | "Hard" | "NA";
-  totalBookmarks: number;
-  hasSolved: boolean;
-};
-
 export type SidebarDataType = {
   name: string;
   topic: {
@@ -86,3 +75,54 @@ export type userProblemSolvedStatType = {
 export type userProblemStreakStatType = {
   current_streak: number;
 };
+
+export interface List {
+  id: string;
+  name: string;
+  slug: string;
+  total_problems: string;
+}
+
+export interface Problem {
+  id: string;
+  name: string;
+  slug: string;
+  link?: string;
+  problem_number?: number;
+  difficulty: "Easy" | "Medium" | "Hard" | "NA";
+  starter_code: string;
+  time_limit: number;
+  memory_limit: number;
+  acceptance_rate?: number;
+  total_submissions: number;
+  successful_submissions: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Testcase {
+  id: string;
+  problem_id: string;
+  ui: string;
+  input: string;
+  output: string;
+  position: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface Topic {
+  id: string;
+  name: string;
+  slug: string;
+  is_active: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export type SidebarTopicList = {
+  name: string;
+  problems: Partial<Problem>[];
+}[];
