@@ -1,7 +1,4 @@
-import BreadCrumbs from "@/components/Breadcrumbs";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "../_components/app-sidebar";
-import MainUI from "./_components/MainUI";
+import Problem from "./_components/Problem";
 
 export const dynamic = "force-dynamic";
 
@@ -13,19 +10,8 @@ export default async function SingleProblemPage({
   const { slug } = await params;
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <main className="flex-1 ml-16 p-8">
-          <div className="flex gap-12 flex-col h-full">
-            <div className="hidden lg:block">
-              <BreadCrumbs />
-            </div>
-
-            <MainUI slug={slug} />
-          </div>
-        </main>
-      </SidebarInset>
-    </SidebarProvider>
+    <main className="flex-1 flex flex-col ml-8 md:ml-16 mr-4 md:mr-8 p-8">
+      <Problem slug={slug} />
+    </main>
   );
 }
