@@ -1,5 +1,4 @@
 import { Navbar } from "@/app/_components/Navbar";
-
 import HeroIllustration from "./_components/HeroIllustration";
 import HeroSection from "./_components/HeroSection";
 

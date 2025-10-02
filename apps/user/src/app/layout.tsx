@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Nunito, Inter } from "next/font/google";
+import { Nunito, Inter, Urbanist } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 
@@ -10,6 +10,11 @@ const nunito = Nunito({
 
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"],
+});
+
+const urbanist = Urbanist({
+  variable: "--font-urbanist",
   subsets: ["latin"],
 });
 
@@ -30,7 +35,7 @@ export default function RootLayout({
         <meta name="view-transition" content="same-origin" />
       </head>
       <body
-        className={`${nunito.className} ${inter.className} antialiased bg-almond dark:bg-charcoal`}
+        className={`${nunito.className} ${inter.className} ${urbanist.variable} antialiased bg-almond dark:bg-charcoal`}
       >
         <Providers>{children}</Providers>
       </body>
