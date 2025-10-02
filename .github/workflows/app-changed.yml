@@ -1,0 +1,39 @@
+name: Check if a given workspace changed
+
+on:
+  workflow_call:
+    inputs:
+      workspace_name:
+        description: "Name of the workspace, aka the app name in the package.json file"
+        required: true
+        type: string
+      base_ref:
+        description: "The base git ref to use to diff for changes"
+        required: true
+        type: string
+    outputs:
+      changed:
+        description: 'Did the inputed workspace (i.e., package) change according to turbo-ignore? Return "true" or "false"'
+        value: ${{ jobs.changed.outputs.changed }}
+jobs:
+  changed:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.changed.outputs.changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Did workspace change?
+        id: changed
+        run: |
+          # disable "exit on failure"
+          set +e
+          npx -y turbo-ignore ${{ inputs.workspace_name }} --fallback ${{ inputs.base_ref }}
+          if [ $? -eq 0 ]
+          then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
