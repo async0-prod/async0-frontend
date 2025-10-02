@@ -1,22 +1,44 @@
-import { auth } from "@/auth";
+import { NextRequest, NextResponse } from "next/server";
 
 export const privateRoutes = ["/dashboard"];
+export const redirectRoutes = ["/dashboard"];
 
-export default auth((req) => {
-  const isLoggedIn = !!req.auth;
-  const isPrivateRoute = privateRoutes.includes(req.nextUrl.pathname);
-  const isAuthRoute = req.nextUrl.pathname === "/signin";
-  const isAPIRoute = req.nextUrl.pathname.startsWith("/api");
+export async function middleware(request: NextRequest) {
+  const session = request.cookies.get("session");
+  const isPrivateRoute = privateRoutes.includes(request.nextUrl.pathname);
+  const isRedirectRoute = redirectRoutes.includes(request.nextUrl.pathname);
 
-  if (isAPIRoute) return;
-  if (isLoggedIn && isAuthRoute) {
-    return Response.redirect(new URL("/dashboard", req.nextUrl.origin));
+  if (isRedirectRoute) {
+    return NextResponse.redirect(new URL("/", request.nextUrl.origin));
   }
-  if (isAuthRoute && !isLoggedIn) return;
-  if (isPrivateRoute && !isLoggedIn) {
-    return Response.redirect(new URL("/signin", req.nextUrl.origin));
+
+  if (isPrivateRoute) {
+    if (!session) {
+      return NextResponse.redirect(new URL("/", request.nextUrl.origin));
+    }
+
+    try {
+      const resp = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/user`,
+        {
+          headers: {
+            Cookie: `session=${session.value}`,
+            Origin: process.env.NEXT_PUBLIC_ORIGIN!,
+          },
+        }
+      );
+      if (!resp.ok) {
+        console.error("resp.ok is false");
+        return NextResponse.redirect(new URL("/", request.nextUrl.origin));
+      }
+    } catch (error) {
+      console.error("Error checking user session:", error);
+      return NextResponse.redirect(new URL("/", request.nextUrl.origin));
+    }
   }
-});
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: "/((?!_next|_vercel|monitoring|.*\\..*).*)",
