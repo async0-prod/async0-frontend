@@ -1,38 +1,47 @@
 FROM node:23-alpine AS base
 
-ENV NODE_ENV=production
+# ENV NODE_ENV=production
 ENV TURBO_TELEMETRY_DISABLED=1
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
-RUN apk update
-RUN apk add --no-cache libc6-compat
-RUN corepack enable && corepack prepare pnpm
+RUN apk add --no-cache libc6-compat \
+  && corepack enable && corepack prepare pnpm@latest --activate
 
 FROM base AS builder
 WORKDIR /app
-RUN pnpm add --global turbo
+RUN pnpm install --global turbo
 COPY . .
 RUN turbo prune admin --docker
 
 FROM base AS installer
 WORKDIR /app
+# COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
+COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=builder /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
 RUN pnpm install --frozen-lockfile
 COPY --from=builder /app/out/full/ .
-RUN pnpm turbo run build
+COPY turbo.json turbo.json
+RUN pnpm run build
 
 FROM base AS runner
 WORKDIR /app
+
+# Install Doppler (runtime only)
+RUN apk add curl gnupg
+RUN (curl -Ls --tlsv1.2 --proto "=https" --retry 3 https://cli.doppler.com/install.sh || wget -t 3 -qO- https://cli.doppler.com/install.sh) | sh
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 USER nextjs
+ENV PATH="/usr/local/bin:$PATH"
+
+COPY --from=installer /app/apps/admin/next.config.ts .
+COPY --from=installer /app/apps/admin/package.json .
 
 COPY --from=installer --chown=nextjs:nodejs /app/apps/admin/.next/standalone ./
 COPY --from=installer --chown=nextjs:nodejs /app/apps/admin/.next/static ./apps/admin/.next/static
-# COPY --from=installer --chown=nextjs:nodejs /app/apps/admin/public ./apps/admin/public
-COPY --from=installer --chown=nextjs:nodejs /app/apps/admin/entrypoint.sh ./entrypoint.sh
+COPY --from=installer --chown=nextjs:nodejs /app/apps/admin/public ./apps/admin/public
 
-RUN chmod +x ./entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
-# CMD ["node", "apps/admin/server.js"]
+CMD ["doppler", "run", "--", "node", "apps/admin/server.js"]

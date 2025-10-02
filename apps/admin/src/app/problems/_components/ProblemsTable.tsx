@@ -1,4 +1,5 @@
-import { getAllProblems } from "@/actions/problems";
+"use client";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,11 +15,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getAllProblems } from "@/fetch/problem";
+import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, MoreVertical } from "lucide-react";
 import Link from "next/link";
 
-export async function ProblemsTable() {
-  const problems = await getAllProblems();
+export function ProblemsTable() {
+  const { data: problems } = useQuery({
+    queryKey: ["problems"],
+    queryFn: getAllProblems,
+  });
 
   if (!problems) {
     return <h1>No problems found</h1>;
@@ -26,7 +32,7 @@ export async function ProblemsTable() {
 
   return (
     <>
-      {problems.length > 0 ? (
+      {problems.data.length > 0 ? (
         <Table>
           <TableHeader>
             <TableRow>
@@ -42,7 +48,7 @@ export async function ProblemsTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {problems.map((problem) => {
+            {problems.data.map((problem) => {
               return (
                 <TableRow key={problem.id}>
                   <TableCell>
@@ -61,8 +67,8 @@ export async function ProblemsTable() {
                     )} */}
                   </TableCell>
                   <TableCell>{problem.name}</TableCell>
-                  <TableCell>{problem.topic_problem[0]?.topic.name}</TableCell>
-                  <TableCell>{problem.testcase.length}</TableCell>
+                  {/* <TableCell>{problem.topic_problem[0]?.topic.name}</TableCell> */}
+                  {/* <TableCell>{problem.testcase.length}</TableCell> */}
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger>
