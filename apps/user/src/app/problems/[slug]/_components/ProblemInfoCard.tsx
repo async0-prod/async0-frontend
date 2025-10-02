@@ -1,6 +1,6 @@
 "use client";
 
-import { getTestcasesByProblemID } from "@/app/fetch/testcase";
+import { getTestcasesByProblemID } from "@/lib/testcase";
 import {
   Card,
   CardHeader,
@@ -9,9 +9,8 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { unescapeCode } from "@/lib/codeFormat";
 import { CodeSubmitResult, Problem, Testcase } from "@/lib/types";
-import { cn, formatDifficulty } from "@/lib/utils";
+import { cn, formatDifficulty, unescapeCode } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import {
   AlertCircle,

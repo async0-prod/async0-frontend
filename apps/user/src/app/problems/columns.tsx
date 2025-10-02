@@ -6,19 +6,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { userProblemTableDataType } from "@/lib/types";
+import { Difficulty, TanstackProblem } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  BookmarkIcon,
-  Clock,
-  LaptopMinimal,
-  Shield,
-  Tag,
-  UserRoundCheck,
-} from "lucide-react";
+import { Clock, LaptopMinimal, Shield, Tag } from "lucide-react";
 
-export const columns: ColumnDef<userProblemTableDataType>[] = [
+export const columns: ColumnDef<TanstackProblem>[] = [
   {
     accessorKey: "hasSolved",
     header: () => {
@@ -49,35 +42,35 @@ export const columns: ColumnDef<userProblemTableDataType>[] = [
     size: 80,
   },
 
-  {
-    accessorKey: "totalbookmarks",
-    header: () => {
-      return (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="flex justify-center text-xs font-medium text-muted-foreground">
-                <BookmarkIcon size={13} className="mt-0.5" />
-                <span className="ml-1">Bookmarks</span>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Number of users who bookmarked this problem</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      );
-    },
-    cell: ({ row }) => {
-      const totalBookmarks = row.getValue("totalbookmarks") as number;
-      return (
-        <div className="flex justify-center items-center gap-1.5 text-sm">
-          <span className="tabular-nums">{totalBookmarks}</span>
-        </div>
-      );
-    },
-    size: 110,
-  },
+  // {
+  //   accessorKey: "totalbookmarks",
+  //   header: () => {
+  //     return (
+  //       <TooltipProvider>
+  //         <Tooltip>
+  //           <TooltipTrigger asChild>
+  //             <div className="flex justify-center text-xs font-medium text-muted-foreground">
+  //               <BookmarkIcon size={13} className="mt-0.5" />
+  //               <span className="ml-1">Bookmarks</span>
+  //             </div>
+  //           </TooltipTrigger>
+  //           <TooltipContent>
+  //             <p>Number of users who bookmarked this problem</p>
+  //           </TooltipContent>
+  //         </Tooltip>
+  //       </TooltipProvider>
+  //     );
+  //   },
+  //   cell: ({ row }) => {
+  //     const totalBookmarks = row.getValue("totalbookmarks") as number;
+  //     return (
+  //       <div className="flex justify-center items-center gap-1.5 text-sm">
+  //         <span className="tabular-nums">{totalBookmarks}</span>
+  //       </div>
+  //     );
+  //   },
+  //   size: 110,
+  // },
 
   {
     accessorKey: "name",
@@ -118,7 +111,7 @@ export const columns: ColumnDef<userProblemTableDataType>[] = [
   },
 
   {
-    accessorKey: "topics",
+    accessorKey: "list_names",
     header: () => {
       return (
         <TooltipProvider>
@@ -126,7 +119,50 @@ export const columns: ColumnDef<userProblemTableDataType>[] = [
             <TooltipTrigger asChild>
               <div className="flex justify-center items-center text-xs font-medium text-muted-foreground">
                 <Tag size={13} className="mt-0.5" />
-                <span className="ml-1">Topic</span>
+                <span className="ml-1">Lists</span>
+              </div>
+            </TooltipTrigger>
+          </Tooltip>
+        </TooltipProvider>
+      );
+    },
+    cell: ({ row }) => {
+      const lists = row.getValue("list_names") as string[];
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex justify-center items-center text-xs">
+                <p>{lists[0]}</p>
+              </div>
+            </TooltipTrigger>
+            {/* <TooltipContent>
+              <div className="flex flex-col gap-1">
+                {topicList.map((topic, index) => (
+                  <span key={index}>{topic}</span>
+                ))}
+              </div>
+            </TooltipContent> */}
+          </Tooltip>
+        </TooltipProvider>
+      );
+    },
+    filterFn: (row, columnId, filterValue) => {
+      const lists = row.getValue(columnId) as string[];
+      return lists.some((list) => list === filterValue);
+    },
+  },
+
+  {
+    accessorKey: "topic_names",
+    header: () => {
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex justify-center items-center text-xs font-medium text-muted-foreground">
+                <Tag size={13} className="mt-0.5" />
+                <span className="ml-1">Topics</span>
               </div>
             </TooltipTrigger>
             {/* <TooltipContent>
@@ -137,7 +173,7 @@ export const columns: ColumnDef<userProblemTableDataType>[] = [
       );
     },
     cell: ({ row }) => {
-      const topicList = row.getValue("topics") as string[];
+      const topicList = row.getValue("topic_names") as string[];
       return (
         <TooltipProvider>
           <Tooltip>
@@ -188,18 +224,17 @@ export const columns: ColumnDef<userProblemTableDataType>[] = [
       );
     },
     cell: ({ row }) => {
-      const difficulty = row.getValue("difficulty") as string;
+      const difficulty = row.getValue("difficulty") as Difficulty;
 
       return (
         <div className="flex justify-center items-center text-muted-foreground text-xs">
           <div
             className={cn(
               "font-bold",
-              difficulty === "Easy" &&
-                "text-highlight-green hover:text-highlight-green/90",
-              difficulty === "Medium" &&
-                "text-highlight-yellow hover:text-highlight-yellow/90",
-              difficulty === "Hard" && "text-red-400 hover:text-red-400/90"
+              difficulty === "EASY" && "text-green-700 hover:text-green-700/90",
+              difficulty === "MEDIUM" &&
+                "text-yellow-600 hover:text-yellow-600",
+              difficulty === "HARD" && "text-red-400 hover:text-red-400/90"
             )}
           >
             {difficulty}
@@ -208,7 +243,7 @@ export const columns: ColumnDef<userProblemTableDataType>[] = [
       );
     },
     sortingFn: (a, b) => {
-      const difficultyOrder = ["Easy", "Medium", "Hard", "NA"];
+      const difficultyOrder = ["EASY", "MEDIUM", "HARD", "NA"];
       return (
         difficultyOrder.indexOf(a.getValue("difficulty")) -
         difficultyOrder.indexOf(b.getValue("difficulty"))
@@ -217,33 +252,33 @@ export const columns: ColumnDef<userProblemTableDataType>[] = [
     size: 50,
   },
 
-  {
-    accessorKey: "totaluserssolved",
-    header: () => {
-      return (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="flex justify-center text-xs font-medium text-muted-foreground">
-                <UserRoundCheck size={13} className="mt-0.5" />
-                <span className="ml-1">Users Solved</span>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Number of users who solved this problem</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      );
-    },
-    cell: ({ row }) => {
-      const totalUsersSolved = row.getValue("totaluserssolved") as number;
-      return (
-        <div className="flex justify-center items-center gap-1.5 text-sm">
-          <span className="tabular-nums">{totalUsersSolved}</span>
-        </div>
-      );
-    },
-    size: 120,
-  },
+  // {
+  //   accessorKey: "totaluserssolved",
+  //   header: () => {
+  //     return (
+  //       <TooltipProvider>
+  //         <Tooltip>
+  //           <TooltipTrigger asChild>
+  //             <div className="flex justify-center text-xs font-medium text-muted-foreground">
+  //               <UserRoundCheck size={13} className="mt-0.5" />
+  //               <span className="ml-1">Users Solved</span>
+  //             </div>
+  //           </TooltipTrigger>
+  //           <TooltipContent>
+  //             <p>Number of users who solved this problem</p>
+  //           </TooltipContent>
+  //         </Tooltip>
+  //       </TooltipProvider>
+  //     );
+  //   },
+  //   cell: ({ row }) => {
+  //     const totalUsersSolved = row.getValue("totaluserssolved") as number;
+  //     return (
+  //       <div className="flex justify-center items-center gap-1.5 text-sm">
+  //         <span className="tabular-nums">{totalUsersSolved}</span>
+  //       </div>
+  //     );
+  //   },
+  //   size: 120,
+  // },
 ];

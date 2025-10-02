@@ -4,19 +4,13 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import { useQuery } from "@tanstack/react-query";
-import { getClientSideSession } from "@/app/fetch/auth";
+import { getClientSideSession } from "@/lib/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function NavInfo() {
-  const { isMobile } = useSidebar();
-  const {
-    data: session,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: session } = useQuery({
     queryKey: ["session"],
     queryFn: getClientSideSession,
     retry: false,

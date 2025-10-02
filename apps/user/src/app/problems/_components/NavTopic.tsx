@@ -1,37 +1,19 @@
 "use client";
 
-import {
-  BookOpen,
-  ChevronRight,
-  Dot,
-  Folder,
-  Forward,
-  MoreHorizontal,
-  Trash2,
-  type LucideIcon,
-} from "lucide-react";
+import { BookOpen, ChevronRight } from "lucide-react";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import { useQuery } from "@tanstack/react-query";
-import { getSidebarTopicsByListID } from "@/app/fetch/topic";
+import { getSidebarTopicsByListID } from "@/lib/topic";
 import {
   Collapsible,
   CollapsibleContent,
@@ -44,8 +26,6 @@ export function NavTopic({
 }: {
   selectedListID: string | undefined;
 }) {
-  const { isMobile } = useSidebar();
-
   const {
     data: topics,
     isPending,
@@ -68,28 +48,29 @@ export function NavTopic({
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
-      <SidebarMenu>
-        {topics.data.map((topic, index) => (
-          <Collapsible
-            key={topic.name}
-            asChild
-            // defaultOpen={index === 0}
-            className="group/collapsible"
-          >
+      <SidebarGroupLabel className="text-almond">Topics</SidebarGroupLabel>
+      <SidebarMenu className="text-almond">
+        {topics.data.map((topic) => (
+          <Collapsible key={topic.name} asChild className="group/collapsible">
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={topic.name}>
+                <SidebarMenuButton
+                  tooltip={topic.name}
+                  className="cursor-pointer hover:bg-almond data-[state=open]:hover:bg-almond active:bg-almond hover:text-charcoal data-[state=open]:hover:text-charcoal active:text-charcoal"
+                >
                   <BookOpen />
                   <span>{topic.name}</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <SidebarMenuSub>
+                <SidebarMenuSub className="border-almond">
                   {topic.problems.map((problem) => (
                     <SidebarMenuSubItem key={problem.name}>
-                      <SidebarMenuSubButton asChild>
+                      <SidebarMenuSubButton
+                        asChild
+                        className="text-almond hover:bg-almond hover:text-charcoal"
+                      >
                         <Link href={`/problems/${problem.slug}`}>
                           <span>{problem.name}</span>
                         </Link>

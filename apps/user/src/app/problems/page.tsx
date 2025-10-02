@@ -1,5 +1,4 @@
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/app/problems/_components/app-sidebar";
+import { Loader } from "lucide-react";
 import ProblemUI from "./_components/ProblemUI";
 import { Suspense } from "react";
 
@@ -7,13 +6,16 @@ export const dynamic = "force-dynamic";
 
 export default async function ProblemPage() {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <Suspense fallback={<div>Loading problems UI...</div>}>
-          <ProblemUI />
-        </Suspense>
-      </SidebarInset>
-    </SidebarProvider>
+    <Suspense
+      fallback={
+        <div className="flex-1 w-full flex flex-col items-center justify-center h-screen">
+          <div className="animate-spin flex items-center justify-center">
+            <Loader />
+          </div>
+        </div>
+      }
+    >
+      <ProblemUI />
+    </Suspense>
   );
 }

@@ -6,14 +6,14 @@ import {
   ResizableHandle,
 } from "@/components/ui/resizable";
 import ProblemDisplay from "./ProblemDisplay";
-import { getProblemDetailsBySlug } from "@/app/fetch/problem";
+import { getProblemDetailsBySlug } from "@/lib/problem";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import CodeEditor from "./CodeEditor";
-import { submitCode, runCode } from "@/app/fetch/submission";
+import { submitCode, runCode } from "@/lib/submission";
 import { toast } from "sonner";
 import { useState } from "react";
 import { CodeRunResult, CodeSubmitResult } from "@/lib/types";
-import { getClientSideSession } from "@/app/fetch/auth";
+import { getClientSideSession } from "@/lib/auth";
 
 export default function Problem({ slug }: { slug: string }) {
   const {
@@ -40,7 +40,6 @@ export default function Problem({ slug }: { slug: string }) {
     onSuccess: (data) => {
       if (data) {
         setProblemSubmitResult(data);
-        console.log(data);
       } else {
         toast.error("Failed to submit code");
       }
@@ -50,7 +49,7 @@ export default function Problem({ slug }: { slug: string }) {
   const { mutate: run, isPending: isRunPending } = useMutation({
     mutationFn: async (code: string) => {
       if (!problem) return;
-      return await runCode(code, problem.data.id);
+      return await runCode(code);
     },
     onSuccess: (data) => {
       if (data) {
@@ -119,6 +118,7 @@ export default function Problem({ slug }: { slug: string }) {
           problem={problem?.data}
           isLoadingProblem={isLoadingProblem}
           isErrorProblem={isErrorProblem}
+          problemSubmitResult={problemSubmitResult}
         />
       </div>
       <div className="hidden lg:block">
@@ -128,6 +128,7 @@ export default function Problem({ slug }: { slug: string }) {
               problem={problem?.data}
               isLoadingProblem={isLoadingProblem}
               isErrorProblem={isErrorProblem}
+              problemSubmitResult={problemSubmitResult}
             />
           </ResizablePanel>
 

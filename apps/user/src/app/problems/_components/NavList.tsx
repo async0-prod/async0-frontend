@@ -1,39 +1,26 @@
 "use client";
 
-import {
-  Folder,
-  Forward,
-  ListCheck,
-  MoreHorizontal,
-  Trash2,
-} from "lucide-react";
-
+import { ListCheck } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import { useQuery } from "@tanstack/react-query";
-import { getAllLists } from "@/app/fetch/list";
+import { getAllLists } from "@/lib/list";
 import { useEffect } from "react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
+import { cn } from "@/lib/utils";
 
 export function NavList({
+  selectedListID,
   setSelectedListID,
 }: {
+  selectedListID: string | undefined;
   setSelectedListID: React.Dispatch<React.SetStateAction<string | undefined>>;
 }) {
-  const { isMobile } = useSidebar();
   const {
     data: lists,
     isPending,
@@ -61,46 +48,21 @@ export function NavList({
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Lists</SidebarGroupLabel>
+      <SidebarGroupLabel className="text-almond">Lists</SidebarGroupLabel>
       <SidebarMenu>
-        {lists.data.map((list, index) => (
+        {lists.data.map((list) => (
           <SidebarMenuItem key={list.id} className="group/collapsible">
             <SidebarMenuButton
               tooltip={list.name}
-              isActive={index === 0}
+              isActive={selectedListID === list.id}
               onClick={() => setSelectedListID(list.id)}
-              className="cursor-pointer"
+              className={cn(
+                "cursor-pointer hover:bg-almond active:bg-almond data-[active=true]:bg-almond text-almond hover:text-charcoal active:text-charcoal data-[active=true]:text-charcoal"
+              )}
             >
               <ListCheck />
-              <span>{list.name}</span>
+              <p>{list.name}</p>
             </SidebarMenuButton>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuAction showOnHover>
-                  <MoreHorizontal />
-                  <span className="sr-only">More</span>
-                </SidebarMenuAction>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-48 rounded-lg"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
-              >
-                <DropdownMenuItem>
-                  <Folder className="text-muted-foreground" />
-                  <span>View Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Forward className="text-muted-foreground" />
-                  <span>Share Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Trash2 className="text-muted-foreground" />
-                  <span>Delete Project</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </SidebarMenuItem>
         ))}
       </SidebarMenu>

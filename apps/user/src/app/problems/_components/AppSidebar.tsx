@@ -1,45 +1,52 @@
 "use client";
 
-import * as React from "react";
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react";
-
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
-  SidebarRail,
 } from "@/components/ui/sidebar";
 import { NavList } from "./NavList";
 import { NavTopic } from "./NavTopic";
-import { NavUser } from "./nav-user";
-import { TeamSwitcher } from "./team-switcher";
+import { ComponentProps, RefObject, useRef, useState } from "react";
+import { NavInfo } from "./NavInfo";
+import { useOnClickOutside } from "usehooks-ts";
+import { useSidebar } from "@/components/ui/sidebar";
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [selectedListID, setSelectedListID] = React.useState<
-    string | undefined
-  >(undefined);
+export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
+  const [selectedListID, setSelectedListID] = useState<string | undefined>(
+    undefined
+  );
+  const { open, openMobile, toggleSidebar } = useSidebar();
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useOnClickOutside(ref as RefObject<HTMLElement>, (e) => {
+    e.stopImmediatePropagation();
+    if (!open && !openMobile) return;
+    toggleSidebar();
+  });
 
   return (
-    <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>{/* <TeamSwitcher teams={data.teams} /> */}</SidebarHeader>
-      <SidebarContent>
-        <NavList setSelectedListID={setSelectedListID} />
+    <Sidebar
+      collapsible="icon"
+      aria-label="Main navigation"
+      ref={ref}
+      onClick={() => {
+        if (open || openMobile) return;
+        toggleSidebar();
+      }}
+      className="border-none mt-4"
+      {...props}
+    >
+      <SidebarHeader className="bg-charcoal">
+        <NavInfo />
+      </SidebarHeader>
+      <SidebarContent className="bg-charcoal">
+        <NavList
+          selectedListID={selectedListID}
+          setSelectedListID={setSelectedListID}
+        />
         <NavTopic selectedListID={selectedListID} />
       </SidebarContent>
-      <SidebarFooter>{/* <NavUser user={data.user} /> */}</SidebarFooter>
-      <SidebarRail />
     </Sidebar>
   );
 }

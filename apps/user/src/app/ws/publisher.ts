@@ -1,7 +1,7 @@
 import { WebsocketMessage } from "@/lib/types";
 import { v4 as uuidv4 } from "uuid";
 
-class Publisher {
+export class Publisher {
   private static instance: Publisher | null = null;
   private ws: WebSocket | null = null;
   private url: string;
@@ -97,5 +97,3 @@ class Publisher {
     return this.publisherId;
   }
 }
-
-export default Publisher;

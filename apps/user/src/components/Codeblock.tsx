@@ -36,12 +36,12 @@ export function CodeBlock({
   }, [code, lang]);
 
   return (
-    <pre className="rounded-md text-sm overflow-auto relative">
+    <pre className="rounded-md text-sm overflow-auto relative font-mono">
       <CopyTextButton
         text={code}
         className="absolute top-1 right-0 text-almond hover:text-almond cursor-pointer"
       />
-      {highlighted ?? "Loading..."}
+      <code>{highlighted ?? "Loading..."}</code>
     </pre>
   );
 }

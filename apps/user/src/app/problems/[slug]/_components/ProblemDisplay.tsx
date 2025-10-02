@@ -11,16 +11,19 @@ import {
 import SolutionInfoCard from "./SolutionInfoCard";
 import { motion } from "motion/react";
 import ProblemInfoCard from "./ProblemInfoCard";
-import { Problem } from "@/lib/types";
+import { CodeSubmitResult, Problem } from "@/lib/types";
+import SubmissionInfoCard from "./SubmissionInfoCard";
 
 export default function ProblemDisplay({
   problem,
   isLoadingProblem,
   isErrorProblem,
+  problemSubmitResult,
 }: {
   problem?: Problem;
   isLoadingProblem: boolean;
   isErrorProblem: boolean;
+  problemSubmitResult: CodeSubmitResult | null;
 }) {
   return (
     <Tabs defaultValue="problem" className="w-full p-4 sm:p-6">
@@ -58,6 +61,7 @@ export default function ProblemDisplay({
           problem={problem}
           isProblemLoading={isLoadingProblem}
           isErrorProblem={isErrorProblem}
+          problemSubmitResult={problemSubmitResult}
         />
       </TabsContent>
 
@@ -65,7 +69,9 @@ export default function ProblemDisplay({
         <SolutionInfoCard />
       </TabsContent>
 
-      <TabsContent value="submission"></TabsContent>
+      <TabsContent value="submission">
+        <SubmissionInfoCard problem={problem} />
+      </TabsContent>
       <TabsContent value="notes">
         {/* <UserNotes problem={problem} /> */}
       </TabsContent>

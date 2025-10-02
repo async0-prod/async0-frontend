@@ -104,9 +104,6 @@ export function SidebarData({ data }: SidebarProps) {
             Problems
           </TooltipContent>
         </Tooltip>
-
-        {/* Spacer to push settings to bottom */}
-        <div className="flex-1"></div>
       </div>
     </TooltipProvider>
   );

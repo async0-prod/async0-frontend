@@ -1,3 +1,4 @@
+import { getUserSubmissionsByProblemID } from "@/lib/submission";
 import { CodeBlock } from "@/components/Codeblock";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,31 +8,35 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { DialogHeader } from "@/components/ui/dialog";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Table,
   TableHeader,
   TableRow,
   TableHead,
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { userSubmissionType } from "@/lib/types";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-} from "@radix-ui/react-dialog";
-import { format, formatDistanceToNow } from "date-fns";
-import { Table } from "lucide-react";
+import { Problem } from "@/lib/types";
 
-export default function SubmissionInfoCard({
-  userSubmissions,
-}: {
-  userSubmissions: userSubmissionType | undefined;
-}) {
-  if (!userSubmissions) {
+import { useQuery } from "@tanstack/react-query";
+import { format, formatDistanceToNow } from "date-fns";
+
+export default function SubmissionInfoCard({ problem }: { problem?: Problem }) {
+  const { data: submissions } = useQuery({
+    queryKey: ["submissions", problem?.id],
+    queryFn: () => getUserSubmissionsByProblemID(problem?.id as string),
+    enabled: !!problem,
+  });
+
+  if (!submissions) {
     return (
       <Card className="bg-transparent border-charcoal/20 text-charcoal dark:border-almond/20 dark:text-almond border-none shadow-none gap-4">
         <CardHeader className="p-0">
@@ -44,32 +49,24 @@ export default function SubmissionInfoCard({
 
   return (
     <Card className="bg-transparent border-charcoal/20 text-charcoal dark:border-almond/20 dark:text-almond border-none shadow-none gap-4 overflow-y-auto">
-      <CardHeader className="p-0">
-        <CardTitle className="flex items-center">Submissions</CardTitle>
-        <CardDescription>
-          {userSubmissions.length > 0
-            ? "All submission results will be shows here"
-            : "No submissions found"}
-        </CardDescription>
-      </CardHeader>
-      {userSubmissions.length > 0 ? (
+      {submissions.data.length > 0 ? (
         <>
-          <CardContent className="p-0">
+          <CardContent>
             <Table>
               <TableHeader>
-                <TableRow>
+                <TableRow className="border-b-almond-darker hover:bg-transparent">
                   <TableHead className="text-center">Status</TableHead>
                   <TableHead className="text-center">Solution</TableHead>
                   <TableHead className="hidden sm:table-cell text-center">
                     <p className="line-clamp-1">Testcases Passed</p>
                   </TableHead>
                   <TableHead className="hidden md:table-cell text-center">
-                    Date
+                    Submission Date
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {userSubmissions.map((sub, index) => {
+                {submissions.data.map((sub, index) => {
                   const date = new Date(sub.created_at);
                   const formattedDate = format(
                     date,
@@ -79,14 +76,14 @@ export default function SubmissionInfoCard({
                     addSuffix: true,
                   });
                   return (
-                    <TableRow key={index}>
+                    <TableRow key={index} className="hover:bg-transparent">
                       <TableCell className="text-center">
                         <div
-                          className={`font-medium ${sub.status === "Accepted" ? "text-green-600" : sub.status === "Rejected" ? "text-red-600" : "text-yellow-600"}`}
+                          className={`font-medium ${sub.status === "AC" ? "text-green-600" : sub.status === "RE" ? "text-red-600" : "text-yellow-600"}`}
                         >
-                          {sub.status === "Accepted"
+                          {sub.status === "AC"
                             ? "Pass"
-                            : sub.status === "Rejected"
+                            : sub.status === "RE"
                               ? "Fail"
                               : "TLE"}
                         </div>
@@ -94,18 +91,18 @@ export default function SubmissionInfoCard({
                       <TableCell className="text-center sm:table-cell">
                         <Dialog>
                           <DialogTrigger asChild>
-                            <Button variant={"outline"} size={"sm"}>
+                            <Button
+                              variant={"outline"}
+                              size={"sm"}
+                              className="bg-charcoal text-almond cursor-pointer hover:bg-almond-darker hover:text-charcoal"
+                            >
                               code
                             </Button>
                           </DialogTrigger>
 
-                          <DialogContent>
+                          <DialogContent className="bg-[#0d1117] border-none">
                             <DialogHeader>
-                              <DialogTitle className="mb-2">
-                                <div className="w-72 overflow-hidden">
-                                  Your Solution
-                                </div>
-                              </DialogTitle>
+                              <DialogTitle className="mb-2"></DialogTitle>
                               <DialogDescription className="overflow-auto">
                                 <CodeBlock code={sub.code} />
                               </DialogDescription>

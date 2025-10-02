@@ -1,4 +1,4 @@
-import { WebsocketMessage } from "@/lib/types";
+import { WebsocketMessage, WebsocketResponse } from "@/lib/types";
 import { v4 as uuidv4 } from "uuid";
 
 type MessageHandler = (msg: WebsocketMessage, publisherId: string) => void;
@@ -37,33 +37,33 @@ export class Subscriber {
     };
 
     ws.onmessage = (event) => {
-      const data: WebsocketMessage = JSON.parse(event.data);
-      if (data.type === "Message") {
+      const data: WebsocketResponse | WebsocketMessage = JSON.parse(event.data);
+
+      if (data.kind === "response") {
+        if (data.success) {
+          console.log("Success from server:", data.message);
+        } else {
+          console.error("Error from server:", data.message);
+          ws.close();
+          console.log("websocket closed");
+          this.connections.delete(publisherId);
+        }
+      }
+
+      if (data.kind === "message") {
         this.handlers.forEach((h) => h(data, publisherId));
       }
     };
 
     ws.onclose = () => {
       console.log(`Disconnected from publisher ${publisherId}`);
-      ws.send?.(
-        JSON.stringify({
-          type: "Unsubscribe",
-          subscriber_id: this.subscriberId,
-          publisher_id: publisherId,
-        })
-      );
       this.connections.delete(publisherId);
     };
 
     ws.onerror = () => {
       console.error(`Error with publisher ${publisherId}`);
-      ws.send?.(
-        JSON.stringify({
-          type: "Unsubscribe",
-          subscriber_id: this.subscriberId,
-          publisher_id: publisherId,
-        })
-      );
+      ws.close();
+      this.connections.delete(publisherId);
     };
 
     this.connections.set(publisherId, ws);
@@ -98,6 +98,7 @@ export class Subscriber {
         })
       );
       ws.close();
+      console.log("websocket closed");
     });
     this.connections.clear();
   }
