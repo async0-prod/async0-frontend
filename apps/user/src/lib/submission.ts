@@ -1,226 +1,62 @@
-import { cache } from "react";
-import axios from "axios";
-import { judge0ResponseType, testcaseType } from "./types";
-import { postUserSubmission } from "@/app/actions/submissions";
+import { CodeRunResult, CodeSubmitResult, Submission } from "@/lib/types";
 
-const judge0Url = process.env.JUDGE0_URL ?? "http://127.0.0.1:2358";
-
-export const submissionRun = cache(async (userCode: string) => {
-  const source = axios.CancelToken.source();
-  const timeId = setTimeout(() => {
-    source.cancel();
-  }, 10000);
-
-  const code = {
-    language_id: 63,
-    source_code: userCode.trim(),
-  };
-
-  try {
-    const response = await axios.post(
-      `${judge0Url}/submissions/?base64_encoded=false&wait=false`,
-      JSON.stringify(code),
-      {
-        headers: { "Content-Type": "application/json" },
-        cancelToken: source.token,
-      }
-    );
-
-    clearTimeout(timeId);
-    return await checkPromiseStatus(response.data.token);
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    if (error.code === "ECONNREFUSED") {
-      return Promise.resolve({
-        stdout: null,
-        time: null,
-        memory: null,
-        stderr: "Server is down at the moment. Please try again in some time.",
-        token: null,
-        compile_output: null,
-        message: null,
-        status: { id: 69, description: null },
-        output: null,
-      });
+export async function runCode(code: string): Promise<CodeRunResult> {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/submissions/run`,
+    {
+      method: "POST",
+      body: JSON.stringify({ code }),
+      credentials: "include",
     }
+  );
 
-    clearTimeout(timeId);
-
-    if (axios.isCancel(error)) {
-      return Promise.resolve({
-        stdout: null,
-        time: null,
-        memory: null,
-        stderr: "Server took too long to respond.",
-        token: null,
-        compile_output: null,
-        message: null,
-        status: { id: 69, description: null },
-        output: null,
-      });
-    }
-
-    return Promise.resolve({
-      stdout: null,
-      time: null,
-      memory: null,
-      stderr: "Something went wrong!",
-      token: null,
-      compile_output: null,
-      message: null,
-      status: { id: 69, description: null },
-      output: null,
-    });
+  if (!response.ok) {
+    throw new Error(`Failed to run user code: ${response.statusText}`);
   }
-});
 
-export const submissionSubmit = cache(
-  async (userCode: string, testcases: testcaseType[], problemId: string) => {
-    const source = axios.CancelToken.source();
-    const timeId = setTimeout(() => {
-      source.cancel();
-    }, 10000);
+  const submissions = (await response.json()) as CodeRunResult;
 
-    const submissions = buildTestcaseSubmissions(userCode, testcases);
+  return submissions;
+}
 
-    try {
-      const response = await axios.post(
-        `${judge0Url}/submissions/batch?base64_encoded=false&wait=false`,
-        { submissions },
-        {
-          headers: { "Content-Type": "application/json" },
-          cancelToken: source.token,
-        }
-      );
-
-      clearTimeout(timeId);
-
-      const tokens: { token: string }[] = response.data;
-
-      const responses = await Promise.allSettled(
-        tokens.map((t) => checkPromiseStatus(t.token))
-      );
-
-      const filteredResponse = responses
-        .filter(
-          (result): result is PromiseFulfilledResult<judge0ResponseType> =>
-            result.status === "fulfilled"
-        )
-        .map((result) => result.value);
-
-      const totalTestcases = filteredResponse.length;
-      const passedTestcases = filteredResponse.filter(
-        (res) => res.status.id === 3
-      ).length;
-      let status = "";
-      if (totalTestcases === passedTestcases) {
-        status = "Accepted";
-      } else if (filteredResponse[passedTestcases]?.status.id === 5) {
-        status = "TimeLimit";
-      } else {
-        status = "Rejected";
-      }
-
-      postUserSubmission(
-        status,
-        problemId,
-        passedTestcases,
-        totalTestcases,
-        userCode
-      );
-
-      return filteredResponse;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      console.error(error);
-      clearTimeout(timeId);
-
-      const errMsg = axios.isCancel(error)
-        ? "Server took too long to respond."
-        : error.code === "ECONNREFUSED" || error.code === "ERR_NETWORK"
-          ? "Server is down at the moment. Please try again in some time."
-          : "Something went wrong!";
-
-      return Promise.resolve([
-        {
-          stdout: null,
-          time: null,
-          memory: null,
-          stderr: null,
-          token: null,
-          compile_output: null,
-          message: null,
-          status: { id: 69, description: errMsg },
-          output: null,
-        },
-      ]);
+export async function submitCode(
+  code: string,
+  problemID: string
+): Promise<CodeSubmitResult> {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/submissions/submit/${problemID}`,
+    {
+      method: "POST",
+      body: JSON.stringify({ code }),
+      credentials: "include",
     }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to submit user code: ${response.statusText}`);
   }
-);
 
-export async function checkPromiseStatus(
-  token: string
-): Promise<judge0ResponseType> {
-  return new Promise((resolve) => {
-    async function checkStatus() {
-      const response = await axios.get(
-        `${judge0Url}/submissions/${token}?base64_encoded=false`
-      );
+  const submissions = (await response.json()) as CodeSubmitResult;
 
-      if (
-        [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].includes(
-          response.data.status.id
-        )
-      ) {
-        clearInterval(intervalId);
-        resolve(response.data);
-      }
+  return submissions;
+}
+
+export async function getUserSubmissionsByProblemID(
+  problemID: string
+): Promise<{
+  data: Submission[];
+}> {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/submissions/problem/${problemID}`,
+    {
+      credentials: "include",
     }
+  );
 
-    const intervalId = setInterval(checkStatus, 200);
-  });
-}
+  if (!response.ok) {
+    throw new Error(`Failed to get user submissions: ${response.statusText}`);
+  }
 
-export async function checkSubmitPromiseStatus(
-  token: string[]
-): Promise<judge0ResponseType> {
-  return new Promise((resolve) => {
-    async function checkStatus() {
-      const response = await axios.get(
-        `${judge0Url}/submissions/${token}?base64_encoded=false`
-      );
-
-      if (
-        [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].includes(
-          response.data.status.id
-        )
-      ) {
-        clearInterval(intervalId);
-        resolve(response.data);
-      }
-    }
-
-    const intervalId = setInterval(checkStatus, 200);
-  });
-}
-
-function buildTestcaseSubmissions(userCode: string, testcases: testcaseType[]) {
-  return testcases.map((tc) => {
-    const source_code = `
-${userCode.trim()}
-try {
-  const result = ${tc.input};
-  console.log(result);
-} catch (e) {
-  console.error(e.message);
-}
-`.trim();
-
-    return {
-      language_id: 63,
-      source_code,
-      expected_output: tc.output,
-    };
-  });
+  const submissions = await response.json();
+  return submissions as { data: Submission[] };
 }
