@@ -22,9 +22,9 @@ jobs:
       base_ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || 'HEAD~1' }}
 
   build-user-and-push-image:
-    if: needs.setup.outputs.user_changed == 'true'
+    # if: needs.user-changed.outputs.changed == 'true'
     runs-on: ubuntu-latest
-    needs: setup
+    # needs: user-changed
 
     steps:
       - name: Checkout repository
@@ -55,9 +55,9 @@ jobs:
           sbom: true
 
   build-admin-and-push-image:
-    if: needs.setup.outputs.admin_changed == 'true'
+    # if: needs.admin-changed.outputs.changed == 'true'
     runs-on: ubuntu-latest
-    needs: setup
+    # needs: admin-changed
 
     steps:
       - name: Checkout repository
