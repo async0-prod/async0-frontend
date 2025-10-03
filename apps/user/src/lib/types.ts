@@ -65,6 +65,21 @@ export interface Topic {
   updated_at: string;
 }
 
+export type SidebarDataType = {
+  name: string;
+  topic: {
+    name: string;
+    topic_problem: {
+      problem: {
+        name: string;
+        difficulty: string;
+        time_limit: number | null;
+        memory_limit: number | null;
+      };
+    }[];
+  }[];
+}[];
+
 export type SidebarTopicList = {
   name: string;
   problems: Partial<Problem>[];

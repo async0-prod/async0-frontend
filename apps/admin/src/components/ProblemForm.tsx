@@ -1,8 +1,8 @@
 "use client";
 
-import { getAllLists } from "@/fetch/list";
-import { getAllTopics } from "@/fetch/topic";
-import { createProblem } from "@/fetch/problem";
+import { getAllLists } from "@/lib/list";
+import { getAllTopics } from "@/lib/topic";
+import { createProblem } from "@/lib/problem";
 import {
   CreateProblemFormdata,
   List,

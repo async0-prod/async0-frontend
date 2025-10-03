@@ -42,3 +42,18 @@ export async function getAllProblems(): Promise<{ data: Problem[] }> {
 
   return response.json();
 }
+
+// export async function getProblemById(id: string): Promise<{ data: Problem }> {
+//   const response = await fetch(
+//     `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/problems/${id}`,
+//     {
+//       credentials: "include",
+//     }
+//   );
+
+//   if (!response.ok) {
+//     throw new Error(`Failed to fetch problems: ${response.statusText}`);
+//   }
+
+//   return response.json();
+// }

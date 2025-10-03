@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAllProblems } from "@/fetch/problem";
+import { getAllProblems } from "@/lib/problem";
 import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, MoreVertical } from "lucide-react";
 import Link from "next/link";
