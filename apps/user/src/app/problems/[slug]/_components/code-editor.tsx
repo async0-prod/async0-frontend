@@ -214,7 +214,7 @@ export default function CodeEditor({
     <div className="p-1.5">
       <Tabs className="py-2">
         <TabsList className="flex items-center">
-          <div className="flex items-center">
+          <div className="dark:text-almond text-charcoal flex items-center">
             <Dot
               className={`${codeSaved && "text-green-600"} ${isCodeSavePending && "text-yellow-600"}`}
             />

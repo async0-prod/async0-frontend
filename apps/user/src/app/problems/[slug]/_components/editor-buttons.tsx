@@ -19,15 +19,15 @@ export default function EditorButtons({
   handleSubmit,
 }: EditorButtonsProps) {
   return (
-    <div className="flex justify-end gap-2 pt-4 w-full">
+    <div className="flex w-full justify-end gap-2 pt-4">
       <Button
         size="lg"
-        className="mr-auto cursor-pointer"
+        className="bg-charcoal hover:bg-charcoal text-almond dark:border-almond/20 mr-auto cursor-pointer dark:border"
         onClick={toggleConsole}
       >
         Console
         <ChevronUp
-          className={` ${isConsoleOpen ? "transition-all duration-400 ease-in-out rotate-180" : "transition-all duration-400 ease-in-out"} `}
+          className={` ${isConsoleOpen ? "rotate-180 transition-all duration-400 ease-in-out" : "transition-all duration-400 ease-in-out"} `}
           size="14"
         />
       </Button>
@@ -35,7 +35,7 @@ export default function EditorButtons({
       <Button
         variant="outline"
         size="lg"
-        className="border-charcoal text-charcoal bg-transparent cursor-pointer"
+        className="border-charcoal/50 text-charcoal bg-almond hover:bg-almond dark:text-almond dark:border-almond/20 cursor-pointer dark:border"
         type="submit"
         onClick={() => {
           handleRun(value);
@@ -48,7 +48,7 @@ export default function EditorButtons({
       <Button
         size="lg"
         type="submit"
-        className="bg-charcoal text-almond cursor-pointer"
+        className="bg-charcoal hover:bg-charcoal text-almond dark:border-almond/20 cursor-pointer dark:border"
         onClick={() => {
           handleSubmit(value);
         }}

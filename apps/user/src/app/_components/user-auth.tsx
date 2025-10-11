@@ -43,7 +43,7 @@ export default function UserAuth() {
       >
         <Button
           size="sm"
-          className="bg-primary text-secondary hover:bg-primary hover:text-secondary cursor-pointer"
+          className="bg-primary text-secondary hover:bg-primary hover:text-secondary dark:bg-almond dark:hover:bg-almond dark:text-charcoal cursor-pointer"
         >
           <LogIn size="16" />
           <p>Sign In</p>

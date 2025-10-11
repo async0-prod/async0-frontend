@@ -56,19 +56,19 @@ export default function ProblemInfoCard({
         <CardHeader className="p-0">
           <div className="flex items-start justify-between">
             <div className="space-y-2">
-              <Skeleton className="h-6 w-48" />
-              <Skeleton className="h-3 w-20" />
+              <Skeleton className="bg-charcoal/10 h-6 w-48" />
+              <Skeleton className="bg-charcoal/10 h-3 w-20" />
             </div>
-            <Skeleton className="h-5 w-5 rounded-md" />
+            <Skeleton className="bg-charcoal/10 h-5 w-5 rounded-md" />
           </div>
         </CardHeader>
 
         <CardContent className="mt-4 space-y-4 p-0">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-5/6" />
-          <Skeleton className="h-4 w-3/4" />
+          <Skeleton className="bg-charcoal/10 h-4 w-full" />
+          <Skeleton className="bg-charcoal/10 h-4 w-5/6" />
+          <Skeleton className="bg-charcoal/10 h-4 w-3/4" />
 
-          <Skeleton className="h-3 w-32" />
+          <Skeleton className="bg-charcoal/10 h-3 w-32" />
 
           <div className="mt-4 space-y-4">
             {[...Array(3)].map((_, i) => (
@@ -77,8 +77,8 @@ export default function ProblemInfoCard({
                 className="border-charcoal/20 bg-transparent px-4 py-4 text-sm"
               >
                 <div className="space-y-2">
-                  <Skeleton className="h-4 w-2/3" />
-                  <Skeleton className="h-4 w-1/3" />
+                  <Skeleton className="bg-charcoal/10 h-4 w-2/3" />
+                  <Skeleton className="bg-charcoal/10 h-4 w-1/3" />
                 </div>
               </Card>
             ))}
@@ -139,8 +139,8 @@ export default function ProblemInfoCard({
                 className="border-charcoal/20 bg-transparent px-4 py-4 text-sm"
               >
                 <div className="space-y-2">
-                  <Skeleton className="h-4 w-2/3" />
-                  <Skeleton className="h-4 w-1/3" />
+                  <Skeleton className="bg-charcoal/10 h-4 w-2/3" />
+                  <Skeleton className="bg-charcoal/10 h-4 w-1/3" />
                 </div>
               </Card>
             ))}

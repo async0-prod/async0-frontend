@@ -67,7 +67,7 @@ export default function ProblemDisplay({
       </TabsContent>
 
       <TabsContent value="solution">
-        <SolutionInfoCard />
+        <SolutionInfoCard problem={problem} isErrorProblem={isErrorProblem} />
       </TabsContent>
 
       <TabsContent value="submission">

@@ -44,6 +44,25 @@ export interface Problem {
   updated_at: string;
 }
 
+export interface Solution {
+  id: string;
+  problem_id: string;
+  title: string;
+  hint: string;
+  description: string;
+  code: string;
+  code_explanation: string;
+  notes: string;
+  time_complexity: string;
+  space_complexity: string;
+  difficulty_level: string;
+  display_order: number;
+  author: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Testcase {
   id: string;
   problem_id: string;
@@ -84,18 +103,6 @@ export type SidebarTopicList = {
   name: string;
   problems: Partial<Problem>[];
 }[];
-
-export type WebsocketMessage = {
-  kind: "message";
-  data: any;
-};
-
-export type WebsocketResponse = {
-  kind: "response";
-  success: boolean;
-  message: string;
-  data: any;
-};
 
 export type CodeRunResult = {
   data: {
@@ -167,3 +174,15 @@ export interface Submission {
   failed_testcases?: number;
   created_at: string;
 }
+
+export type WebsocketMessage = {
+  kind: "message";
+  data: any;
+};
+
+export type WebsocketResponse = {
+  kind: "response";
+  success: boolean;
+  message: string;
+  data: any;
+};

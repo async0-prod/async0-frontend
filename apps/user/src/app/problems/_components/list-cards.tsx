@@ -66,16 +66,16 @@ function ListCard({
         transition={{ delay: index * 0.1 }}
         className="cursor-pointer"
       >
-        <Card className="bg-almond dark:bg-charcoal border-almond-darker h-full p-0">
+        <Card className="border-almond-darker h-full bg-transparent p-0">
           <div className="space-y-4 p-6">
-            <Skeleton className="bg-almond-darker h-6 w-1/2" />
-            <Skeleton className="bg-almond-darker h-4 w-3/4" />
+            <Skeleton className="bg-charcoal/10 dark:bg-almond/10 h-6 w-1/2" />
+            <Skeleton className="bg-charcoal/10 dark:bg-almond/10 h-4 w-3/4" />
             <div className="mt-4 flex items-center justify-between gap-8">
-              <Skeleton className="bg-almond-darker h-40 w-1/2 rounded-full" />
+              <Skeleton className="bg-charcoal/10 dark:bg-almond/10 h-40 w-1/2 rounded-full" />
               <div className="grow space-y-3">
-                <Skeleton className="bg-almond-darker h-4 w-full" />
-                <Skeleton className="bg-almond-darker h-4 w-5/6" />
-                <Skeleton className="bg-almond-darker h-4 w-2/3" />
+                <Skeleton className="bg-charcoal/10 dark:bg-almond/10 h-4 w-full" />
+                <Skeleton className="bg-charcoal/10 dark:bg-almond/10 h-4 w-5/6" />
+                <Skeleton className="bg-charcoal/10 dark:bg-almond/10 h-4 w-2/3" />
               </div>
             </div>
           </div>
@@ -93,11 +93,16 @@ function ListCard({
         transition={{ delay: index * 0.1 }}
         className="cursor-pointer"
       >
-        <Card className="h-full border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900">
-          <div className="flex flex-col items-center justify-center p-6 text-center text-red-600 dark:text-red-300">
-            <AlertTriangle className="mb-2 h-8 w-8" />
+        <Card className="border-almond-dark/30 h-full bg-transparent">
+          <div className="flex flex-col items-center justify-center p-6 text-center">
+            <AlertTriangle
+              size={30}
+              className="mb-2 text-red-600 dark:text-red-300"
+            />
             <p className="font-semibold">Failed to load analytics</p>
-            <p className="text-sm">Please try again later</p>
+            <p className="text-muted-foreground text-sm">
+              Please try again later
+            </p>
           </div>
         </Card>
       </motion.div>

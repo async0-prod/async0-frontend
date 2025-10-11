@@ -36,8 +36,8 @@ export default function ProblemsTable({
     return (
       <div className="flex w-full flex-col gap-2.5 overflow-auto">
         <div className="flex items-center gap-2 pb-2">
-          <Skeleton className="bg-almond-darker h-9 w-64" />
-          <Skeleton className="bg-almond-darker ml-auto h-9 w-40" />
+          <Skeleton className="bg-charcoal/10 dark:bg-almond/10 h-9 w-64" />
+          <Skeleton className="bg-charcoal/10 dark:bg-almond/10 ml-auto h-9 w-40" />
         </div>
 
         <div className="overflow-hidden rounded-md border p-2">
@@ -45,13 +45,13 @@ export default function ProblemsTable({
             <TableHeader>
               <TableRow>
                 <TableHead>
-                  <Skeleton className="bg-almond-darker h-4 w-20" />
+                  <Skeleton className="bg-charcoal/10 dark:bg-almond/10 h-4 w-20" />
                 </TableHead>
                 <TableHead>
-                  <Skeleton className="bg-almond-darker h-4 w-20" />
+                  <Skeleton className="bg-charcoal/10 dark:bg-almond/10 h-4 w-20" />
                 </TableHead>
                 <TableHead>
-                  <Skeleton className="bg-almond-darker h-4 w-20" />
+                  <Skeleton className="bg-charcoal/10 dark:bg-almond/10 h-4 w-20" />
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -59,13 +59,13 @@ export default function ProblemsTable({
               {Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
                   <TableCell>
-                    <Skeleton className="bg-almond-darker h-4 w-24" />
+                    <Skeleton className="bg-charcoal/10 dark:bg-almond/10 h-4 w-24" />
                   </TableCell>
                   <TableCell>
-                    <Skeleton className="bg-almond-darker h-4 w-36" />
+                    <Skeleton className="bg-charcoal/10 dark:bg-almond/10 h-4 w-36" />
                   </TableCell>
                   <TableCell>
-                    <Skeleton className="bg-almond-darker h-4 w-16" />
+                    <Skeleton className="bg-charcoal/10 dark:bg-almond/10 h-4 w-16" />
                   </TableCell>
                 </TableRow>
               ))}

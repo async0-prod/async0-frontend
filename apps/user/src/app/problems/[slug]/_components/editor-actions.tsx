@@ -2,14 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { unescapeCode } from "@/lib/utils";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@radix-ui/react-popover";
+
 import {
   CheckCheck,
   Copy,
@@ -57,12 +58,12 @@ export default function EditorActions({
   name,
 }: EditorActionsProps) {
   return (
-    <div className="ml-auto flex gap-4">
+    <div className="dark:text-almond text-charcoal ml-auto flex gap-4">
       <Button
         variant={"ghost"}
         size={"icon"}
         onClick={toggleStartStreaming}
-        className="hover:bg-transparent cursor-pointer"
+        className="cursor-pointer hover:bg-transparent"
       >
         {startStreaming ? <Pause size={16} /> : <Play size={16} />}
       </Button>
@@ -71,7 +72,7 @@ export default function EditorActions({
         variant={"ghost"}
         size={"icon"}
         onClick={handleCodeDownload}
-        className="hover:bg-transparent cursor-pointer"
+        className="cursor-pointer hover:bg-transparent"
       >
         {copied ? <CheckCheck size={16} /> : <Copy size={16} />}
       </Button>
@@ -81,13 +82,16 @@ export default function EditorActions({
           <Button
             variant={"ghost"}
             size={"icon"}
-            className="hover:bg-transparent cursor-pointer"
+            className="cursor-pointer hover:bg-transparent"
           >
             <Settings size={16} />
           </Button>
         </PopoverTrigger>
-        <PopoverContent align="end">
-          <div className="space-y-3.5">
+        <PopoverContent
+          align="end"
+          className="bg-almond border-charcoal/20 dark:bg-charcoal dark:border-almond/20 dark:text-almond text-charcoal"
+        >
+          <div className="space-y-3">
             <NumberSetting
               label="Font Size"
               value={fontSize}
@@ -134,7 +138,7 @@ export default function EditorActions({
             window.localStorage.removeItem(`${name}-code`);
           }
         }}
-        className="hover:bg-transparent cursor-pointer"
+        className="cursor-pointer hover:bg-transparent"
       >
         <RotateCcw size={16} />
       </Button>
@@ -183,20 +187,20 @@ function NumberSetting({
         <Button
           variant="outline"
           size="icon"
-          className="h-8 w-8 rounded-r-none"
+          className="bg-almond dark:bg-charcoal h-8 w-8 rounded-r-none"
           onClick={decrement}
           disabled={value <= min}
         >
           <Minus className="h-3 w-3" />
           <span className="sr-only">Decrease {label}</span>
         </Button>
-        <div className="flex h-8 w-10 items-center justify-center border border-x-0 border-input bg-background text-sm tabular-nums">
+        <div className="border-input bg-almond dark:bg-charcoal flex h-8 w-10 items-center justify-center border border-x-0 text-sm tabular-nums">
           {value}
         </div>
         <Button
           variant="outline"
           size="icon"
-          className="h-8 w-8 rounded-l-none"
+          className="bg-almond dark:bg-charcoal h-8 w-8 rounded-l-none"
           onClick={increment}
           disabled={value >= max}
         >

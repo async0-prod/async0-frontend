@@ -34,7 +34,6 @@ export default function ProblemUI() {
       setSelectedProblem(name);
       startTransition(async () => {
         router.push(`/problems/${slug}`);
-        // await new Promise((resolve) => setTimeout(resolve, 2000));
       });
     },
     [router],
