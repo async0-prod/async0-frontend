@@ -21,10 +21,14 @@ import { CheckCircle2, MoreVertical } from "lucide-react";
 import Link from "next/link";
 
 export function ProblemsTable() {
-  const { data: problems } = useQuery({
+  const { data: problems, isLoading } = useQuery({
     queryKey: ["problems"],
     queryFn: getAllProblems,
   });
+
+  if (isLoading) {
+    return <h1>Loading...</h1>;
+  }
 
   if (!problems) {
     return <h1>No problems found</h1>;

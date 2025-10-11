@@ -1,25 +1,12 @@
 "use client";
 
-import { getAllLists } from "@/lib/list";
-import { getAllTopics } from "@/lib/topic";
-import { createProblem } from "@/lib/problem";
-import {
-  List,
-  ProblemBody,
-  ProblemFormdata,
-  Solution,
-  Testcase,
-  Topic,
-} from "@/lib/types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { ArrowLeft, Plus, X } from "lucide-react";
 import { Button } from "./ui/button";
-import { ArrowLeft, X, Plus } from "lucide-react";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Label } from "./ui/label";
+import { useRouter } from "next/navigation";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 import {
   Select,
   SelectContent,
@@ -29,24 +16,52 @@ import {
 } from "./ui/select";
 import { Checkbox } from "./ui/checkbox";
 import { Badge } from "./ui/badge";
+import {
+  List,
+  Problem,
+  ProblemBody,
+  ProblemFormdata,
+  Solution,
+  Testcase,
+  Topic,
+} from "@/lib/types";
+import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getAllLists } from "@/lib/list";
+import { getAllTopics } from "@/lib/topic";
 import { toast } from "sonner";
+import { updateProblem } from "@/lib/problem";
 
-export default function ProblemForm() {
+interface UpdateProblemFormProps {
+  problem: Problem;
+  prevLists: List[];
+  prevTopics: Topic[];
+  prevTestcases: Testcase[];
+  prevSolutions: Solution[];
+}
+
+export default function UpdateProblemForm({
+  problem,
+  prevLists,
+  prevTopics,
+  prevTestcases,
+  prevSolutions,
+}: UpdateProblemFormProps) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
   const { mutate } = useMutation({
     mutationFn: async (data: ProblemBody) => {
-      return await createProblem(data);
+      return await updateProblem(data, problem.id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["metrics"] });
       queryClient.invalidateQueries({ queryKey: ["requests"] });
-      toast.success("Problem created successfully!");
+      toast.success("Problem updated successfully!");
     },
     onError: (error) => {
-      console.error("Failed to submit problem:", error);
-      toast.error("Failed to submit problem. Check console for more info.");
+      console.error("Failed to update problem:", error);
+      toast.error("Failed to update problem. Check console for more info.");
     },
   });
 
@@ -61,20 +76,37 @@ export default function ProblemForm() {
   });
 
   const [formData, setFormData] = useState<ProblemFormdata>({
-    name: "",
-    slug: "",
-    description: "",
-    link: "",
-    problem_number: 0,
-    difficulty: "NA",
-    starter_code: "",
-    time_limit: 2000,
-    memory_limit: 256,
-    is_active: true,
-    selectedTopics: [],
-    selectedLists: [],
-    testcases: [{ ui: "", input: "", output: "" }],
-    solutions: [],
+    name: problem.name,
+    slug: problem.slug,
+    description: problem.description,
+    link: problem.link || "",
+    problem_number: problem.problem_number || 0,
+    difficulty: problem.difficulty,
+    starter_code: problem.starter_code,
+    time_limit: problem.time_limit || 2000,
+    memory_limit: problem.memory_limit || 256,
+    is_active: problem.is_active,
+    selectedTopics: prevTopics.map((topic) => topic.id),
+    selectedLists: prevLists.map((list) => list.id),
+    testcases: prevTestcases.map((testcase) => ({
+      ui: testcase.ui,
+      input: testcase.input,
+      output: testcase.output,
+    })),
+    solutions: prevSolutions.map((solution) => ({
+      title: solution.title,
+      hint: solution.hint,
+      description: solution.description,
+      code: solution.code,
+      code_explanation: solution.code_explanation,
+      notes: solution.notes,
+      time_complexity: solution.time_complexity,
+      space_complexity: solution.space_complexity,
+      difficulty_level: solution.difficulty_level,
+      display_order: solution.display_order,
+      author: solution.author,
+      is_active: solution.is_active,
+    })),
   });
   const [topics, setTopics] = useState<Topic[]>([]);
   const [lists, setLists] = useState<List[]>([]);
@@ -160,7 +192,7 @@ export default function ProblemForm() {
           notes: "",
           time_complexity: "",
           space_complexity: "",
-          difficulty_level: "MEDIUM",
+          difficulty_level: "EASY",
           display_order: prev.solutions.length,
           author: "",
           is_active: true,
@@ -245,13 +277,10 @@ export default function ProblemForm() {
           display_order: index,
         })),
       };
-
       mutate(submissionData);
-
-      // router.push("/problems");
     } catch (error) {
-      console.error("Error creating problem:", error);
-      toast.error("Failed to create problem. Please check your JSON syntax.");
+      console.error("Error updating problem:", error);
+      toast.error("Failed to update problem. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -580,7 +609,7 @@ export default function ProblemForm() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div className="space-y-2">
                       <Label>Test Case Name</Label>
-                      <Input
+                      <Textarea
                         value={testCase.ui}
                         onChange={(e) =>
                           handleTestCaseChange(index, "ui", e.target.value)
@@ -866,7 +895,7 @@ export default function ProblemForm() {
               disabled={loading}
               className="min-w-40 h-12 text-base font-medium bg-green-600 hover:bg-green-700 shadow-lg hover:shadow-xl transition-all duration-200"
             >
-              {loading ? "Creating..." : "Create Problem"}
+              {loading ? "Creating..." : "Update Problem"}
             </Button>
           </div>
         </form>

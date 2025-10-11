@@ -4,7 +4,7 @@ import { ProblemsTable } from "./_components/ProblemsTable";
 
 export default function AdminProblemPage() {
   return (
-    <>
+    <div className="container mx-auto py-12 max-w-7xl">
       <div className="flex justify-between mb-4">
         <div>
           <h3 className="text-lg font-medium">Problem Board</h3>
@@ -17,6 +17,6 @@ export default function AdminProblemPage() {
         </Button>
       </div>
       <ProblemsTable />
-    </>
+    </div>
   );
 }

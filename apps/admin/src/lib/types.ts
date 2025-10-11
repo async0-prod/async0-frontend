@@ -1,55 +1,22 @@
-export type DifficultyEnumType = "Easy" | "Medium" | "Hard" | "NA";
+export type Difficulty = "EASY" | "MEDIUM" | "HARD" | "NA";
 
-export type ProblemType = {
+export type SessionUser = {
   id: string;
+  email: string;
+  image: string;
   name: string;
-  description: string;
-  difficulty: DifficultyEnumType;
-  starter_code: string;
-  link: string;
-  time_limit: number | null;
-  memory_limit: number | null;
-  created_at: string; // ISO timestamp
-  updated_at: string; // ISO timestamp
-  rank: number;
-  testcase: {
-    input: string;
-    output: string;
-  }[];
-  topic_problem: {
-    topic: {
-      id: string;
-      name: string;
-    };
-  }[];
-  list_problem: {
-    list: {
-      id: string;
-      name: string;
-    };
-  }[];
+  role: string;
 };
-
-export type TopicType = {
-  id: string;
-  name: string;
-  list_id: string;
-}[];
-
-export type ListType = {
-  id: string;
-  name: string;
-}[];
 
 export interface Problem {
   id: string;
   name: string;
+  description: string;
   slug: string;
   link?: string;
   problem_number?: number;
   difficulty: "Easy" | "Medium" | "Hard" | "NA";
-  starter_code: Record<string, string>;
-  solution_code?: Record<string, string>;
+  starter_code: string;
   time_limit: number;
   memory_limit: number;
   acceptance_rate?: number;
@@ -58,9 +25,6 @@ export interface Problem {
   is_active: boolean;
   created_at: string;
   updated_at: string;
-  topics: string[];
-  lists: string[];
-  testcases: Testcase[];
 }
 
 export interface Testcase {
@@ -94,16 +58,16 @@ export interface Solution {
   is_active: boolean;
 }
 
-export interface CreateProblemFormdata {
+export interface ProblemFormdata {
   name: string;
   slug: string;
   description: string;
   link: string;
-  problem_number: string;
+  problem_number: number;
   difficulty: string;
   starter_code: string;
-  time_limit: string;
-  memory_limit: string;
+  time_limit: number;
+  memory_limit: number;
   is_active: boolean;
   selectedTopics: string[];
   selectedLists: string[];

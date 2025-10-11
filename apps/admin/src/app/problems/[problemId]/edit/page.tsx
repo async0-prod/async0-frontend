@@ -1,7 +1,10 @@
 import { Separator } from "@/components/ui/separator";
-// import { getAllLists } from "@/lib/list";
-// import { getProblemById } from "@/lib/problem";
-// import { getAllTopics } from "@/lib/topic";
+import UpdateProblemForm from "@/components/UpdateProblemForm";
+import { getListsByProblemId } from "@/lib/list";
+import { getProblemById } from "@/lib/problem";
+import { getSolutionsByProblemId } from "@/lib/solution";
+import { getTestcasesByProblemId } from "@/lib/testcase";
+import { getTopicsByProblemId } from "@/lib/topic";
 
 export default async function EditProductPage({
   params,
@@ -9,15 +12,20 @@ export default async function EditProductPage({
   params: Promise<{ problemId: string }>;
 }) {
   const { problemId } = await params;
-  // const listsPromise = getAllLists();
-  // const topicsPromise = getAllTopics();
-  // const problemPromise = getProblemById(problemId);
 
-  // const [lists, topics, problem] = await Promise.all([
-  //   listsPromise,
-  //   topicsPromise,
-  //   problemPromise,
-  // ]);
+  const problemPromise = getProblemById(problemId);
+  const listPromise = getListsByProblemId(problemId);
+  const topicsPromise = getTopicsByProblemId(problemId);
+  const testcasesPromise = getTestcasesByProblemId(problemId);
+  const solutionsPromise = getSolutionsByProblemId(problemId);
+
+  const [problem, lists, topics, testcases, solutions] = await Promise.all([
+    problemPromise,
+    listPromise,
+    topicsPromise,
+    testcasesPromise,
+    solutionsPromise,
+  ]);
 
   return (
     <>
@@ -29,11 +37,17 @@ export default async function EditProductPage({
         </p>
       </div>
       <Separator className="mb-4" />
-      {/* {problem ? (
-        <ProblemForm problem={problem} lists={lists} topics={topics} />
+      {problem ? (
+        <UpdateProblemForm
+          problem={problem.data}
+          prevLists={lists.data}
+          prevTopics={topics.data}
+          prevTestcases={testcases.data}
+          prevSolutions={solutions.data}
+        />
       ) : (
         <h1>No problem found</h1>
-      )} */}
+      )}
     </>
   );
 }

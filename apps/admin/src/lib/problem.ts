@@ -18,13 +18,41 @@ export async function createProblem(data: ProblemBody) {
 
     return response.json();
   } catch (error) {
-    console.error("Error creating bookmark", error);
+    console.error("Error creating problem", error);
 
     if (error instanceof Error) {
       throw error;
     }
 
-    throw new Error("Failed to bookmark request. Please try again.");
+    throw new Error("Failed to create problem. Please try again.");
+  }
+}
+
+export async function updateProblem(data: ProblemBody, problemID: string) {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/problems/${problemID}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(data),
+        credentials: "include",
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error updating problem", error);
+
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error("Failed to update problem. Please try again.");
   }
 }
 
@@ -43,17 +71,17 @@ export async function getAllProblems(): Promise<{ data: Problem[] }> {
   return response.json();
 }
 
-// export async function getProblemById(id: string): Promise<{ data: Problem }> {
-//   const response = await fetch(
-//     `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/problems/${id}`,
-//     {
-//       credentials: "include",
-//     }
-//   );
+export async function getProblemById(id: string): Promise<{ data: Problem }> {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/problems/${id}`,
+    {
+      credentials: "include",
+    }
+  );
 
-//   if (!response.ok) {
-//     throw new Error(`Failed to fetch problems: ${response.statusText}`);
-//   }
+  if (!response.ok) {
+    throw new Error(`Failed to fetch problems: ${response.statusText}`);
+  }
 
-//   return response.json();
-// }
+  return response.json();
+}
