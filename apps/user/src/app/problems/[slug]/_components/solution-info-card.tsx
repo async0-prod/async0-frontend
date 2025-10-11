@@ -10,7 +10,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getSolutionsByProblemID } from "@/lib/solution";
-import { Problem, Solution } from "@/lib/types";
+import { Problem } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
 
 interface SolutionInfoCardProps {
@@ -97,9 +97,10 @@ export default function SolutionInfoCard({
     <Card className="border-charcoal/20 text-charcoal dark:border-almond/20 dark:text-almond gap-4 border-none bg-transparent shadow-none">
       <Tabs defaultValue="0" className="flex flex-col items-center">
         <TabsList className="flex justify-start gap-4 bg-transparent">
-          {solutions.data.map((_, index) => {
+          {solutions.data.map((sol, index) => {
             return (
               <TabsTrigger
+                key={sol.id}
                 value={index.toString()}
                 className="data-[state=active]:bg-charcoal data-[state=active]:text-almond dark:data-[state=active]:bg-almond dark:data-[state=active]:text-charcoal border-charcoal/20 dark:border-almond-darker/50 flex size-10 items-center justify-center rounded-full"
               >
