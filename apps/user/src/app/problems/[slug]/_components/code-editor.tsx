@@ -6,9 +6,9 @@ import { editor } from "monaco-editor";
 import { Dot } from "lucide-react";
 import { CodeRunResult, CodeSubmitResult, Problem } from "@/lib/types";
 import { Tabs, TabsList } from "@radix-ui/react-tabs";
-import EditorConsole from "./EditorConsole";
-import EditorActions from "./EditorActions";
-import EditorButtons from "./EditorButtons";
+import EditorConsole from "./editor-console";
+import EditorActions from "./editor-actions";
+import EditorButtons from "./editor-buttons";
 import { Publisher } from "@/app/ws/publisher";
 import { unescapeCode } from "@/lib/utils";
 
@@ -51,7 +51,7 @@ export default function CodeEditor({
   const [intellisenseActive, setIntellisenseActive] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [value, setValue] = useState<string>(
-    String(unescapeCode(problem?.starter_code ?? ""))
+    String(unescapeCode(problem?.starter_code ?? "")),
   );
   const [startStreaming, setStartStreaming] = useState<boolean>(false);
   const [publisher, setPublisher] = useState<Publisher | null>(null);
@@ -131,7 +131,7 @@ export default function CodeEditor({
     if (!startStreaming) {
       const publisher = Publisher.getInstance(
         process.env.NEXT_PUBLIC_WS_URL!,
-        "6232c0c5-70c0-422b-bdd0-f9b46bbc0222"
+        "6232c0c5-70c0-422b-bdd0-f9b46bbc0222",
       );
       setPublisher(publisher);
       setStartStreaming(true);
@@ -220,16 +220,16 @@ export default function CodeEditor({
             />
             {codeSaved ? (
               <p
-                className={`${codeSaved && "text-green-600"} ${isCodeSavePending && "text-yellow-600"} text-xs italic -ml-1`}
+                className={`${codeSaved && "text-green-600"} ${isCodeSavePending && "text-yellow-600"} -ml-1 text-xs italic`}
               >
                 Saved
               </p>
             ) : (
-              <p className={`text-xs -ml-1`}>Unsaved</p>
+              <p className={`-ml-1 text-xs`}>Unsaved</p>
             )}
             {isCodeSavePending && (
               <p
-                className={` ${codeSaved && "text-green-600"} ${isCodeSavePending && "text-yellow-600"} text-xs italic -ml-1`}
+                className={` ${codeSaved && "text-green-600"} ${isCodeSavePending && "text-yellow-600"} -ml-1 text-xs italic`}
               >
                 Saving...
               </p>

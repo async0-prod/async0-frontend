@@ -58,7 +58,7 @@ export default function SpectatePage() {
 
     sub.subscribe(
       "6232c0c5-70c0-422b-bdd0-f9b46bbc0222",
-      process.env.NEXT_PUBLIC_WS_URL!
+      process.env.NEXT_PUBLIC_WS_URL!,
     );
 
     handleConnection(true);
@@ -70,43 +70,18 @@ export default function SpectatePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10 shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent animate-in slide-in-from-left duration-500">
-                CodeStream
-              </h1>
-              <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground animate-in slide-in-from-left duration-700">
-                <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse shadow-lg shadow-green-500/50" />
-                <span>{24} coders live</span>
-                <Badge variant="secondary" className="ml-2 animate-pulse">
-                  Hot
-                </Badge>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground animate-in slide-in-from-right duration-500">
-              <span className="hidden sm:inline">Total viewers:</span>
-              <span className="font-semibold text-foreground">
-                {/* <AnimatedCounter value={totalViewers} /> */}
-              </span>
-            </div>
-          </div>
-        </div>
-      </header>
-
+    <div className="bg-background min-h-screen">
       <div className="container mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-          <div className="xl:col-span-3 animate-in slide-in-from-bottom duration-700">
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-4">
+          <div className="animate-in slide-in-from-bottom duration-700 xl:col-span-3">
             <div className="mb-4">
-              <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
+              <h2 className="mb-2 flex items-center gap-2 text-lg font-semibold">
                 Featured Coder
                 <Badge variant="destructive" className="animate-pulse">
                   LIVE
                 </Badge>
               </h2>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+              <div className="text-muted-foreground mb-4 flex items-center gap-2 text-sm">
                 <span className="font-medium">
                   {/* <AnimatedCounter value={featuredCoder.viewerCount} /> viewers */}
                 </span>
@@ -120,7 +95,7 @@ export default function SpectatePage() {
               problemTitle={featuredCoder.problem}
               avatarUrl={featuredCoder.avatar}
               initialCode={featuredCoder.code}
-              className="h-[600px] shadow-xl shadow-primary/5"
+              className="shadow-primary/5 h-[600px] shadow-xl"
               messages={messages}
             />
           </div>

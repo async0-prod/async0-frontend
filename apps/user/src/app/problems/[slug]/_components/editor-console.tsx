@@ -3,8 +3,8 @@
 import { CodeRunResult, CodeSubmitResult } from "@/lib/types";
 import { Terminal, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import RunConsole from "./RunConsole";
-import SubmitConsole from "./SubmitConsole";
+import RunConsole from "./run-console";
+import SubmitConsole from "./submit-console";
 
 interface EditorConsoleProps {
   isConsoleOpen: boolean;
@@ -39,7 +39,7 @@ export default function EditorConsole({
             duration: 0.5,
             ease: [0.4, 0.0, 0.2, 1],
           }}
-          className="absolute bg-charcoal bottom-0 w-full overflow-hidden text-muted-foreground"
+          className="text-muted-foreground bg-charcoal absolute bottom-0 z-50 w-full"
           ref={consoleRef}
         >
           <div className="flex h-8 items-center justify-between border-b px-4">
@@ -48,7 +48,7 @@ export default function EditorConsole({
               <h3 className="text-xs font-medium">Console</h3>
             </div>
             <div
-              className="ml-auto flex items-center gap-1 cursor-pointer"
+              className="ml-auto flex cursor-pointer items-center gap-1"
               onClick={clearConsole}
             >
               <Trash2 size={13} />

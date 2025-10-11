@@ -5,14 +5,15 @@ import {
   CodeXml,
   FolderOpen,
   Lightbulb,
-  MessageCircle,
-  NotebookText,
+  // MessageCircle,
+  // NotebookText,
 } from "lucide-react";
-import SolutionInfoCard from "./SolutionInfoCard";
+import SolutionInfoCard from "./solution-info-card";
 import { motion } from "motion/react";
-import ProblemInfoCard from "./ProblemInfoCard";
+import ProblemInfoCard from "./problem-info-card";
 import { CodeSubmitResult, Problem } from "@/lib/types";
-import SubmissionInfoCard from "./SubmissionInfoCard";
+import SubmissionInfoCard from "./submission-info-card";
+// import UserNotes from "./UserNotes";
 
 export default function ProblemDisplay({
   problem,
@@ -26,19 +27,19 @@ export default function ProblemDisplay({
   problemSubmitResult: CodeSubmitResult | null;
 }) {
   return (
-    <Tabs defaultValue="problem" className="w-full p-4 sm:p-6">
+    <Tabs defaultValue="problem" className="w-full px-6">
       <TabsList className="grid w-full grid-cols-5 bg-transparent">
         {[
           { value: "problem", icon: CodeXml, label: "Problem" },
           { value: "solution", icon: Lightbulb, label: "Solutions" },
           { value: "submission", icon: FolderOpen, label: "Submissions" },
-          { value: "notes", icon: NotebookText, label: "Notes" },
-          { value: "ai", icon: MessageCircle, label: "Ask AI" },
+          // { value: "notes", icon: NotebookText, label: "Notes" },
+          // { value: "ai", icon: MessageCircle, label: "Ask AI" },
         ].map(({ value, icon: Icon, label }) => (
           <TabsTrigger
             key={value}
             value={value}
-            className="border-none @container"
+            className="@container border-none"
           >
             <motion.div
               layout
@@ -47,7 +48,7 @@ export default function ProblemDisplay({
               <Icon className="h-3.5 w-3.5 flex-shrink-0" />
               <motion.span
                 layout
-                className="overflow-hidden transition-[max-width,opacity] duration-300 ease-in-out @[6rem]:max-w-[100px] @[6rem]:opacity-100 max-w-0 opacity-0"
+                className="max-w-0 overflow-hidden opacity-0 transition-[max-width,opacity] duration-300 ease-in-out @[6rem]:max-w-[100px] @[6rem]:opacity-100"
               >
                 {label}
               </motion.span>
@@ -72,9 +73,9 @@ export default function ProblemDisplay({
       <TabsContent value="submission">
         <SubmissionInfoCard problem={problem} />
       </TabsContent>
-      <TabsContent value="notes">
-        {/* <UserNotes problem={problem} /> */}
-      </TabsContent>
+      {/* <TabsContent value="notes">
+        <UserNotes problem={problem} />
+      </TabsContent> */}
     </Tabs>
   );
 }

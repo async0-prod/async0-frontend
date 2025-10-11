@@ -1,6 +1,4 @@
-import Problem from "./_components/Problem";
-
-export const dynamic = "force-dynamic";
+import Problem from "./_components/problem";
 
 export default async function SingleProblemPage({
   params,
@@ -10,7 +8,7 @@ export default async function SingleProblemPage({
   const { slug } = await params;
 
   return (
-    <main className="flex-1 flex flex-col ml-8 md:ml-16 mr-4 md:mr-8 p-8">
+    <main className="flex flex-col px-16">
       <Problem slug={slug} />
     </main>
   );

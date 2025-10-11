@@ -1,21 +1,17 @@
 import type { Metadata } from "next";
-import { Nunito, Inter, Urbanist } from "next/font/google";
+import { Nunito, Inter, Urbanist, Birthstone, Ephesis } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-
-const nunito = Nunito({
-  variable: "--font-nunito",
-  subsets: ["latin"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
 
 const urbanist = Urbanist({
   variable: "--font-urbanist",
   subsets: ["latin"],
+});
+
+const ephesis = Ephesis({
+  variable: "--font-ephesis",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -35,7 +31,7 @@ export default function RootLayout({
         <meta name="view-transition" content="same-origin" />
       </head>
       <body
-        className={`${nunito.className} ${inter.className} ${urbanist.variable} antialiased bg-almond dark:bg-charcoal`}
+        className={` ${urbanist.variable} bg-almond dark:bg-charcoal antialiased`}
       >
         <Providers>{children}</Providers>
       </body>

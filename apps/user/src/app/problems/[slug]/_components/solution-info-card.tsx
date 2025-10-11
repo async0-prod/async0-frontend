@@ -1,4 +1,4 @@
-import { CodeBlock } from "@/components/Codeblock";
+import { CodeBlock } from "@/components/code-block";
 import {
   Card,
   CardDescription,
@@ -29,7 +29,7 @@ const code = `
 
 export default function SolutionInfoCard() {
   return (
-    <Card className="bg-transparent border-charcoal/20 text-charcoal dark:border-almond/20 dark:text-almond border-none shadow-none gap-4">
+    <Card className="border-charcoal/20 text-charcoal dark:border-almond/20 dark:text-almond gap-4 border-none bg-transparent shadow-none">
       <CardHeader className="p-0">
         <CardTitle className="flex items-center">Solution 1</CardTitle>
         <CardDescription>A simple DFS using a stack.</CardDescription>

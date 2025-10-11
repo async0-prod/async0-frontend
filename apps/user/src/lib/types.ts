@@ -113,7 +113,7 @@ export type CodeSubmitResult = {
     passed_testcases: number;
     total_testcases: number;
     testcases_results: TestcaseResult[];
-  };
+  } | null;
 };
 
 export type TestcaseResult = {

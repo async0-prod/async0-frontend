@@ -88,7 +88,7 @@ export function DataTable<TData, TValue>({
   };
 
   return (
-    <div className="flex w-full flex-col gap-2.5 overflow-auto text-charcoal dark:text-almond">
+    <div className="text-charcoal dark:text-almond flex w-full flex-col gap-2.5 overflow-auto">
       <div className="flex items-center pb-2">
         <div>
           <Input
@@ -97,7 +97,7 @@ export function DataTable<TData, TValue>({
             onChange={(event) =>
               table.getColumn("name")?.setFilterValue(event.target.value)
             }
-            className="max-w-sm dark:border-almond border-almond-darker"
+            className="dark:border-almond border-almond-darker max-w-sm"
           />
         </div>
         <div className="ml-auto">
@@ -105,13 +105,13 @@ export function DataTable<TData, TValue>({
             value={topicFilterValue || "all"}
             onValueChange={handleTopicFilter}
           >
-            <SelectTrigger className="w-[200px] dark:border-almond border-almond-darker cursor-pointer">
+            <SelectTrigger className="dark:border-almond border-almond-darker w-[200px] cursor-pointer">
               <SelectValue placeholder="Filter by topic" />
             </SelectTrigger>
-            <SelectContent className="bg-almond dark:bg-charcoal ">
+            <SelectContent className="bg-almond dark:bg-charcoal">
               <SelectItem
                 value="all"
-                className="focus:bg-almond-dark cursor-pointer dark:focus:text-charcoal"
+                className="focus:bg-almond-dark dark:focus:text-charcoal cursor-pointer"
               >
                 All Topics
               </SelectItem>
@@ -119,7 +119,7 @@ export function DataTable<TData, TValue>({
                 <SelectItem
                   key={topic}
                   value={topic}
-                  className="focus:bg-almond-dark cursor-pointer dark:focus:text-charcoal"
+                  className="focus:bg-almond-dark dark:focus:text-charcoal cursor-pointer"
                 >
                   {topic}
                 </SelectItem>
@@ -128,13 +128,13 @@ export function DataTable<TData, TValue>({
           </Select>
         </div>
       </div>
-      <div className="overflow-hidden rounded-md p-2 border not-dark:border-almond-darker">
+      <div className="not-dark:border-almond-darker overflow-hidden rounded-md border p-2">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="hover:bg-transparent not-dark:border-almond-darker"
+                className="not-dark:border-almond-darker hover:bg-transparent"
               >
                 {headerGroup.headers.map((header) => {
                   return (
@@ -149,7 +149,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -167,7 +167,7 @@ export function DataTable<TData, TValue>({
                     const rowData = row.original as Problem;
                     handleRowClick(rowData.slug, rowData.name);
                   }}
-                  className="cursor-pointer dark:bg-charcoal hover:bg-almond-dark border-none"
+                  className="dark:bg-charcoal hover:bg-almond-dark dark:hover:bg-almond-dark dark:hover:text-charcoal cursor-pointer border-none"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
@@ -178,7 +178,7 @@ export function DataTable<TData, TValue>({
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

@@ -5,10 +5,10 @@ import {
   ResizablePanel,
   ResizableHandle,
 } from "@/components/ui/resizable";
-import ProblemDisplay from "./ProblemDisplay";
+import ProblemDisplay from "./problem-display";
 import { getProblemDetailsBySlug } from "@/lib/problem";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import CodeEditor from "./CodeEditor";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import CodeEditor from "./code-editor";
 import { submitCode, runCode } from "@/lib/submission";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -16,6 +16,7 @@ import { CodeRunResult, CodeSubmitResult } from "@/lib/types";
 import { getClientSideSession } from "@/lib/auth";
 
 export default function Problem({ slug }: { slug: string }) {
+  const queryClient = useQueryClient();
   const {
     data: problem,
     isLoading: isLoadingProblem,
@@ -40,6 +41,15 @@ export default function Problem({ slug }: { slug: string }) {
     onSuccess: (data) => {
       if (data) {
         setProblemSubmitResult(data);
+        queryClient.invalidateQueries({
+          queryKey: ["submissions", problem?.data.id],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["problem", slug],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["analytics"],
+        });
       } else {
         toast.error("Failed to submit code");
       }
@@ -132,12 +142,12 @@ export default function Problem({ slug }: { slug: string }) {
             />
           </ResizablePanel>
 
-          <ResizableHandle className="hidden md:block w-1 bg-charcoal/20  hover:bg-muted-foreground rounded-full my-6" />
+          <ResizableHandle className="bg-charcoal/20 hover:bg-muted-foreground my-6 hidden w-1 rounded-full md:block" />
 
           <ResizablePanel
             defaultSize={60}
             minSize={30}
-            className="px-4 rounded-xl pt-2 pb-4"
+            className="rounded-xl px-4 pt-2 pb-4"
           >
             {problem?.data && (
               <CodeEditor

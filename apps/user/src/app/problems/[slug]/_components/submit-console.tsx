@@ -10,6 +10,7 @@ import {
   Info,
   Loader,
 } from "lucide-react";
+import { motion } from "motion/react";
 
 interface SubmitConsoleProps {
   data: CodeSubmitResult | null;
@@ -22,8 +23,8 @@ export default function SubmitConsole({
 }: SubmitConsoleProps) {
   if (isSubmitPending) {
     return (
-      <div className="w-full flex items-center justify-center h-full">
-        <Loader className="animate-spin" />
+      <div className="text-almond flex h-full w-full items-center justify-center text-xs">
+        <Loader size={16} className="mr-1 animate-spin" />
         Running...
       </div>
     );
@@ -31,10 +32,10 @@ export default function SubmitConsole({
 
   if (!data)
     return (
-      <div className="flex h-20 items-center justify-center text-slate-500">
-        No output available
-      </div>
+      <div className="flex h-20 items-center justify-center">No output</div>
     );
+
+  console.log(data);
 
   function getStatusIcon(statusId: number) {
     switch (statusId) {
@@ -62,6 +63,7 @@ export default function SubmitConsole({
       case 3:
         return "bg-green-100 text-green-800 border-green-300";
       case 4:
+        return "bg-red-100 text-red-800 border-red-300";
       case 5:
         return "bg-yellow-100 text-yellow-800 border-yellow-300";
       default:
@@ -70,32 +72,38 @@ export default function SubmitConsole({
   }
 
   return (
-    <ScrollArea className="h-full w-full p-4 font-mono text-sm">
-      <div className="space-y-4">
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-2">
-            <Badge
-              className={`flex items-center gap-1 px-2 py-1 font-medium ${getStatusColor(data.data.overall_status_id)}`}
-              variant="outline"
-            >
-              {getStatusIcon(data.data.overall_status_id)}
-              {data.data.overall_status}
-            </Badge>
+    <ScrollArea className="h-full p-4 text-sm">
+      <motion.div
+        initial={{ height: 0, opacity: 0 }}
+        animate={{ height: "100%", opacity: 1 }}
+        exit={{ height: 0, opacity: 0 }}
+        transition={{
+          type: "tween",
+          duration: 0.2,
+          ease: [0.4, 0.0, 0.2, 1],
+        }}
+      >
+        <div className="flex items-center justify-start gap-2 p-2">
+          <Badge
+            className={`${getStatusColor(data.data?.overall_status_id ?? 0)}`}
+          >
+            {getStatusIcon(data.data?.overall_status_id ?? 0)}
+            {data.data?.overall_status}
+          </Badge>
 
-            <Badge variant="outline" className="bg-slate-100">
-              {data.data.passed_testcases}/{data.data.total_testcases} test
-              cases passed
-            </Badge>
-          </div>
+          <Badge className="border-almond">
+            {data.data?.passed_testcases}/{data.data?.total_testcases} testcases
+            passed
+          </Badge>
         </div>
 
         {/* Test cases */}
-        <div className="space-y-2">
-          {data.data.testcases_results.map((tc, index) => (
+        <div className="flex flex-col gap-2 p-2">
+          {data.data?.testcases_results.map((tc, index) => (
             <TestCaseItem key={index} tc={tc} index={index} />
           ))}
         </div>
-      </div>
+      </motion.div>
     </ScrollArea>
   );
 }
@@ -115,22 +123,14 @@ function TestCaseItem({ tc, index }: { tc: TestcaseResult; index: number }) {
   }
 
   return (
-    <div className="border rounded-md overflow-hidden">
-      <div className="flex w-full items-center justify-between text-left">
-        <div className="flex items-center gap-2">
-          {getStatusIcon(tc.tc_status_id)}
-          <span className="font-medium">Test Case {index + 1}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          {tc.tc_time && (
-            <span className="text-xs text-slate-500">{tc.tc_time}s</span>
-          )}
-          {tc.tc_memory && (
-            <span className="text-xs text-slate-500">
-              {formatMemory(tc.tc_memory)}
-            </span>
-          )}
-        </div>
+    <div className="flex items-center justify-start gap-9">
+      <div className="flex items-center gap-2">
+        {getStatusIcon(tc.tc_status_id)}
+        <span className="font-medium">Testcase {index + 1}</span>
+      </div>
+      <div className="flex items-center gap-2">
+        {tc.tc_time && <span>{tc.tc_time}s</span>}
+        {tc.tc_memory && <span>{formatMemory(tc.tc_memory)}</span>}
       </div>
     </div>
   );

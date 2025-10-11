@@ -7,7 +7,7 @@ export async function runCode(code: string): Promise<CodeRunResult> {
       method: "POST",
       body: JSON.stringify({ code }),
       credentials: "include",
-    }
+    },
   );
 
   if (!response.ok) {
@@ -21,7 +21,7 @@ export async function runCode(code: string): Promise<CodeRunResult> {
 
 export async function submitCode(
   code: string,
-  problemID: string
+  problemID: string,
 ): Promise<CodeSubmitResult> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/submissions/submit/${problemID}`,
@@ -29,7 +29,7 @@ export async function submitCode(
       method: "POST",
       body: JSON.stringify({ code }),
       credentials: "include",
-    }
+    },
   );
 
   if (!response.ok) {
@@ -42,7 +42,7 @@ export async function submitCode(
 }
 
 export async function getUserSubmissionsByProblemID(
-  problemID: string
+  problemID: string,
 ): Promise<{
   data: Submission[];
 }> {
@@ -50,7 +50,7 @@ export async function getUserSubmissionsByProblemID(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/submissions/problem/${problemID}`,
     {
       credentials: "include",
-    }
+    },
   );
 
   if (!response.ok) {

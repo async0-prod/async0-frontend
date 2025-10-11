@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,7 +17,7 @@ export function SignInForm() {
 
   const handleGoogleSignIn = () => {
     setIsLoading(true);
-    signIn("google", { callbackUrl: "/dashboard" });
+    // signIn("google", { callbackUrl: "/dashboard" });
   };
 
   return (
@@ -29,7 +28,7 @@ export function SignInForm() {
     >
       <Card className="border-none shadow-lg">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
+          <CardTitle className="text-center text-2xl font-bold">
             Welcome back
           </CardTitle>
           <CardDescription>
@@ -40,7 +39,7 @@ export function SignInForm() {
           <div className="space-y-2">
             <Button
               variant="outline"
-              className="w-full relative group cursor-pointer"
+              className="group relative w-full cursor-pointer"
               onClick={handleGoogleSignIn}
               disabled={isLoading}
             >
@@ -77,23 +76,23 @@ export function SignInForm() {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
+              <span className="bg-background text-muted-foreground px-2">
                 Community
               </span>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4 text-center text-sm">
-            <div className="rounded-lg border border-muted p-3">
+            <div className="border-muted rounded-lg border p-3">
               <p className="font-medium">2,838</p>
-              <p className="text-xs text-muted-foreground">Users</p>
+              <p className="text-muted-foreground text-xs">Users</p>
             </div>
-            <div className="rounded-lg border border-muted p-3">
+            <div className="border-muted rounded-lg border p-3">
               <div className="flex items-center justify-center gap-1">
                 <span className="h-2 w-2 rounded-full bg-green-500"></span>
                 <p className="font-medium">56</p>
               </div>
-              <p className="text-xs text-muted-foreground">Online now</p>
+              <p className="text-muted-foreground text-xs">Online now</p>
             </div>
           </div>
         </CardContent>

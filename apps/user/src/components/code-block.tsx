@@ -7,7 +7,7 @@ import { codeToHast } from "shiki/bundle/web";
 import { toJsxRuntime } from "hast-util-to-jsx-runtime";
 import { Fragment } from "react";
 import { jsx, jsxs } from "react/jsx-runtime";
-import { CopyTextButton } from "./CopyTextButton";
+import { CopyTextButton } from "./copy-text-button";
 
 export async function highlightToJSX(code: string, lang: BundledLanguage) {
   const hast = await codeToHast(code, {
@@ -36,10 +36,10 @@ export function CodeBlock({
   }, [code, lang]);
 
   return (
-    <pre className="rounded-md text-sm overflow-auto relative font-mono">
+    <pre className="relative overflow-auto rounded-md font-mono text-sm">
       <CopyTextButton
         text={code}
-        className="absolute top-1 right-0 text-almond hover:text-almond cursor-pointer"
+        className="text-almond hover:text-almond absolute top-1 right-0 cursor-pointer"
       />
       <code>{highlighted ?? "Loading..."}</code>
     </pre>

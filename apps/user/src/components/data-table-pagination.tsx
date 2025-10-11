@@ -30,32 +30,36 @@ export function DataTablePagination<TData>({
     <div
       className={cn(
         "flex w-full items-center justify-between overflow-auto p-1 sm:gap-8",
-        className
+        className,
       )}
       {...props}
     >
       <div className="ml-auto flex items-center gap-4 sm:gap-6 lg:gap-8">
         <div className="flex items-center space-x-2">
-          <p className="whitespace-nowrap font-medium text-sm">Rows per page</p>
+          <p className="text-sm font-medium whitespace-nowrap">Rows per page</p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
               table.setPageSize(Number(value));
             }}
           >
-            <SelectTrigger className="h-8 w-[4.5rem] [&[data-size]]:h-8 border border-charcoal/20">
+            <SelectTrigger className="border-charcoal/20 dark:border-almond-dark cursor-pointer border [&[data-size]]:h-8">
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
-            <SelectContent side="top">
+            <SelectContent side="top" className="bg-almond dark:bg-charcoal">
               {pageSizeOptions.map((pageSize) => (
-                <SelectItem key={pageSize} value={`${pageSize}`}>
+                <SelectItem
+                  key={pageSize}
+                  value={`${pageSize}`}
+                  className="bg-almond dark:bg-charcoal focus:bg-almond-dark dark:focus:bg-almond-dark dark:focus:text-charcoal cursor-pointer"
+                >
                   {pageSize}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center justify-center font-medium text-sm">
+        <div className="flex items-center justify-center text-sm font-medium">
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
         </div>
@@ -64,7 +68,7 @@ export function DataTablePagination<TData>({
             aria-label="Go to first page"
             variant="outline"
             size="sm"
-            className="hidden  lg:flex"
+            className="bg-almond-dark hover:bg-almond dark:border-almond-dark dark:hover:bg-almond-dark dark:hover:text-charcoal hidden cursor-pointer lg:flex"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
           >
@@ -74,7 +78,7 @@ export function DataTablePagination<TData>({
             aria-label="Go to previous page"
             variant="outline"
             size="sm"
-            className=""
+            className="bg-almond-dark hover:bg-almond dark:border-almond-dark dark:hover:bg-almond-dark dark:hover:text-charcoal cursor-pointer"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
@@ -84,7 +88,7 @@ export function DataTablePagination<TData>({
             aria-label="Go to next page"
             variant="outline"
             size="sm"
-            className=""
+            className="bg-almond-dark hover:bg-almond dark:border-almond-dark dark:hover:bg-almond-dark dark:hover:text-charcoal cursor-pointer"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
@@ -94,7 +98,7 @@ export function DataTablePagination<TData>({
             aria-label="Go to last page"
             variant="outline"
             size="sm"
-            className="hidden lg:flex"
+            className="bg-almond-dark hover:bg-almond dark:border-almond-dark dark:hover:bg-almond-dark dark:hover:text-charcoal hidden cursor-pointer lg:flex"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >

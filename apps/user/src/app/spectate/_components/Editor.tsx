@@ -65,7 +65,6 @@ export function MonacoEditor({
     editor.focus();
   }
 
-  console.log("Messages", messages);
   useEffect(() => {
     if (!editorRef.current || messages.length === 0) return;
 
@@ -81,7 +80,7 @@ export function MonacoEditor({
   return (
     <Card className={`overflow-hidden ${className}`}>
       {showHeader && (
-        <div className="flex items-center gap-3 p-4 border-b bg-card">
+        <div className="bg-card flex items-center gap-3 border-b p-4">
           <Avatar className="h-8 w-8">
             <AvatarImage
               src={avatarUrl || "/placeholder.svg"}
@@ -90,11 +89,11 @@ export function MonacoEditor({
             <AvatarFallback>{coderName.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
           <div className="flex-1">
-            <h3 className="font-semibold text-sm">{coderName}</h3>
-            <p className="text-xs text-muted-foreground">{problemTitle}</p>
+            <h3 className="text-sm font-semibold">{coderName}</h3>
+            <p className="text-muted-foreground text-xs">{problemTitle}</p>
           </div>
           <div className="flex items-center gap-2">
-            <div className="h-2 w-2 bg-red-500 rounded-full animate-pulse"></div>
+            <div className="h-2 w-2 animate-pulse rounded-full bg-red-500"></div>
           </div>
         </div>
       )}

@@ -1,12 +1,12 @@
-import { Navbar } from "@/app/_components/Navbar";
-import HeroIllustration from "./_components/HeroIllustration";
-import HeroSection from "./_components/HeroSection";
+import { Navbar } from "@/app/_components/navbar";
+import HeroIllustration from "./_components/hero-illustration";
+import HeroSection from "./_components/hero-section";
 
 export default async function Home() {
   return (
-    <div className="relative flex p-2 h-screen flex-col">
+    <div className="relative flex h-screen flex-col p-2">
       <Navbar />
-      <main className="flex flex-col lg:flex-row flex-1 items-center justify-center">
+      <main className="flex flex-1 flex-col items-center justify-center lg:flex-row">
         <HeroSection />
         <HeroIllustration />
       </main>

@@ -22,18 +22,18 @@ import { TopicProgress } from "./_components/TopicProgress";
 import { PopularProblems } from "./_components/PopularProblems";
 import { PopularSolutions } from "./_components/PopularSolutions";
 import { Badge } from "@/components/ui/badge";
-import NavigationPane from "@/components/NavigationPane";
+import NavigationPane from "@/components/nav-panel";
 
 export const dynamic = "force-dynamic";
 
 export default function DashboardPage() {
   return (
-    <div className="flex w-full flex-col rounded-xl my-4 mr-4 border-1 overflow-hidden">
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 bg-background">
+    <div className="my-4 mr-4 flex w-full flex-col overflow-hidden rounded-xl border-1">
+      <main className="bg-background flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="flex items-center">
           <div>
             <div className="text-4xl font-bold">Morning Gourav!</div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               {`Been a while since you're back huh?`}
             </p>
           </div>
@@ -47,7 +47,7 @@ export default function DashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center">
               <div className="grid gap-1">
-                <CardTitle className=" flex items-center gap-1">
+                <CardTitle className="flex items-center gap-1">
                   Trending Problems
                   <Badge variant="outline" className="px-2 py-0 text-xs">
                     782 new attempts this week <TrendingUp />
@@ -57,7 +57,7 @@ export default function DashboardPage() {
                   Problems with the most bookmarks
                 </CardDescription>
               </div>
-              <BookMarked className="ml-auto h-5 w-5 text-muted-foreground" />
+              <BookMarked className="text-muted-foreground ml-auto h-5 w-5" />
             </CardHeader>
             <CardContent>
               <PopularProblems />
@@ -72,7 +72,7 @@ export default function DashboardPage() {
                   Solutions with the most upvotes
                 </CardDescription>
               </div>
-              <ThumbsUp className="ml-auto h-5 w-5 text-muted-foreground" />
+              <ThumbsUp className="text-muted-foreground ml-auto h-5 w-5" />
             </CardHeader>
             <CardContent>
               <PopularSolutions />
@@ -86,11 +86,11 @@ export default function DashboardPage() {
               <CardTitle className="text-sm font-medium">
                 Total Problems Solved
               </CardTitle>
-              <CheckCircle className="h-4 w-4 text-muted-foreground" />
+              <CheckCircle className="text-muted-foreground h-4 w-4" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">247</div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 +12% from last month
               </p>
             </CardContent>
@@ -100,11 +100,11 @@ export default function DashboardPage() {
               <CardTitle className="text-sm font-medium">
                 Completion Rate
               </CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <TrendingUp className="text-muted-foreground h-4 w-4" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">68%</div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 +4% from last month
               </p>
             </CardContent>
@@ -112,11 +112,11 @@ export default function DashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Streak</CardTitle>
-              <Activity className="h-4 w-4 text-muted-foreground" />
+              <Activity className="text-muted-foreground h-4 w-4" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">14 days</div>
-              <p className="text-xs text-muted-foreground">Current streak</p>
+              <p className="text-muted-foreground text-xs">Current streak</p>
             </CardContent>
           </Card>
           <Card>
@@ -124,11 +124,11 @@ export default function DashboardPage() {
               <CardTitle className="text-sm font-medium">
                 Average Time
               </CardTitle>
-              <Clock className="h-4 w-4 text-muted-foreground" />
+              <Clock className="text-muted-foreground h-4 w-4" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">24 min</div>
-              <p className="text-xs text-muted-foreground">Per problem</p>
+              <p className="text-muted-foreground text-xs">Per problem</p>
             </CardContent>
           </Card>
         </div>

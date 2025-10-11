@@ -1,5 +1,5 @@
 import { getUserSubmissionsByProblemID } from "@/lib/submission";
-import { CodeBlock } from "@/components/Codeblock";
+import { CodeBlock } from "@/components/code-block";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -36,9 +36,9 @@ export default function SubmissionInfoCard({ problem }: { problem?: Problem }) {
     enabled: !!problem,
   });
 
-  if (!submissions) {
+  if (!submissions || !submissions.data || submissions.data.length === 0) {
     return (
-      <Card className="bg-transparent border-charcoal/20 text-charcoal dark:border-almond/20 dark:text-almond border-none shadow-none gap-4">
+      <Card className="border-charcoal/20 text-charcoal dark:border-almond/20 dark:text-almond gap-4 border-none bg-transparent shadow-none">
         <CardHeader className="p-0">
           <CardTitle className="flex items-center">Submissions</CardTitle>
           <CardDescription>No submissions found</CardDescription>
@@ -48,7 +48,7 @@ export default function SubmissionInfoCard({ problem }: { problem?: Problem }) {
   }
 
   return (
-    <Card className="bg-transparent border-charcoal/20 text-charcoal dark:border-almond/20 dark:text-almond border-none shadow-none gap-4 overflow-y-auto">
+    <Card className="border-charcoal/20 text-charcoal dark:border-almond/20 dark:text-almond gap-4 overflow-y-auto border-none bg-transparent shadow-none">
       {submissions.data.length > 0 ? (
         <>
           <CardContent>
@@ -57,10 +57,10 @@ export default function SubmissionInfoCard({ problem }: { problem?: Problem }) {
                 <TableRow className="border-b-almond-darker hover:bg-transparent">
                   <TableHead className="text-center">Status</TableHead>
                   <TableHead className="text-center">Solution</TableHead>
-                  <TableHead className="hidden sm:table-cell text-center">
+                  <TableHead className="hidden text-center sm:table-cell">
                     <p className="line-clamp-1">Testcases Passed</p>
                   </TableHead>
-                  <TableHead className="hidden md:table-cell text-center">
+                  <TableHead className="hidden text-center md:table-cell">
                     Submission Date
                   </TableHead>
                 </TableRow>
@@ -70,7 +70,7 @@ export default function SubmissionInfoCard({ problem }: { problem?: Problem }) {
                   const date = new Date(sub.created_at);
                   const formattedDate = format(
                     date,
-                    "EEEE, d MMM, yyyy, h:mm a"
+                    "EEEE, d MMM, yyyy, h:mm a",
                   );
                   const timeAgo = formatDistanceToNow(date, {
                     addSuffix: true,
@@ -94,13 +94,13 @@ export default function SubmissionInfoCard({ problem }: { problem?: Problem }) {
                             <Button
                               variant={"outline"}
                               size={"sm"}
-                              className="bg-charcoal text-almond cursor-pointer hover:bg-almond-darker hover:text-charcoal"
+                              className="bg-charcoal text-almond hover:bg-almond-darker hover:text-charcoal cursor-pointer"
                             >
                               code
                             </Button>
                           </DialogTrigger>
 
-                          <DialogContent className="bg-[#0d1117] border-none">
+                          <DialogContent className="border-none bg-[#0d1117]">
                             <DialogHeader>
                               <DialogTitle className="mb-2"></DialogTitle>
                               <DialogDescription className="overflow-auto">
@@ -110,12 +110,12 @@ export default function SubmissionInfoCard({ problem }: { problem?: Problem }) {
                           </DialogContent>
                         </Dialog>
                       </TableCell>
-                      <TableCell className="hidden sm:table-cell text-center">{`${sub.passed_testcases} / ${sub.total_testcases}`}</TableCell>
-                      <TableCell className="hidden md:table-cell text-center">
-                        <div className="font-medium line-clamp-1">
+                      <TableCell className="hidden text-center sm:table-cell">{`${sub.passed_testcases} / ${sub.total_testcases}`}</TableCell>
+                      <TableCell className="hidden text-center md:table-cell">
+                        <div className="line-clamp-1 font-medium">
                           {formattedDate}
                         </div>
-                        <div className="hidden text-sm text-muted-foreground md:inline md:line-clamp-1">
+                        <div className="text-muted-foreground hidden text-sm md:line-clamp-1 md:inline">
                           {timeAgo}
                         </div>
                       </TableCell>

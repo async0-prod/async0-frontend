@@ -30,7 +30,7 @@ export default function BreadCrumbs() {
               <React.Fragment key={index}>
                 <BreadcrumbItem>
                   <BreadcrumbLink className="capitalize" asChild>
-                    <Link href={`${path}`}>
+                    <Link href={`${path}`} className="hover:text-almond">
                       {index === 0 ? "Home" : path.split("/").pop()}
                     </Link>
                   </BreadcrumbLink>
