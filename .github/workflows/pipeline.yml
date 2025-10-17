@@ -126,5 +126,5 @@ jobs:
           ssh -o StrictHostKeyChecking=no deploy@async0 << 'EOF'
             set -e
             cd /home/deploy
-            docker stack deploy -c assync0.prod.yml async0
+            docker stack deploy -c async0.prod.yml async0
           EOF

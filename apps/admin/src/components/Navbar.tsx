@@ -1,16 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "./ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { CircleUser, LogIn } from "lucide-react";
 
 export default function Navbar() {
   // const { data: session } = useSession();
