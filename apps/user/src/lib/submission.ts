@@ -1,8 +1,9 @@
 import { CodeRunResult, CodeSubmitResult, Submission } from "@/lib/types";
+import { env } from "next-runtime-env";
 
 export async function runCode(code: string): Promise<CodeRunResult> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/submissions/run`,
+    `${env("NEXT_PUBLIC_BACKEND_URL")}/api/v1/submissions/run`,
     {
       method: "POST",
       body: JSON.stringify({ code }),
@@ -24,7 +25,7 @@ export async function submitCode(
   problemID: string,
 ): Promise<CodeSubmitResult> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/submissions/submit/${problemID}`,
+    `${env("NEXT_PUBLIC_BACKEND_URL")}/api/v1/submissions/submit/${problemID}`,
     {
       method: "POST",
       body: JSON.stringify({ code }),
@@ -47,7 +48,7 @@ export async function getUserSubmissionsByProblemID(
   data: Submission[];
 }> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/submissions/problem/${problemID}`,
+    `${env("NEXT_PUBLIC_BACKEND_URL")}/api/v1/submissions/problem/${problemID}`,
     {
       credentials: "include",
     },

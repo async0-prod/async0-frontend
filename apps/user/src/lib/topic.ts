@@ -1,13 +1,14 @@
 import { SidebarTopicList, Topic } from "@/lib/types";
+import { env } from "next-runtime-env";
 
 export async function getSidebarTopicsByListID(
-  listID: string
+  listID: string,
 ): Promise<{ data: SidebarTopicList }> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/topics/list/${listID}?problems=true`,
+    `${env("NEXT_PUBLIC_BACKEND_URL")}/api/v1/topics/list/${listID}?problems=true`,
     {
       credentials: "include",
-    }
+    },
   );
 
   if (!response.ok) {
@@ -21,10 +22,10 @@ export async function getSidebarTopicsByListID(
 
 export async function getAllTopics(): Promise<{ data: Topic[] }> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/topics`,
+    `${env("NEXT_PUBLIC_BACKEND_URL")}/api/v1/topics`,
     {
       credentials: "include",
-    }
+    },
   );
 
   if (!response.ok) {

@@ -22,7 +22,7 @@ jobs:
       base_ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || 'HEAD~1' }}
 
   build-user-and-push-image:
-    if: needs.user-changed.outputs.changed == 'true'
+    if: ${{ needs.user-changed.outputs.changed == 'true' }}
     runs-on: ubuntu-latest
     needs: user-changed
 
@@ -55,7 +55,7 @@ jobs:
           sbom: true
 
   build-admin-and-push-image:
-    if: needs.admin-changed.outputs.changed == 'true'
+    if: ${{ needs.admin-changed.outputs.changed == 'true' }}
     runs-on: ubuntu-latest
     needs: admin-changed
 
@@ -87,38 +87,44 @@ jobs:
           provenance: false
           sbom: true
 
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 10
-  #   needs:
-  #     - user-changed
-  #     - admin-changed
-  #     - build-user-and-push-image
-  #     - build-admin-and-push-image
-  #   if: |
-  #     needs.user-changed.outputs.changed == 'true' ||
-  #     needs.admin-changed.outputs.changed == 'true'
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs:
+      - user-changed
+      - admin-changed
+      - build-user-and-push-image
+      - build-admin-and-push-image
+    if: |
+      always() &&
+      github.event_name != 'pull_request' &&
+      (needs.user-changed.outputs.changed == 'true' ||
+       needs.admin-changed.outputs.changed == 'true') &&
+      (needs.build-user-and-push-image.result == 'success' ||
+       needs.build-user-and-push-image.result == 'skipped') &&
+      (needs.build-admin-and-push-image.result == 'success' ||
+       needs.build-admin-and-push-image.result == 'skipped')
 
-  #   steps:
-  #     - name: Join Tailscale network
-  #       uses: tailscale/github-action@v3
-  #       with:
-  #         oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-  #         oauth-secret: ${{ secrets.TS_OAUTH_CLIENT_SECRET }}
-  #         tags: tag:ci
-  #         version: latest
-  #         use-cache: "true"
+    steps:
+      - name: Join Tailscale network
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TAILSCALE_OAUTH_CLIENT_SECRET }}
+          tags: tag:cicd
+          version: latest
+          use-cache: "true"
 
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
+      # - name: Checkout repository
+      #   uses: actions/checkout@v4
 
-  #     - name: Copy docker-stack.yml to server
-  #       run: scp -o StrictHostKeyChecking=no docker-stack.yml deploy@nazrein:/home/deploy/
+      # - name: Copy docker-stack.yml to server
+      #   run: scp -o StrictHostKeyChecking=no docker-stack.yml deploy@async0:/home/deploy/
 
-  #     - name: Deploy or update stack
-  #       run: |
-  #         ssh -o StrictHostKeyChecking=no deploy@nazrein << 'EOF'
-  #           set -e
-  #           cd /home/deploy
-  #           docker stack deploy -c docker-stack.yml nazrein
-  #         EOF
+      - name: Deploy or update stack
+        run: |
+          ssh -o StrictHostKeyChecking=no deploy@async0 << 'EOF'
+            set -e
+            cd /home/deploy
+            docker stack deploy -c assync0.prod.yml async0
+          EOF

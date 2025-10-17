@@ -1,9 +1,10 @@
 import { Problem, ProblemBody } from "@/lib/types";
+import { env } from "next-runtime-env";
 
 export async function createProblem(data: ProblemBody) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/problems`,
+      `${env("NEXT_PUBLIC_BACKEND_URL")}/admin/problems`,
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -31,7 +32,7 @@ export async function createProblem(data: ProblemBody) {
 export async function updateProblem(data: ProblemBody, problemID: string) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/problems/${problemID}`,
+      `${env("NEXT_PUBLIC_BACKEND_URL")}/admin/problems/${problemID}`,
       {
         method: "PUT",
         body: JSON.stringify(data),
@@ -58,7 +59,7 @@ export async function updateProblem(data: ProblemBody, problemID: string) {
 
 export async function getAllProblems(): Promise<{ data: Problem[] }> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/problems`,
+    `${env("NEXT_PUBLIC_BACKEND_URL")}/admin/problems`,
     {
       credentials: "include",
     }
@@ -73,7 +74,7 @@ export async function getAllProblems(): Promise<{ data: Problem[] }> {
 
 export async function getProblemById(id: string): Promise<{ data: Problem }> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/problems/${id}`,
+    `${env("NEXT_PUBLIC_BACKEND_URL")}/admin/problems/${id}`,
     {
       credentials: "include",
     }

@@ -1,13 +1,11 @@
 import { Topic } from "@/lib/types";
+import { env } from "next-runtime-env";
 
 export async function getAllTopics(): Promise<{ data: Topic[] }> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/topics`,
-    {
-      method: "GET",
-      credentials: "include",
-    }
-  );
+  const res = await fetch(`${env("NEXT_PUBLIC_BACKEND_URL")}/admin/topics`, {
+    method: "GET",
+    credentials: "include",
+  });
 
   if (!res.ok) {
     throw new Error(`Failed to fetch topics: ${res.statusText}`);
@@ -19,7 +17,7 @@ export async function getAllTopics(): Promise<{ data: Topic[] }> {
 
 export async function getTopicsByProblemId(problemID: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/topics/problem/${problemID}`,
+    `${env("NEXT_PUBLIC_BACKEND_URL")}/admin/topics/problem/${problemID}`,
     {
       method: "GET",
       credentials: "include",

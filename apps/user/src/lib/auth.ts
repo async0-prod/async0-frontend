@@ -1,14 +1,12 @@
 import { SessionUser } from "@/lib/types";
+import { env } from "next-runtime-env";
 
 export async function getClientSideSession(): Promise<{
   data: SessionUser;
 } | null> {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/user`,
-    {
-      credentials: "include",
-    }
-  );
+  const response = await fetch(`${env("NEXT_PUBLIC_BACKEND_URL")}/auth/user`, {
+    credentials: "include",
+  });
 
   if (!response.ok) {
     throw new Error("Error fetching client-side session");

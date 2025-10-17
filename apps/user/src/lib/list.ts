@@ -1,13 +1,14 @@
 import { List } from "@/lib/types";
+import { env } from "next-runtime-env";
 
 export async function getAllLists(): Promise<{
   data: List[];
 }> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/lists`,
+    `${env("NEXT_PUBLIC_BACKEND_URL")}/api/v1/lists`,
     {
       credentials: "include",
-    }
+    },
   );
 
   if (!response.ok) {

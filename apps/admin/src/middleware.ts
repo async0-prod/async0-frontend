@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { env } from "next-runtime-env";
 
 export const privateRoutes = ["/problems"];
 
 export async function middleware(request: NextRequest) {
-  const session = request.cookies.get("admin_session");
+  const session = request.cookies.get("async0_admin_session");
   const isPrivateRoute = privateRoutes.includes(request.nextUrl.pathname);
 
   if (isPrivateRoute) {
@@ -12,15 +13,12 @@ export async function middleware(request: NextRequest) {
     }
 
     try {
-      const resp = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/admin`,
-        {
-          headers: {
-            Cookie: `admin_session=${session.value}`,
-            Origin: process.env.NEXT_PUBLIC_ADMIN_ORIGIN!,
-          },
-        }
-      );
+      const resp = await fetch(`${env("NEXT_PUBLIC_BACKEND_URL")}/auth/admin`, {
+        headers: {
+          Cookie: `async0_admin_session=${session.value}`,
+          Origin: env("NEXT_PUBLIC_ORIGIN")!,
+        },
+      });
 
       if (!resp.ok) {
         console.error("resp.ok is false");

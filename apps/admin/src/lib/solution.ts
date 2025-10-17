@@ -1,8 +1,9 @@
+import { env } from "next-runtime-env";
 import { Solution } from "./types";
 
 export async function getSolutionsByProblemId(problemID: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/admin/solutions/problem/${problemID}`,
+    `${env("NEXT_PUBLIC_BACKEND_URL")}/admin/solutions/problem/${problemID}`,
     {
       method: "GET",
       credentials: "include",

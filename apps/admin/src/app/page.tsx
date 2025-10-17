@@ -13,6 +13,7 @@ import {
 import { getClientSideSession } from "@/lib/auth";
 import { useQuery } from "@tanstack/react-query";
 import { LogIn, LogOut, User } from "lucide-react";
+import { env } from "next-runtime-env";
 import Link from "next/link";
 
 export default function AdminDashboard() {
@@ -41,7 +42,7 @@ export default function AdminDashboard() {
     return (
       <div className="h-screen w-full flex items-center justify-center">
         <Link
-          href={`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/admin/google/login`}
+          href={`${env("NEXT_PUBLIC_BACKEND_URL")}/auth/admin/google/login`}
           className="flex items-center space-x-2"
         >
           <Button
@@ -96,7 +97,7 @@ export default function AdminDashboard() {
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link
-              href={`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/admin/google/logout`}
+              href={`${env("NEXT_PUBLIC_BACKEND_URL")}/auth/admin/google/logout`}
               className="cursor-pointer focus:bg-almond-darker  dark:focus:bg-almond dark:focus:text-charcoal"
             >
               <LogOut className="hover:text-charcoal" />

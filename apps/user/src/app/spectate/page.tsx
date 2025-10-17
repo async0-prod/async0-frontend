@@ -5,6 +5,7 @@ import { MonacoEditor } from "./_components/Editor";
 import { useEffect, useState } from "react";
 import { Subscriber } from "../ws/subscriber";
 import { WebsocketMessage } from "@/lib/types";
+import { env } from "next-runtime-env";
 
 const featuredCoder = {
   id: "alex_dev",
@@ -58,7 +59,7 @@ export default function SpectatePage() {
 
     sub.subscribe(
       "6232c0c5-70c0-422b-bdd0-f9b46bbc0222",
-      process.env.NEXT_PUBLIC_WS_URL!,
+      env("NEXT_PUBLIC_WS_URL")!,
     );
 
     handleConnection(true);

@@ -11,6 +11,7 @@ import EditorActions from "./editor-actions";
 import EditorButtons from "./editor-buttons";
 import { Publisher } from "@/app/ws/publisher";
 import { unescapeCode } from "@/lib/utils";
+import { env } from "next-runtime-env";
 
 type CodeEditorProps = {
   problem?: Problem;
@@ -130,7 +131,7 @@ export default function CodeEditor({
   function toggleStartStreaming() {
     if (!startStreaming) {
       const publisher = Publisher.getInstance(
-        process.env.NEXT_PUBLIC_WS_URL!,
+        env("NEXT_PUBLIC_WS_URL")!,
         "6232c0c5-70c0-422b-bdd0-f9b46bbc0222",
       );
       setPublisher(publisher);

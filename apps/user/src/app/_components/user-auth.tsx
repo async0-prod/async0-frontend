@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getClientSideSession } from "@/lib/auth";
+import { env } from "next-runtime-env";
 
 export default function UserAuth() {
   const {
@@ -38,7 +39,7 @@ export default function UserAuth() {
   if (!session || isError) {
     return (
       <Link
-        href={`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/google/login`}
+        href={`${env("NEXT_PUBLIC_BACKEND_URL")}/auth/google/login`}
         className="flex items-center space-x-2"
       >
         <Button
@@ -92,7 +93,7 @@ export default function UserAuth() {
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link
-              href={`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/google/logout`}
+              href={`${env("NEXT_PUBLIC_BACKEND_URL")}/auth/google/logout`}
               className="focus:bg-almond-dark dark:focus:bg-almond dark:focus:text-charcoal cursor-pointer"
             >
               <LogOut className="hover:text-charcoal" />

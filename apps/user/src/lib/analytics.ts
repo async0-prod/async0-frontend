@@ -1,13 +1,14 @@
 import { CardAnalytics } from "@/lib/types";
+import { env } from "next-runtime-env";
 
 export async function getCardAnalytics(
-  listID: string
+  listID: string,
 ): Promise<{ data: CardAnalytics }> {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/analytics/list/${listID}`,
+    `${env("NEXT_PUBLIC_BACKEND_URL")}/api/v1/analytics/list/${listID}`,
     {
       credentials: "include",
-    }
+    },
   );
 
   if (!response.ok) {

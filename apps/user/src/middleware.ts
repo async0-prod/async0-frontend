@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { env } from "next-runtime-env";
 
 export const privateRoutes = ["/dashboard"];
 export const redirectRoutes = ["/dashboard"];
@@ -18,15 +19,12 @@ export async function middleware(request: NextRequest) {
     }
 
     try {
-      const resp = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/user`,
-        {
-          headers: {
-            Cookie: `session=${session.value}`,
-            Origin: process.env.NEXT_PUBLIC_ORIGIN!,
-          },
-        }
-      );
+      const resp = await fetch(`${env("NEXT_PUBLIC_BACKEND_URL")}/auth/user`, {
+        headers: {
+          Cookie: `async0_session=${session.value}`,
+          Origin: env("NEXT_PUBLIC_ORIGIN")!,
+        },
+      });
       if (!resp.ok) {
         console.error("resp.ok is false");
         return NextResponse.redirect(new URL("/", request.nextUrl.origin));
