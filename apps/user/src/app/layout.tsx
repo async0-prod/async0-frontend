@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
-import { Nunito, Inter, Urbanist, Birthstone, Ephesis } from "next/font/google";
+import { Urbanist } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import { PublicEnvScript } from "next-runtime-env";
 
 const urbanist = Urbanist({
   variable: "--font-urbanist",
   subsets: ["latin"],
-});
-
-const ephesis = Ephesis({
-  variable: "--font-ephesis",
-  subsets: ["latin"],
-  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -29,6 +24,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="view-transition" content="same-origin" />
+        <PublicEnvScript />
       </head>
       <body
         className={` ${urbanist.variable} bg-almond dark:bg-charcoal antialiased`}

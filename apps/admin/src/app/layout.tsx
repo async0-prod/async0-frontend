@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Toaster } from "sonner";
+import { PublicEnvScript } from "next-runtime-env";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +29,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="view-transition" content="same-origin" />
+        <PublicEnvScript />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

@@ -9,11 +9,6 @@ export async function middleware(request: NextRequest) {
   const isPrivateRoute = privateRoutes.includes(request.nextUrl.pathname);
   const isRedirectRoute = redirectRoutes.includes(request.nextUrl.pathname);
 
-  // DELETE THIS
-  console.log("BACKEND_URL: ", env("NEXT_PUBLIC_BACKEND_URL"));
-  console.log("SESSION: ", session);
-  console.log("ORIGIN: ", env("NEXT_PUBLIC_ORIGIN"));
-
   if (isRedirectRoute) {
     return NextResponse.redirect(new URL("/", request.nextUrl.origin));
   }
