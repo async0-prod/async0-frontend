@@ -54,6 +54,8 @@ export default function Problem({ slug }: { slug: string }) {
         toast.error("Failed to submit code");
       }
     },
+
+    retry: false,
   });
 
   const { mutate: run, isPending: isRunPending } = useMutation({
@@ -68,6 +70,7 @@ export default function Problem({ slug }: { slug: string }) {
         toast.error("Failed to submit code");
       }
     },
+    retry: false,
   });
 
   const [problemRunResult, setProblemRunResult] =

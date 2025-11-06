@@ -9,9 +9,7 @@ import { Tabs, TabsList } from "@radix-ui/react-tabs";
 import EditorConsole from "./editor-console";
 import EditorActions from "./editor-actions";
 import EditorButtons from "./editor-buttons";
-import { Publisher } from "@/app/ws/publisher";
 import { unescapeCode } from "@/lib/utils";
-import { env } from "next-runtime-env";
 import { toast } from "sonner";
 
 type CodeEditorProps = {
@@ -56,7 +54,7 @@ export default function CodeEditor({
     String(unescapeCode(problem?.starter_code ?? "")),
   );
   const [startStreaming, setStartStreaming] = useState<boolean>(false);
-  const [publisher, setPublisher] = useState<Publisher | null>(null);
+  // const [publisher, setPublisher] = useState<Publisher | null>(null);
 
   useEffect(() => {
     if (!problem) return;

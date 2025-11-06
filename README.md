@@ -1,6 +1,6 @@
 ## Introduction
 
-async0 is a website to practice problems in javascipt/typescript. It fetches and combines various problems and their various approaches from different sources and puts them in one place.
+Async0 is a platform for practicing JavaScript and TypeScript problems, combining exercises and solutions from various sources in one place.
 
 ## High level architecture overview
 
