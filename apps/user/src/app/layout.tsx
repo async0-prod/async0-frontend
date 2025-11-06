@@ -17,8 +17,7 @@ const ephesis = Ephesis({
 
 export const metadata: Metadata = {
   title: "async0 - JavaScript Algorithms & Data Structures",
-  description:
-    "Solve algorithm challenges with JavaScript. Is it the best tool for the job? Absolutely not. Will we do it anyway? You bet your undefined we will.",
+  description: "Solve algorithm challenges in JavaScript.",
 };
 
 export default function RootLayout({
