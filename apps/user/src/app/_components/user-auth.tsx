@@ -44,7 +44,7 @@ export default function UserAuth() {
       >
         <Button
           size="sm"
-          className="bg-primary text-secondary hover:bg-primary hover:text-secondary dark:bg-almond dark:hover:bg-almond dark:text-charcoal cursor-pointer"
+          className="bg-primary text-almond hover:bg-primary hover:text-secondary dark:bg-almond dark:hover:bg-almond dark:text-charcoal cursor-pointer"
         >
           <LogIn size="16" />
           <p>Sign In</p>
@@ -57,7 +57,7 @@ export default function UserAuth() {
     <div className="flex items-center space-x-3">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="text-secondary flex cursor-pointer items-center md:space-x-3">
+          <div className="text-almond flex cursor-pointer items-center md:space-x-3">
             {session.data.image ? (
               <Avatar>
                 <AvatarImage src={session.data.image} alt={session.data.name} />

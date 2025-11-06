@@ -50,12 +50,12 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <div className="font-urbanist dark:text-almond flex flex-1 flex-col items-center justify-center">
+    <div className="dark:text-almond flex flex-1 flex-col items-center justify-center">
       <div className="ml-4 flex flex-col items-center justify-center">
         <div className="pointer-events-none text-4xl leading-tight font-thin tracking-tight text-balance sm:text-5xl">
           <AnimatePresence mode="wait">
             <motion.div
-              key={selectedTextIdx} // 👈 triggers enter/exit animation
+              key={selectedTextIdx}
               initial="initial"
               animate="animate"
               exit="exit"

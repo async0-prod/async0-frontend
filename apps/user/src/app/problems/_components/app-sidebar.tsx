@@ -52,7 +52,7 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
     >
       <div
         className={cn(
-          "dark:bg-charcoal border-almond-dark dark:border-almond/40 relative h-full overflow-hidden rounded-md border shadow-sm",
+          "dark:hover:shadow-almond relative h-full overflow-hidden rounded-md transition-shadow hover:shadow-xl dark:hover:shadow-xs",
           !isMobile && "my-6",
           !open && "cursor-pointer",
         )}

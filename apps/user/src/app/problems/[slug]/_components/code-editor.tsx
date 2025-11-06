@@ -12,6 +12,7 @@ import EditorButtons from "./editor-buttons";
 import { Publisher } from "@/app/ws/publisher";
 import { unescapeCode } from "@/lib/utils";
 import { env } from "next-runtime-env";
+import { toast } from "sonner";
 
 type CodeEditorProps = {
   problem?: Problem;
@@ -129,82 +130,84 @@ export default function CodeEditor({
   }
 
   function toggleStartStreaming() {
-    if (!startStreaming) {
-      const publisher = Publisher.getInstance(
-        env("NEXT_PUBLIC_WS_URL")!,
-        "6232c0c5-70c0-422b-bdd0-f9b46bbc0222",
-      );
-      setPublisher(publisher);
-      setStartStreaming(true);
+    toast.info("Streaming feature coming soon...");
+    return;
+    // if (!startStreaming) {
+    //   const publisher = Publisher.getInstance(
+    //     env("NEXT_PUBLIC_WS_URL")!,
+    //     "6232c0c5-70c0-422b-bdd0-f9b46bbc0222",
+    //   );
+    //   setPublisher(publisher);
+    //   setStartStreaming(true);
 
-      const editor = editorRef.current;
-      if (!editor) return;
+    //   const editor = editorRef.current;
+    //   if (!editor) return;
 
-      const model = editor.getModel();
-      if (!model) return;
+    //   const model = editor.getModel();
+    //   if (!model) return;
 
-      model.onDidChangeContent((e) => {
-        const event = {
-          type: "content-change",
-          timestamp: Date.now(),
-          fullContent: model.getValue(),
-          changes: e.changes.map((change) => ({
-            range: {
-              startLineNumber: change.range.startLineNumber,
-              startColumn: change.range.startColumn,
-              endLineNumber: change.range.endLineNumber,
-              endColumn: change.range.endColumn,
-            },
-            text: change.text,
-            rangeLength: change.rangeLength,
-          })),
-        };
+    //   model.onDidChangeContent((e) => {
+    //     const event = {
+    //       type: "content-change",
+    //       timestamp: Date.now(),
+    //       fullContent: model.getValue(),
+    //       changes: e.changes.map((change) => ({
+    //         range: {
+    //           startLineNumber: change.range.startLineNumber,
+    //           startColumn: change.range.startColumn,
+    //           endLineNumber: change.range.endLineNumber,
+    //           endColumn: change.range.endColumn,
+    //         },
+    //         text: change.text,
+    //         rangeLength: change.rangeLength,
+    //       })),
+    //     };
 
-        publisher.publish(event);
-      });
+    //     publisher.publish(event);
+    //   });
 
-      editor.onDidChangeCursorSelection((e) => {
-        const event = {
-          type: "cursor-change",
-          timestamp: Date.now(),
-          fullContent: model.getValue(),
-          changes: e.selection
-            ? [
-                {
-                  startLineNumber: e.selection.startLineNumber,
-                  startColumn: e.selection.startColumn,
-                  endLineNumber: e.selection.endLineNumber,
-                  endColumn: e.selection.endColumn,
-                },
-              ]
-            : [],
-        };
+    //   editor.onDidChangeCursorSelection((e) => {
+    //     const event = {
+    //       type: "cursor-change",
+    //       timestamp: Date.now(),
+    //       fullContent: model.getValue(),
+    //       changes: e.selection
+    //         ? [
+    //             {
+    //               startLineNumber: e.selection.startLineNumber,
+    //               startColumn: e.selection.startColumn,
+    //               endLineNumber: e.selection.endLineNumber,
+    //               endColumn: e.selection.endColumn,
+    //             },
+    //           ]
+    //         : [],
+    //     };
 
-        publisher.publish(event);
-      });
+    //     publisher.publish(event);
+    //   });
 
-      let scrollThrottleTimer: NodeJS.Timeout;
-      editor.onDidScrollChange((e) => {
-        clearTimeout(scrollThrottleTimer);
-        scrollThrottleTimer = setTimeout(() => {
-          const event = {
-            type: "scroll-change",
-            timestamp: Date.now(),
-            fullContent: model.getValue(),
-            changes: {
-              scrollTop: e.scrollTop,
-              scrollLeft: e.scrollLeft,
-            },
-          };
+    //   let scrollThrottleTimer: NodeJS.Timeout;
+    //   editor.onDidScrollChange((e) => {
+    //     clearTimeout(scrollThrottleTimer);
+    //     scrollThrottleTimer = setTimeout(() => {
+    //       const event = {
+    //         type: "scroll-change",
+    //         timestamp: Date.now(),
+    //         fullContent: model.getValue(),
+    //         changes: {
+    //           scrollTop: e.scrollTop,
+    //           scrollLeft: e.scrollLeft,
+    //         },
+    //       };
 
-          publisher.publish(event);
-        }, 32);
-      });
-    } else {
-      publisher?.disconnect();
-      setPublisher(null);
-      setStartStreaming(false);
-    }
+    //       publisher.publish(event);
+    //     }, 32);
+    //   });
+    // } else {
+    //   publisher?.disconnect();
+    //   setPublisher(null);
+    //   setStartStreaming(false);
+    // }
   }
 
   if (!problem) return null;
