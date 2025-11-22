@@ -32,27 +32,27 @@ export class Subscriber {
           type: "Subscribe",
           subscriber_id: this.subscriberId,
           publisher_id: publisherId,
-        })
+        }),
       );
     };
 
     ws.onmessage = (event) => {
       const data: WebsocketResponse | WebsocketMessage = JSON.parse(event.data);
 
-      if (data.kind === "response") {
-        if (data.success) {
-          console.log("Success from server:", data.message);
-        } else {
-          console.error("Error from server:", data.message);
-          ws.close();
-          console.log("websocket closed");
-          this.connections.delete(publisherId);
-        }
-      }
+      // if (data.kind === "response") {
+      //   if (data.) {
+      //     console.log("Success from server:", data.message);
+      //   } else {
+      //     console.error("Error from server:", data.message);
+      //     ws.close();
+      //     console.log("websocket closed");
+      //     this.connections.delete(publisherId);
+      //   }
+      // }
 
-      if (data.kind === "message") {
-        this.handlers.forEach((h) => h(data, publisherId));
-      }
+      // if (data.kind === "message") {
+      //   this.handlers.forEach((h) => h(data, publisherId));
+      // }
     };
 
     ws.onclose = () => {
@@ -77,7 +77,7 @@ export class Subscriber {
           type: "Unsubscribe",
           subscriber_id: this.subscriberId,
           publisher_id: publisherId,
-        })
+        }),
       );
       ws.close();
       this.connections.delete(publisherId);
@@ -95,7 +95,7 @@ export class Subscriber {
           type: "Unsubscribe",
           subscriber_id: this.subscriberId,
           publisher_id: publisherId,
-        })
+        }),
       );
       ws.close();
       console.log("websocket closed");

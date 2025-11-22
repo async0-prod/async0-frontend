@@ -32,7 +32,7 @@ export class Publisher {
         JSON.stringify({
           type: "Register",
           user_id: this.publisherId,
-        })
+        }),
       );
     };
 
@@ -45,7 +45,7 @@ export class Publisher {
         JSON.stringify({
           type: "Deregister",
           user_id: this.publisherId,
-        })
+        }),
       );
     };
 
@@ -56,7 +56,7 @@ export class Publisher {
         JSON.stringify({
           type: "Deregister",
           user_id: this.publisherId,
-        })
+        }),
       );
     };
 
@@ -73,7 +73,7 @@ export class Publisher {
           type: "Message",
           publisher_id: this.publisherId,
           data,
-        })
+        }),
       );
     } else {
       console.warn("Publisher not connected, message not sent:", data);
@@ -86,7 +86,7 @@ export class Publisher {
         JSON.stringify({
           type: "Deregister",
           user_id: this.publisherId,
-        })
+        }),
       );
       this.ws.close();
       Publisher.instance = null; // reset singleton
