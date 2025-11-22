@@ -72,7 +72,7 @@ export default function UserAuth() {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           sideOffset={10}
-          className="bg-almond dark:bg-charcoal dark:text-almond mr-4 md:mr-8"
+          className="bg-almond dark:bg-charcoal dark:text-almond border-almond-dark/50 mr-4 md:mr-8"
         >
           <DropdownMenuLabel className="p-0 font-normal">
             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">

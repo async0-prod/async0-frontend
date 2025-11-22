@@ -1,28 +1,29 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 const VARIANT = {
-  initial: { opacity: 0, y: -25 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: 25 },
+  initial: { opacity: 0, y: -10, filter: "blur(4px)" },
+  animate: { opacity: 1, y: 0, filter: "blur(0px)" },
+  exit: { opacity: 0, y: 10, filter: "blur(4px)" },
 };
 
 const TEXTS = [
   "Solve problems in",
   "But why in",
-  "Maybe we shouldn't in",
   "It's fine in",
-  "So should I learn",
-  "Aight, we'll just do in",
+  "Fine, we'll do in",
+  "It's a pain in",
 ];
 
 export default function HeroSection() {
   const [isHovered, setIsHovered] = useState(false);
+  const [hoverIndex, setHoverIndex] = useState(-1);
   const [selectedTextIdx, setSelectedTextIdx] = useState(0);
   const cooldownRef = useRef(0);
   const timeRef = useRef(new Date());
@@ -49,39 +50,55 @@ export default function HeroSection() {
     return () => cancelAnimationFrame(animationFrameId);
   }, []);
 
+  const text = "Javascript.";
+  const letters = text.split("");
+
   return (
     <div className="dark:text-almond flex flex-1 flex-col items-center justify-center">
       <div className="ml-4 flex flex-col items-center justify-center">
-        <div className="pointer-events-none text-4xl leading-tight font-thin tracking-tight text-balance sm:text-5xl">
+        <div className="text-3xl font-thin text-balance sm:text-[2.5rem]">
           <AnimatePresence mode="wait">
-            <motion.div
+            <motion.p
               key={selectedTextIdx}
               initial="initial"
               animate="animate"
               exit="exit"
               transition={{ duration: 0.3, ease: "easeOut" }}
               variants={VARIANT}
+              className="tracking-wide select-none"
             >
               {TEXTS[selectedTextIdx]}
-            </motion.div>
+            </motion.p>
           </AnimatePresence>
         </div>
 
-        <motion.p
+        <motion.div
           initial="initial"
           animate="animate"
           transition={{ duration: 0.3, ease: "easeOut" }}
           variants={VARIANT}
-          className="font-ephesis text-6xl font-thin lg:text-8xl"
+          className="font-ephesis -mt-8 flex text-[5rem] font-thin tracking-wide select-none lg:-mt-14 lg:text-[10rem]"
+          onMouseLeave={() => setHoverIndex(-1)}
         >
-          Javascript.
-        </motion.p>
+          {letters.map((letter, index) => (
+            <span
+              key={index}
+              onMouseEnter={() => setHoverIndex(index)}
+              className={cn(
+                "relative inline-block transition-colors duration-300 ease-out",
+                index <= hoverIndex ? "text-orange-500" : "inherit",
+              )}
+            >
+              {letter}
+            </span>
+          ))}
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="mt-2 flex gap-3"
+          className="-mt-2 flex gap-3 lg:-mt-4"
         >
           <Button
             variant="outline"
@@ -109,7 +126,7 @@ export default function HeroSection() {
               >
                 <ArrowRight />
               </motion.div>
-              Problems
+              <p className="tracking-wide">Problems</p>
             </Link>
           </Button>
         </motion.div>
