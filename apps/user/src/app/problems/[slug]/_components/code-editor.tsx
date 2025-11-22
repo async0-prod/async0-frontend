@@ -4,12 +4,22 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { Editor, Monaco } from "@monaco-editor/react";
 import { editor } from "monaco-editor";
 import { Dot } from "lucide-react";
-import { CodeRunResult, CodeSubmitResult, Problem } from "@/lib/types";
+import {
+  CodeRunResult,
+  CodeSubmitResult,
+  Problem,
+  UserRole,
+} from "@/lib/types";
 import { Tabs, TabsList } from "@radix-ui/react-tabs";
 import EditorConsole from "./editor-console";
 import EditorActions from "./editor-actions";
 import EditorButtons from "./editor-buttons";
 import { unescapeCode } from "@/lib/utils";
+// import { toast } from "sonner";
+import { Publisher } from "@/app/ws/publisher";
+import { env } from "next-runtime-env";
+import { getClientSideSession } from "@/lib/auth";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 type CodeEditorProps = {
@@ -54,7 +64,12 @@ export default function CodeEditor({
     String(unescapeCode(problem?.starter_code ?? "")),
   );
   const [startStreaming, setStartStreaming] = useState<boolean>(false);
-  // const [publisher, setPublisher] = useState<Publisher | null>(null);
+  const [publisher, setPublisher] = useState<Publisher | null>(null);
+
+  const { data: session } = useQuery({
+    queryKey: ["session"],
+    queryFn: () => getClientSideSession(),
+  });
 
   useEffect(() => {
     if (!problem) return;
@@ -128,84 +143,91 @@ export default function CodeEditor({
   }
 
   function toggleStartStreaming() {
-    toast.info("Streaming feature coming soon...");
-    return;
-    // if (!startStreaming) {
-    //   const publisher = Publisher.getInstance(
-    //     env("NEXT_PUBLIC_WS_URL")!,
-    //     "6232c0c5-70c0-422b-bdd0-f9b46bbc0222",
-    //   );
-    //   setPublisher(publisher);
-    //   setStartStreaming(true);
+    // toast.info("Streaming feature coming soon...");
+    // return;
 
-    //   const editor = editorRef.current;
-    //   if (!editor) return;
+    if (!session) return;
+    if (session.data.role != UserRole.ADMIN) {
+      toast.info("You must be an admin to start streaming");
+      return;
+    }
 
-    //   const model = editor.getModel();
-    //   if (!model) return;
+    if (!startStreaming) {
+      const publisher = Publisher.getInstance(
+        env("NEXT_PUBLIC_WS_URL")!,
+        session.data.id,
+      );
+      setPublisher(publisher);
+      setStartStreaming(true);
 
-    //   model.onDidChangeContent((e) => {
-    //     const event = {
-    //       type: "content-change",
-    //       timestamp: Date.now(),
-    //       fullContent: model.getValue(),
-    //       changes: e.changes.map((change) => ({
-    //         range: {
-    //           startLineNumber: change.range.startLineNumber,
-    //           startColumn: change.range.startColumn,
-    //           endLineNumber: change.range.endLineNumber,
-    //           endColumn: change.range.endColumn,
-    //         },
-    //         text: change.text,
-    //         rangeLength: change.rangeLength,
-    //       })),
-    //     };
+      const editor = editorRef.current;
+      if (!editor) return;
 
-    //     publisher.publish(event);
-    //   });
+      const model = editor.getModel();
+      if (!model) return;
 
-    //   editor.onDidChangeCursorSelection((e) => {
-    //     const event = {
-    //       type: "cursor-change",
-    //       timestamp: Date.now(),
-    //       fullContent: model.getValue(),
-    //       changes: e.selection
-    //         ? [
-    //             {
-    //               startLineNumber: e.selection.startLineNumber,
-    //               startColumn: e.selection.startColumn,
-    //               endLineNumber: e.selection.endLineNumber,
-    //               endColumn: e.selection.endColumn,
-    //             },
-    //           ]
-    //         : [],
-    //     };
+      model.onDidChangeContent((e) => {
+        const event = {
+          type: "editor-content-change",
+          timestamp: Date.now(),
+          fullContent: model.getValue(),
+          changes: e.changes.map((change) => ({
+            range: {
+              startLineNumber: change.range.startLineNumber,
+              startColumn: change.range.startColumn,
+              endLineNumber: change.range.endLineNumber,
+              endColumn: change.range.endColumn,
+            },
+            text: change.text,
+            rangeLength: change.rangeLength,
+          })),
+        };
 
-    //     publisher.publish(event);
-    //   });
+        publisher.publish(event);
+      });
 
-    //   let scrollThrottleTimer: NodeJS.Timeout;
-    //   editor.onDidScrollChange((e) => {
-    //     clearTimeout(scrollThrottleTimer);
-    //     scrollThrottleTimer = setTimeout(() => {
-    //       const event = {
-    //         type: "scroll-change",
-    //         timestamp: Date.now(),
-    //         fullContent: model.getValue(),
-    //         changes: {
-    //           scrollTop: e.scrollTop,
-    //           scrollLeft: e.scrollLeft,
-    //         },
-    //       };
+      editor.onDidChangeCursorSelection((e) => {
+        const event = {
+          type: "cursor-change",
+          timestamp: Date.now(),
+          fullContent: model.getValue(),
+          changes: e.selection
+            ? [
+                {
+                  startLineNumber: e.selection.startLineNumber,
+                  startColumn: e.selection.startColumn,
+                  endLineNumber: e.selection.endLineNumber,
+                  endColumn: e.selection.endColumn,
+                },
+              ]
+            : [],
+        };
 
-    //       publisher.publish(event);
-    //     }, 32);
-    //   });
-    // } else {
-    //   publisher?.disconnect();
-    //   setPublisher(null);
-    //   setStartStreaming(false);
-    // }
+        publisher.publish(event);
+      });
+
+      let scrollThrottleTimer: NodeJS.Timeout;
+      editor.onDidScrollChange((e) => {
+        clearTimeout(scrollThrottleTimer);
+        scrollThrottleTimer = setTimeout(() => {
+          const event = {
+            type: "scroll-change",
+            timestamp: Date.now(),
+            fullContent: model.getValue(),
+            changes: {
+              scrollTop: e.scrollTop,
+              scrollLeft: e.scrollLeft,
+            },
+          };
+
+          publisher.publish(event);
+        }, 32);
+      });
+    } else {
+      publisher?.disconnect();
+      setPublisher(null);
+      setStartStreaming(false);
+    }
   }
 
   if (!problem) return null;

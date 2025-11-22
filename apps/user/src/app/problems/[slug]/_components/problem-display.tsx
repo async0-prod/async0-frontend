@@ -28,7 +28,7 @@ export default function ProblemDisplay({
 }) {
   return (
     <Tabs defaultValue="problem" className="w-full px-6">
-      <TabsList className="grid w-full grid-cols-5 bg-transparent">
+      <TabsList className="grid w-full grid-cols-3 bg-transparent">
         {[
           { value: "problem", icon: CodeXml, label: "Problem" },
           { value: "solution", icon: Lightbulb, label: "Solutions" },
@@ -48,7 +48,7 @@ export default function ProblemDisplay({
               <Icon className="h-3.5 w-3.5 flex-shrink-0" />
               <motion.span
                 layout
-                className="max-w-0 overflow-hidden opacity-0 transition-[max-width,opacity] duration-300 ease-in-out @[6rem]:max-w-[100px] @[6rem]:opacity-100"
+                className="max-w-0 overflow-hidden opacity-0 transition-[max-width,opacity] duration-300 ease-in-out @[6rem]:opacity-100 @[8rem]:max-w-[100px]"
               >
                 {label}
               </motion.span>

@@ -2,29 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Card } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { editor } from "monaco-editor";
 import { Editor, Monaco } from "@monaco-editor/react";
 import { WebsocketMessage } from "@/lib/types";
 
 interface MonacoEditorProps {
-  coderName: string;
-  problemTitle: string;
-  avatarUrl?: string;
   initialCode?: string;
-  className?: string;
-  showHeader?: boolean;
-  enableLiveSimulation?: boolean;
   messages?: WebsocketMessage[];
 }
 
 export function MonacoEditor({
-  coderName,
-  problemTitle,
-  avatarUrl,
   initialCode = "",
-  className = "",
-  showHeader = true,
   messages = [],
 }: MonacoEditorProps) {
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
@@ -78,28 +66,13 @@ export function MonacoEditor({
   }, [messages]);
 
   return (
-    <Card className={`overflow-hidden ${className}`}>
-      {showHeader && (
-        <div className="bg-card flex items-center gap-3 border-b p-4">
-          <Avatar className="h-8 w-8">
-            <AvatarImage
-              src={avatarUrl || "/placeholder.svg"}
-              alt={coderName}
-            />
-            <AvatarFallback>{coderName.charAt(0).toUpperCase()}</AvatarFallback>
-          </Avatar>
-          <div className="flex-1">
-            <h3 className="text-sm font-semibold">{coderName}</h3>
-            <p className="text-muted-foreground text-xs">{problemTitle}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="h-2 w-2 animate-pulse rounded-full bg-red-500"></div>
-          </div>
-        </div>
-      )}
+    <Card
+      className={`h-full w-full overflow-hidden rounded-none border-none bg-transparent p-0`}
+    >
       <Editor
         value={value}
-        height="60vh"
+        className="h-full w-full"
+        height="100%"
         defaultLanguage="javascript"
         theme="custom"
         onMount={handleMount}
@@ -113,7 +86,7 @@ export function MonacoEditor({
           inlineSuggest: { enabled: false },
           tabCompletion: false ? "on" : "off",
           fontSize: 14,
-          fontFamily: "Fira Code, monospace",
+          fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
           fontLigatures: true,
           wordWrap: "on",
           minimap: { enabled: false },
@@ -122,7 +95,7 @@ export function MonacoEditor({
           formatOnPaste: true,
           lineNumbers: "on",
           lineHeight: 22,
-          padding: { top: 20 },
+          padding: { top: 20, bottom: 40 },
           scrollBeyondLastLine: false,
           smoothScrolling: true,
           scrollbar: {

@@ -32,7 +32,7 @@ export default function RootLayout({
         <PublicEnvScript />
       </head>
       <body
-        className={` ${urbanist.variable} ${ephesis.variable} bg-almond dark:bg-charcoal font-urbanist antialiased`}
+        className={` ${urbanist.variable} ${ephesis.variable} bg-almond dark:bg-charcoal font-urbanist selection:bg-charcoal selection:text-almond dark:selection:bg-almond dark:selection:text-charcoal antialiased`}
       >
         <Providers>{children}</Providers>
       </body>

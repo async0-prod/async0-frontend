@@ -62,7 +62,7 @@ export default function ProblemUI() {
   return (
     <main className="relative mr-4 ml-8 flex flex-1 flex-col md:mr-8 md:ml-16">
       {isLoading && (
-        <div className="bg-almond dark:bg-charcoal dark:text-almond-dark text-charcoal absolute inset-0 z-50 flex items-center justify-center rounded-md border-2">
+        <div className="bg-almond dark:bg-charcoal dark:text-almond-dark text-charcoal absolute inset-0 z-50 flex items-center justify-center rounded-md">
           <Loader className="animate-spin" />
           <p className="pl-4 text-center text-sm">
             {`  Loading problem - ${selectedProblem}`}

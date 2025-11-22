@@ -1,11 +1,21 @@
-export type Difficulty = "EASY" | "MEDIUM" | "HARD" | "NA";
+export enum Difficulty {
+  EASY = "EASY",
+  MEDIUM = "MEDIUM",
+  HARD = "HARD",
+  NA = "NA",
+}
+
+export enum UserRole {
+  USER = "USER",
+  ADMIN = "ADMIN",
+}
 
 export type SessionUser = {
   id: string;
   email: string;
   image: string;
   name: string;
-  role: string;
+  role: UserRole;
 };
 
 export interface List {
@@ -19,7 +29,7 @@ export interface TanstackProblem {
   id: string;
   name: string;
   slug: string;
-  difficulty: "EASY" | "MEDIUM" | "HARD" | "NA";
+  difficulty: Difficulty;
   has_solved?: boolean;
   list_names: string[];
   topic_names: string[];
@@ -32,7 +42,7 @@ export interface Problem {
   link?: string;
   description: string;
   problem_number?: number;
-  difficulty: "Easy" | "Medium" | "Hard" | "NA";
+  difficulty: Difficulty;
   starter_code: string;
   time_limit: number;
   memory_limit: number;
@@ -176,7 +186,7 @@ export interface Submission {
 }
 
 export type WebsocketMessage = {
-  kind: "message";
+  kind: "response";
   data: any;
 };
 

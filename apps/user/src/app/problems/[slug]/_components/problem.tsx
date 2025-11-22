@@ -86,15 +86,19 @@ export default function Problem({ slug }: { slug: string }) {
       return;
     }
 
-    if (!problem) {
-      toast.error("No problem found");
-      return;
-    }
+    toast.error(
+      "Running the code isn't working at the moment. Working on a fix.",
+    );
 
-    if (!isConsoleOpen) setIsConsoleOpen(true);
-    clearConsole();
-    setConsoleMode("run");
-    run(userCode);
+    // if (!problem) {
+    //   toast.error("No problem found");
+    //   return;
+    // }
+
+    // if (!isConsoleOpen) setIsConsoleOpen(true);
+    // clearConsole();
+    // setConsoleMode("run");
+    // run(userCode);
   }
 
   function handleSubmit(userCode: string) {

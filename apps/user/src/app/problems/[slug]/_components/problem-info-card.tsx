@@ -187,10 +187,11 @@ function TestCaseBlock({
   testcaseSubmitStatus: TestcaseResult | null;
   index: number;
 }) {
+  console.log(testcase);
   return (
     <Card
       className={cn(
-        "text-muted-foreground border-charcoal/20 dark:border-almond/20 mb-6 overflow-x-auto bg-transparent p-4 text-sm text-nowrap",
+        "text-muted-foreground border-charcoal/20 dark:border-almond/20 mb-6 max-w-lg overflow-x-auto bg-transparent p-4 text-sm text-nowrap",
         testcaseSubmitStatus
           ? testcaseSubmitStatus.tc_status_id === 5
             ? "border-yellow-500"
@@ -226,8 +227,8 @@ function TestCaseBlock({
         </div>
       </div>
       <div className="flex flex-col items-start justify-between gap-1">
-        <p>{`${unescapeCode(testcase.ui)}`}</p>
-        <p>{`Output: ${unescapeCode(testcase.output)}`}</p>
+        <pre className="whitespace-pre-wrap">{`${unescapeCode(testcase.ui)}`}</pre>
+        <pre>{`Output: ${unescapeCode(testcase.output)}`}</pre>
       </div>
     </Card>
   );

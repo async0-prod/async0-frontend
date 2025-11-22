@@ -19,7 +19,7 @@ export default async function ProblemLayout({
     <SidebarProvider defaultOpen={false}>
       <AppSidebar />
       <SidebarInset className="relative flex flex-col gap-6 md:peer-data-[variant=inset]:shadow-none">
-        <header className="mx-15 mt-6">
+        <header className="mx-8 mt-6 lg:mx-15">
           <div className="flex items-center justify-between lg:flex lg:items-center lg:justify-between">
             <div className="-ml-3 flex shrink-0 items-center gap-2 px-4">
               <SidebarTrigger
@@ -41,7 +41,7 @@ export default async function ProblemLayout({
             </div>
           </div>
         </header>
-        <div className="mb-2 px-16">
+        <div className="mb-2 px-10 lg:px-16">
           <BreadCrumbs />
         </div>
         {children}
