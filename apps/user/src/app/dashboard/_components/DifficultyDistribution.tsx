@@ -20,7 +20,7 @@ export function DifficultyDistribution() {
 
   if (!mounted) {
     return (
-      <div className="h-[300px] flex items-center justify-center">
+      <div className="flex h-[300px] items-center justify-center">
         Loading chart...
       </div>
     );
@@ -47,7 +47,7 @@ export function DifficultyDistribution() {
             paddingAngle={5}
             dataKey="value"
             label={({ name, percent }) =>
-              `${name} ${(percent * 100).toFixed(0)}%`
+              `${name} ${(percent! * 100).toFixed(0)}%`
             }
             labelLine={false}
           >
@@ -59,9 +59,9 @@ export function DifficultyDistribution() {
             content={({ active, payload }) => {
               if (active && payload && payload.length) {
                 return (
-                  <div className="rounded-lg border border-border bg-background p-2 shadow-md">
-                    <p className=" text-sm font-bold">{payload[0]?.name}</p>
-                    <p className="font-nunito text-sm text-primary">
+                  <div className="border-border bg-background rounded-lg border p-2 shadow-md">
+                    <p className="text-sm font-bold">{payload[0]?.name}</p>
+                    <p className="font-nunito text-primary text-sm">
                       <span className="font-bold">{payload[0]?.value}</span>{" "}
                       problems
                     </p>

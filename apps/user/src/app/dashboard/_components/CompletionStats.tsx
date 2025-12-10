@@ -131,9 +131,9 @@ export function CompletionStats() {
                   if (active && payload && payload.length) {
                     const item = data[payload[0]?.payload.index];
                     return (
-                      <div className="rounded-lg border border-border bg-background p-2 shadow-md">
-                        <p className=" text-sm font-bold">{item?.name}</p>
-                        <p className="font-nunito text-sm text-primary">
+                      <div className="border-border bg-background rounded-lg border p-2 shadow-md">
+                        <p className="text-sm font-bold">{item?.name}</p>
+                        <p className="font-nunito text-primary text-sm">
                           <span className="font-bold">
                             {item?.solved}/{item?.total}
                           </span>{" "}
@@ -155,8 +155,8 @@ export function CompletionStats() {
         {data.map((list) => (
           <div key={list.name} className="space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium ">{list.name}</span>
-              <span className="text-sm text-muted-foreground">
+              <span className="text-sm font-medium">{list.name}</span>
+              <span className="text-muted-foreground text-sm">
                 {list.solved}/{list.total} ({list.percentage}%)
               </span>
             </div>

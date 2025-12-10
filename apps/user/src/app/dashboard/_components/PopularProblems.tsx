@@ -50,13 +50,13 @@ export function PopularProblems() {
           key={problem.id}
           className="flex items-start justify-between border-b pb-4 last:border-0 last:pb-0"
         >
-          <div className="space-y-1 w-full">
+          <div className="w-full space-y-1">
             <div className="flex items-center gap-2">
-              <h4 className="font-medium  text-wrap max-w-[300px]">
+              <h4 className="max-w-[300px] font-medium text-wrap">
                 {problem.name}
               </h4>
             </div>
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <div className="text-muted-foreground flex items-center gap-4 text-sm">
               <Badge variant="outline" className="px-2 py-0 text-xs">
                 {problem.difficulty}
               </Badge>

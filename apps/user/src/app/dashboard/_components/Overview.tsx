@@ -79,7 +79,7 @@ export function Overview() {
   return (
     <div className="space-y-4" ref={containerRef}>
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="text-sm font-medium text-muted-foreground">
+        <div className="text-muted-foreground text-sm font-medium">
           Showing data for:{" "}
           <span className="font-bold">{periodLabels[timePeriod]}</span>
         </div>
@@ -163,11 +163,11 @@ export function Overview() {
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     return (
-                      <div className="rounded-lg border border-border bg-background p-2 shadow-md">
-                        <p className=" text-sm font-bold">
+                      <div className="border-border bg-background rounded-lg border p-2 shadow-md">
+                        <p className="text-sm font-bold">
                           {payload[0]?.payload.date}
                         </p>
-                        <p className="font-nunito text-sm text-primary">
+                        <p className="font-nunito text-primary text-sm">
                           <span className="font-bold">{payload[0]?.value}</span>{" "}
                           problems solved
                         </p>

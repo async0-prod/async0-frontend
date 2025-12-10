@@ -57,7 +57,7 @@ export function RecentActivity() {
         >
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <h4 className="font-medium ">{activity.problemName}</h4>
+              <h4 className="font-medium">{activity.problemName}</h4>
               <Badge
               // variant={
               //   activity.difficulty === "Easy"
@@ -70,14 +70,14 @@ export function RecentActivity() {
                 {activity.difficulty}
               </Badge>
             </div>
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <div className="text-muted-foreground flex items-center gap-4 text-sm">
               <div className="flex items-center gap-1">
                 {activity.status === "Accepted" ? (
-                  <CheckCircle className="h-4 w-4 text-success" />
+                  <CheckCircle className="text-success h-4 w-4" />
                 ) : activity.status === "Rejected" ? (
-                  <XCircle className="h-4 w-4 text-destructive" />
+                  <XCircle className="text-destructive h-4 w-4" />
                 ) : (
-                  <Clock className="h-4 w-4 text-warning" />
+                  <Clock className="text-warning h-4 w-4" />
                 )}
                 <span>{activity.status}</span>
               </div>
@@ -86,7 +86,7 @@ export function RecentActivity() {
               </div>
             </div>
           </div>
-          <div className="text-sm text-muted-foreground">
+          <div className="text-muted-foreground text-sm">
             {activity.timestamp}
           </div>
         </div>
