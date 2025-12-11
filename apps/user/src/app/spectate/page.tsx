@@ -1,7 +1,7 @@
 "use client";
 
 import { MonacoEditor } from "./_components/editor";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { WebsocketMessage } from "@/lib/types";
 import { Monitor, Send, Settings } from "lucide-react";
 import { motion } from "motion/react";
@@ -12,15 +12,6 @@ const THEME = {
   almond: "#eee5da",
   accent: "#d4c5b0", // Slightly darker almond for borders
   glass: "rgba(30, 27, 24, 0.8)",
-};
-
-const featuredCoder = {
-  id: "alex_dev",
-  name: "Alex Chen",
-  problem: "Two Sum - LeetCode Hard",
-  avatar: "/developer-avatar.png",
-  viewerCount: 1247,
-  code: `function twoSum(nums, target) { }`,
 };
 
 interface ConnectionStats {

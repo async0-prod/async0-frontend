@@ -2,11 +2,13 @@
   "name": "user",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --port 3000 --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint --max-warnings 0",
+    "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
     "@base-ui-components/react": "1.0.0-rc.0",
@@ -62,15 +64,14 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "@async0/eslint-config": "workspace:*",
     "@async0/typescript-config": "workspace:*",
-    "@eslint/eslintrc": "^3.3.3",
     "@tailwindcss/postcss": "^4.1.17",
     "@tanstack/eslint-plugin-query": "^5.91.2",
     "@types/node": "^24.10.2",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.1",
-    "eslint-config-next": "16.0.8",
     "shiki": "^3.19.0",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3"

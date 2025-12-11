@@ -14,13 +14,7 @@ import {
   ThumbsUp,
   TrendingUp,
 } from "lucide-react";
-import { Overview } from "./_components/Overview";
-import { DifficultyDistribution } from "./_components/DifficultyDistribution";
-import { RecentActivity } from "./_components/RecentActivity";
-import { CompletionStats } from "./_components/CompletionStats";
-import { TopicProgress } from "./_components/TopicProgress";
-import { PopularProblems } from "./_components/PopularProblems";
-import { PopularSolutions } from "./_components/PopularSolutions";
+
 import { Badge } from "@/components/ui/badge";
 import NavigationPane from "@/components/nav-panel";
 
@@ -28,7 +22,7 @@ export const dynamic = "force-dynamic";
 
 export default function DashboardPage() {
   return (
-    <div className="my-4 mr-4 flex w-full flex-col overflow-hidden rounded-xl border-1">
+    <div className="my-4 mr-4 flex w-full flex-col overflow-hidden rounded-xl border">
       <main className="bg-background flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="flex items-center">
           <div>
@@ -59,9 +53,7 @@ export default function DashboardPage() {
               </div>
               <BookMarked className="text-muted-foreground ml-auto h-5 w-5" />
             </CardHeader>
-            <CardContent>
-              <PopularProblems />
-            </CardContent>
+            <CardContent>{/* <PopularProblems /> */}</CardContent>
           </Card>
 
           <Card>
@@ -74,9 +66,7 @@ export default function DashboardPage() {
               </div>
               <ThumbsUp className="text-muted-foreground ml-auto h-5 w-5" />
             </CardHeader>
-            <CardContent>
-              <PopularSolutions />
-            </CardContent>
+            <CardContent>{/* <PopularSolutions /> */}</CardContent>
           </Card>
         </div>
 
@@ -155,9 +145,7 @@ export default function DashboardPage() {
                     Number of problems solved over time
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="pl-2">
-                  <Overview />
-                </CardContent>
+                <CardContent className="pl-2">{/* <Overview /> */}</CardContent>
               </Card>
               <Card className="lg:col-span-3">
                 <CardHeader>
@@ -166,9 +154,7 @@ export default function DashboardPage() {
                     Problems solved by difficulty level
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <DifficultyDistribution />
-                </CardContent>
+                <CardContent>{/* <DifficultyDistribution /> */}</CardContent>
               </Card>
             </div>
 
@@ -180,9 +166,7 @@ export default function DashboardPage() {
                     Your recent problem submissions
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <RecentActivity />
-                </CardContent>
+                <CardContent>{/* <RecentActivity /> */}</CardContent>
               </Card>
               <Card className="lg:col-span-3">
                 <CardHeader>
@@ -191,9 +175,7 @@ export default function DashboardPage() {
                     Completion percentage by topic
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <TopicProgress />
-                </CardContent>
+                <CardContent>{/* <TopicProgress /> */}</CardContent>
               </Card>
             </div>
           </TabsContent>
@@ -207,7 +189,7 @@ export default function DashboardPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="pl-2">
-                <CompletionStats />
+                {/* <CompletionStats /> */}
               </CardContent>
             </Card>
           </TabsContent>
@@ -221,7 +203,7 @@ export default function DashboardPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="pl-2">
-                <TopicProgress showAll={true} />
+                {/* <TopicProgress showAll={true} /> */}
               </CardContent>
             </Card>
           </TabsContent>
